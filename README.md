@@ -1,4 +1,4 @@
-haskell-dangerzone
+sport-dangerzone
 ==================
-
-Contains various Haskell source files, try to make it a Haskell repository for different algo's problem from TC, ACM, GCJ, etc.
+Repo for various source files:
+* Solutions for different problems from TC, ACM, GCJ, CF, etc.
