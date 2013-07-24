@@ -1,4 +1,4 @@
-package org.mystic.codeforces;
+package java.org.mystic.codeforces;
 
 import java.io.*;
 import java.util.HashSet;
