@@ -28,6 +28,13 @@ object B_332 {
     return Long.parseLong(next)
   }
 
+  def main(args: Array[String]): Unit = {
+    br = new BufferedReader(new InputStreamReader(System.in))
+    out = new PrintWriter(new BufferedOutputStream(System.out))
+    solve
+    out.close
+  }
+
   def partialSum(ints: Array[Int]): Array[Long] = {
     val sums = new Array[Long](ints.length)
     sums(0) = ints(0)
@@ -68,11 +75,6 @@ object B_332 {
     println((ans._1 + 1) + " " + (ans._2 + 1))
   }
 
-  def main(args: Array[String]): Unit = {
-    br = new BufferedReader(new InputStreamReader(System.in))
-    out = new PrintWriter(new BufferedOutputStream(System.out))
-    solve
-    out.close
-  }
+
 
 }
