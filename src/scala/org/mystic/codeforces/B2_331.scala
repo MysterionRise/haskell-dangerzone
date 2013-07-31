@@ -43,15 +43,10 @@ object B2_331 {
   def solve = {
     val n = nextInt
     val arr = new Array[Int](n)
-    val pos = new Array[(Int, Int)](n)
+    val pos = new Array[Int](n)
     for (i <- 0 until n) {
       arr(i) = nextInt
-      pos(i) = (arr(i), i + 1)
-    }
-    val sorted = pos.sortBy(_._1)
-    val position = new Array[Int](n)
-    for (i <- 0 until n) {
-      position(i) = sorted(i)._2
+      pos(arr(i) - 1) = i
     }
     tree = new Array[Long](4 * n)
     for (i <- 0 until 4 * n) {
@@ -77,8 +72,8 @@ object B2_331 {
       typeOfQuery match {
         case 1 => {
           println("a = " + a + " b = " + b)
-          val left = min(position(a - 1) - 1, position(b - 1) - 1)
-          val right = max(position(a - 1) - 1, position(b - 1) - 1)
+          val left = min(pos(a - 1), pos(b - 1))
+          val right = max(pos(a - 1), pos(b - 1))
           println("call sum func with " + left + " " + right)
           println(sum(1, 0, n - 1, left, right) + 1)
         }
@@ -90,9 +85,9 @@ object B2_331 {
           val tmp = arr(a - 1)
           arr(a - 1) = arr(b - 1)
           arr(b - 1) = tmp
-          val temp = position(e1 - 1)
-          position(e1 - 1) = position(e2 - 1)
-          position(e2 - 1) = temp
+          val temp = pos(e1 - 1)
+          pos(e1 - 1) = pos(e2 - 1)
+          pos(e2 - 1) = temp
           if (x > 1) {
             if (arr(x - 1) < arr(x - 2)) {
               updateVal(1, 0, n - 1, x - 1, 1)
