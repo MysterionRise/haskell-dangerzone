@@ -5,11 +5,7 @@ readAInt :: IO Int
 readAInt = readLn
 
 main = do
-	w <- getLine
-	--putStrLn $ solve ( read w :: Int)
-	putStrLn w
+    input <- getLine
+    putStrLn $ solve $ read input
 
-solve w 
-	| w mod 2 == 0 	= "YES"
-	| otherwise 	= "NO"
-
+solve n = if (n > 2 && mod n 2 == 0) then "YES" else "NO"
