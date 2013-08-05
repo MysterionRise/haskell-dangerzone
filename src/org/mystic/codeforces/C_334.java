@@ -1,4 +1,4 @@
-package java.org.mystic.codeforces;
+package org.mystic.codeforces;
 
 import java.io.*;
 import java.util.StringTokenizer;
