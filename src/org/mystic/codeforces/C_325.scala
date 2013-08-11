@@ -8,11 +8,11 @@ object C_325 {
 
   def readString = Console.readLine
 
-  def readInts = readString.split(" ").map(_.toInt)
+  def readInts = readString.trim.split(" ").map(_.toInt)
 
   def main(args: Array[String]): Unit = {
     val Array(m, n) = readInts
-    var monstersNum: Array[Int] = Array[Int](m)
+    val monstersNum: Array[Int] = Array[Int](m)
     for (i <- 1 to m) {
       val s = readInts
       val monsterType = s(0)
