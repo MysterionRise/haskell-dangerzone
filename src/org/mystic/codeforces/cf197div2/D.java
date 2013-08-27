@@ -5,9 +5,6 @@ import java.util.StringTokenizer;
 
 /**
  * @author kperikov
- *         <p/>
- *         Failed solution
- * @todo need to fix
  */
 public class D implements Runnable {
 
@@ -59,12 +56,10 @@ public class D implements Runnable {
             tree[i] = a[j];
         }
         int layer = 1;
-        int count = 0;
         int temp = n - 1;
         for (int i = t - z; i >= 1; --i) {
             tree[i] = operation(tree[2 * i], tree[2 * i + 1], layer);
-            count++;
-            if (count == Math.pow(2, temp)) {
+            if (i == Math.pow(2, temp)) {
                 layer++;
                 temp--;
             }
@@ -74,13 +69,15 @@ public class D implements Runnable {
             int b = nextInt();
             int pos = ((int) (Math.pow(2, n) + p - 1));
             tree[pos] = b;
-            for (int j = 1; j <= n; ++j) {
+            layer = 1;
+            while (pos != 1) {
                 if (pos % 2 == 0) {
-                    tree[pos / 2] = operation(tree[pos], tree[pos + 1], j);
+                    tree[pos / 2] = operation(tree[pos], tree[pos + 1], layer);
                 } else {
-                    tree[pos / 2] = operation(tree[pos - 1], tree[pos], j);
+                    tree[pos / 2] = operation(tree[pos - 1], tree[pos], layer);
                 }
                 pos /= 2;
+                ++layer;
             }
             out.println(tree[1]);
         }
