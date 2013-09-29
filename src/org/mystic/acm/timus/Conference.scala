@@ -28,8 +28,16 @@ object Conference {
       g(i) = new Array[Int](n + m + 2)
     }
     for (i <- 0 until k) {
-      g(nextInt - 1)(n + nextInt - 1) = 1
+      g(nextInt)(n + nextInt) = 1
     }
+    for (i <- 1 to n) {
+      g(i)(0) = 1 // add fake source
+    }
+    for (i <- n + 1 to m) {
+      g(i)(n + m - 1) = 1 // add fake sink
+    }
+    // @todo find max flow
+    // answer should be n + m - maxflow
   }
 
   def main(args: Array[String]): Unit = {
