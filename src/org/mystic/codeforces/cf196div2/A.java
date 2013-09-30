@@ -7,14 +7,14 @@ import java.util.StringTokenizer;
 /**
  * @author kperikov
  */
-public class A_337 implements Runnable {
+public class A implements Runnable {
 
     PrintWriter out;
     BufferedReader br;
     StringTokenizer st;
 
     public static void main(String[] args) throws IOException {
-        new Thread(new A_337()).start();
+        new Thread(new A()).start();
     }
 
     public String next() throws IOException {

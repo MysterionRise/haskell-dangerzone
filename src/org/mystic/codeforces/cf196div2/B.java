@@ -6,14 +6,14 @@ import java.util.StringTokenizer;
 /**
  * @author kperikov
  */
-public class B_337 implements Runnable {
+public class B implements Runnable {
 
     PrintWriter out;
     BufferedReader br;
     StringTokenizer st;
 
     public static void main(String[] args) throws IOException {
-        new Thread(new B_337()).start();
+        new Thread(new B()).start();
     }
 
     public String next() throws IOException {
