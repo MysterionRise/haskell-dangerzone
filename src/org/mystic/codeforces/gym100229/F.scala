@@ -22,10 +22,10 @@ object F {
   def solve = {
     val string = next
     val n = string.length
-    var result = -1
+    var result = 0
     for (i <- 1 to n) {
-      val prefMax = prefixFunc(string.substring(0, i)).toList.max
-      result = Math.max(result, string.substring(0, i).length + 1 - prefMax)
+      val prefMax = prefixFunc(string.substring(0, i).reverse).toList.max
+      result += string.substring(0, i).length - prefMax
     }
     out.println(result)
   }
