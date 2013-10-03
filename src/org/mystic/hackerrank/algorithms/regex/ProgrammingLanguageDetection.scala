@@ -1,8 +1,8 @@
-package org.mystic.hackerrank
+package org.mystic.hackerrank.algorithms.regex
 
 import scala.io._
 
-object Solution {
+object ProgrammingLanguageDetection {
 
   var language = ""
 
