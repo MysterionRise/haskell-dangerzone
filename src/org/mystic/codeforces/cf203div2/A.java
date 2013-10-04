@@ -28,6 +28,10 @@ public class A implements Runnable {
         return Long.parseLong(next());
     }
 
+    public double nextDouble() throws IOException {
+        return Double.parseDouble(next());
+    }
+
     public void run() {
         try {
             br = new BufferedReader(new InputStreamReader(System.in));
