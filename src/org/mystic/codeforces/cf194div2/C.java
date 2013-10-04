@@ -1,19 +1,16 @@
-package org.mystic.codeforces;
+package org.mystic.codeforces.cf194div2;
 
 import java.io.*;
 import java.util.StringTokenizer;
 
-/**
- * @author kperikov
- */
-public class C_334 implements Runnable {
+public class C implements Runnable {
 
     PrintWriter out;
     BufferedReader br;
     StringTokenizer st;
 
     public static void main(String[] args) throws IOException {
-        new Thread(new C_334()).start();
+        new Thread(new C()).start();
     }
 
     public String next() throws IOException {

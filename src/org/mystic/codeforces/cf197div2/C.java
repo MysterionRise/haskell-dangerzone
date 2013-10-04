@@ -4,9 +4,8 @@ import java.io.*;
 import java.util.*;
 
 /**
- * @author kperikov
- *         <p/>
- *         Failed solution
+ * Failed solution
+ *
  * @todo need to fix
  */
 public class C implements Runnable {

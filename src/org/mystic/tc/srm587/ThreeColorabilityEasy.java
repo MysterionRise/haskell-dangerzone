@@ -1,8 +1,5 @@
 package org.mystic.tc.srm587;
 
-/**
- * @author kperikov
- */
 public class ThreeColorabilityEasy {
 
     public String isColorable(String[] cells) {

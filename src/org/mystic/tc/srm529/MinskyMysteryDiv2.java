@@ -1,8 +1,5 @@
 package org.mystic.tc.srm529;
 
-/**
- * @author kperikov
- */
 public class MinskyMysteryDiv2 {
 
     public long computeAnswer(long N) {

@@ -6,9 +6,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.StringTokenizer;
 
-/**
- * @author kperikov
- */
 public class B implements Runnable {
 
     PrintWriter out;

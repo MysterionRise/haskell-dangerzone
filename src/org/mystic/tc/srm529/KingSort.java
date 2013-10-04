@@ -5,9 +5,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * @author kperikov
- */
 public class KingSort {
     public String[] getSortedList(String[] kings) {
         ArrayList<KingName> names = new ArrayList<KingName>();

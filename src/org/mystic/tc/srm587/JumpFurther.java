@@ -1,8 +1,5 @@
 package org.mystic.tc.srm587;
 
-/**
- * @author kperikov
- */
 public class JumpFurther {
 
     public int furthest(int N, int badStep) {

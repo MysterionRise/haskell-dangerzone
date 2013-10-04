@@ -3,9 +3,6 @@ package org.mystic.codeforces.cf198div2;
 import java.io.*;
 import java.util.StringTokenizer;
 
-/**
- * @author kperikov
- */
 public class A implements Runnable {
 
     PrintWriter out;

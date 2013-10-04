@@ -1,14 +1,11 @@
-package scala.org.mystic.codeforces
+package org.mystic.codeforces.cf194div2
 
 import java.io.{BufferedOutputStream, InputStreamReader, BufferedReader, PrintWriter}
 import java.util.StringTokenizer
 import java.lang.Long
 import scala.collection.immutable.HashSet
 
-/**
- * @author kperikov
- */
-object D_334 {
+object D {
   var out: PrintWriter = null
   var br: BufferedReader = null
   var st: StringTokenizer = null

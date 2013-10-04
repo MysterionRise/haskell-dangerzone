@@ -5,9 +5,6 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
-/**
- * @author kperikov
- */
 public class A implements Runnable {
 
     PrintWriter out;

@@ -1,8 +1,5 @@
 package org.mystic.tc.srm588;
 
-/**
- * @author kperikov
- */
 public class KeyDungeonDiv2 {
     public int countDoors(int[] doorR, int[] doorG, int[] keys) {
         int n = doorR.length;
