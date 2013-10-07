@@ -1,9 +1,6 @@
 package org.mystic.opencup.round1;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 
 public class F {
 
@@ -13,12 +10,8 @@ public class F {
     private PrintWriter writer;
 
     public F() throws IOException {
-
-//        reader = new BufferedReader(new FileReader("intset.in"));
-//        writer = new PrintWriter(new FileWriter("intset.out"));
-
-        reader = new BufferedReader(new InputStreamReader(System.in));
-        writer = new PrintWriter(System.out);
+        reader = new BufferedReader(new FileReader("intset.in"));
+        writer = new PrintWriter(new FileWriter("intset.out"));
     }
 
     public static void main(String[] args) throws IOException {
@@ -46,7 +39,7 @@ public class F {
         int n = readInt();
         int l = readInt();
         int m = readInt();
-        writer.println((1L * l * m) / n);
+        // @todo calculate with C's, using log
         writer.flush();
     }
 }

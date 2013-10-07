@@ -36,6 +36,7 @@ object Conference {
     for (i <- n + 1 to m) {
       g(i)(n + m - 1) = 1 // add fake sink
     }
+
     // @todo find max flow
     // answer should be n + m - maxflow
   }

@@ -1,5 +1,4 @@
-//package org.mystic.opencup.round1;
-
+package org.mystic.opencup.round1;
 
 import java.io.*;
 import java.util.Iterator;
