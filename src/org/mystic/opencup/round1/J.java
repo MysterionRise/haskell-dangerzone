@@ -1,7 +1,10 @@
-//package org.mystic.opencup.round1;
+package org.mystic.opencup.round1;
 
 import java.io.*;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class J {
 
@@ -14,9 +17,6 @@ public class J {
 
         reader = new BufferedReader(new FileReader("snakes2.in"));
         writer = new PrintWriter(new FileWriter("snakes2.out"));
-
-//        reader = new BufferedReader(new InputStreamReader(System.in));
-//        writer = new PrintWriter(System.out);
     }
 
     public static void main(String[] args) throws IOException {
@@ -44,6 +44,11 @@ public class J {
         class Point {
             int x, y;
 
+            Point(int x, int y) {
+                this.x = x;
+                this.y = y;
+            }
+
             @Override
             public boolean equals(Object o) {
                 if (this == o) return true;
@@ -63,36 +68,29 @@ public class J {
                 result = 31 * result + y;
                 return result;
             }
-
-            Point(int x, int y) {
-                this.x = x;
-                this.y = y;
-            }
         }
         int k = readInt();
         Map<Point, Integer> points = new HashMap<>();
         Point[][] snakes = new Point[k][];
-        for(int i = 0; i < k; i++) {
+        for (int i = 0; i < k; i++) {
             int l = readInt();
             snakes[i] = new Point[l];
-            for(int j = 0; j < l; j++) {
+            for (int j = 0; j < l; j++) {
                 snakes[i][j] = new Point(readInt(), readInt());
-                if(!points.containsKey(snakes[i][j])) {
+                if (!points.containsKey(snakes[i][j])) {
                     points.put(snakes[i][j], 1);
-                }
-                else {
+                } else {
                     points.put(snakes[i][j], 2);
                 }
             }
         }
         Set<Point> visited = new HashSet<>();
-        for(int i = 0; i < k; i++) {
-            for(Point p: snakes[i]) {
-                if(points.get(p) == 2) {
-                    if(visited.contains(p)) {
+        for (int i = 0; i < k; i++) {
+            for (Point p : snakes[i]) {
+                if (points.get(p) == 2) {
+                    if (visited.contains(p)) {
                         writer.print('+');
-                    }
-                    else {
+                    } else {
                         writer.print('-');
                         visited.add(p);
                     }

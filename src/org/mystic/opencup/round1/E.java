@@ -14,9 +14,6 @@ public class E {
 
         reader = new BufferedReader(new FileReader("fourprimes.in"));
         writer = new PrintWriter(new FileWriter("fourprimes.out"));
-
-//        reader = new BufferedReader(new InputStreamReader(System.in));
-//        writer = new PrintWriter(System.out);
     }
 
     public static void main(String[] args) throws IOException {
@@ -79,7 +76,6 @@ public class E {
         for (int i = 0; i <= n; ++i) {
             sum += d[i] * d[n - i];
         }
-
 
 
         writer.println(sum);

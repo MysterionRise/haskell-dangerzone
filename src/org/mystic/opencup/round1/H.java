@@ -1,4 +1,4 @@
-//package org.mystic.opencup.round1;
+package org.mystic.opencup.round1;
 
 import java.io.*;
 import java.util.Arrays;
@@ -14,9 +14,6 @@ public class H {
 
         reader = new BufferedReader(new FileReader("reachability.in"));
         writer = new PrintWriter(new FileWriter("reachability.out"));
-//
-//        reader = new BufferedReader(new InputStreamReader(System.in));
-//        writer = new PrintWriter(System.out);
     }
 
     public static void main(String[] args) throws IOException {

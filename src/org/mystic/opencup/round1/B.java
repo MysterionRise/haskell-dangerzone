@@ -1,8 +1,6 @@
 package org.mystic.opencup.round1;
 
 import java.io.*;
-import java.util.Iterator;
-import java.util.LinkedList;
 
 
 public class B {
@@ -16,9 +14,6 @@ public class B {
 
         reader = new BufferedReader(new FileReader("checkers.in"));
         writer = new PrintWriter(new FileWriter("checkers.out"));
-
-//        reader = new BufferedReader(new InputStreamReader(System.in));
-//        writer = new PrintWriter(System.out);
     }
 
     public static void main(String[] args) throws IOException {
@@ -66,7 +61,7 @@ public class B {
         for (int i = 0; i < 1L << 20; ++i) {
             int currentWhite = 0;
             int playedGames = 0;
-            for(int j = 0; j < n; j++) {
+            for (int j = 0; j < n; j++) {
                 currentLengths[j] = initialLengths[j];
             }
             vl = 0;
@@ -75,7 +70,7 @@ public class B {
                 if ((i & (1 << j)) == 0) {
                     gtp = 1;
                 }
-                for(int games = 0; games < gtp && playedGames < k; games++) {
+                for (int games = 0; games < gtp && playedGames < k; games++) {
                     playedGames++;
                     char[] historyForCurrentEngine = initialHistory[j % n];
                     int hi = currentLengths[j % n];
