@@ -20,25 +20,36 @@ object Conference {
   }
 
   def solve = {
-    val n = nextInt
     val m = nextInt
+    val n = nextInt
     val k = nextInt
-    val g = new Array[Array[Int]](n + m + 2)
-    for (i <- 0 until n + m + 2) {
-      g(i) = new Array[Int](n + m + 2)
-    }
+    val g = createGraph(n + m + 2)
     for (i <- 0 until k) {
-      g(nextInt)(n + nextInt) = 1
+      val a = nextInt
+      val b = nextInt
+      g(a) = (b + m) :: g(a)
     }
-    for (i <- 1 to n) {
-      g(i)(0) = 1 // add fake source
+    for (i <- 1 to m) {
+      g(0) = i :: g(0) // add fake source
     }
-    for (i <- n + 1 to m) {
-      g(i)(n + m - 1) = 1 // add fake sink
+    for (i <- m + 1 to m + n) {
+      g(i) = (n + m + 1) :: g(i) // add fake sink
     }
+    out.println(n + m - maxFlow(0, n + m + 1, g))
+  }
 
-    // @todo find max flow
-    // answer should be n + m - maxflow
+  def createGraph(size: Int): Array[List[Int]] = {
+    val graph = new Array[List[Int]](size)
+    for (i <- 0 until size) {
+      graph(i) = List()
+    }
+    graph
+  }
+
+
+  def maxFlow(s: Int, t: Int, graph: Array[List[Int]]): Int = {
+    var flow = 0
+    flow
   }
 
   def main(args: Array[String]): Unit = {
@@ -47,4 +58,5 @@ object Conference {
     solve
     out.close
   }
+
 }
