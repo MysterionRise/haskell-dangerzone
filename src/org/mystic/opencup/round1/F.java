@@ -39,7 +39,30 @@ public class F {
         int n = readInt();
         int l = readInt();
         int m = readInt();
-        // @todo calculate with C's, using log
-        writer.flush();
+        double[] logFacts = new double[1000 * 1000 + 1000];
+        logFacts[0] = Math.log(1.0d);
+        for (int i = 1; i < logFacts.length; ++i) {
+            logFacts[i] = logFacts[i - 1] + Math.log(i);
+        }
+        double sum = 0.0d;
+        double[] logProb = new double[Math.min(l, m) + 1];
+        double[] prob = new double[Math.min(l, m) + 1];
+        for (int s = 0; s <= Math.min(l, m); ++s) {
+            if (l + m - 2 * s > n - s) {
+                continue;
+            }
+            logProb[s] = logFacts[l] + logFacts[n - l] + logFacts[m] + logFacts[n - m] - logFacts[l - s] - logFacts[m - s] - logFacts[n] - logFacts[n - m - l + s] - logFacts[s];
+            prob[s] = Math.exp(logProb[s]);
+            sum += prob[s];
+        }
+        double prefixSum = 0.0d;
+        for (int ans = logProb.length - 1; ans >= 0; --ans) {
+            prefixSum += prob[ans];
+            if (prefixSum >= 0.5 * sum) {
+                writer.println(ans);
+                writer.flush();
+                return;
+            }
+        }
     }
 }
