@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
-// @todo failed solution, WA12
 public class C implements Runnable {
 
     PrintWriter out;
@@ -60,16 +59,9 @@ public class C implements Runnable {
                         k++;
                     }
                     int left = r.size();
+                    int ans = r.size();
                     for (int j = 0; j < numbers.size(); ++j) {
-                        boolean found = false;
-                        for (int l = 0; l < r.size(); ++l) {
-                            if (r.get(l).second == numbers.get(j).second) {
-                                found = true;
-                            }
-                        }
-                        if (!found) {
-                            out.println("pushBack");
-                        } else {
+                        if (r.contains(numbers.get(j))) {
                             if (left == 3) {
                                 out.println("pushQueue");
                             } else if (left == 2) {
@@ -80,12 +72,14 @@ public class C implements Runnable {
                                 out.println("pushBack");
                             }
                             left--;
+                        } else {
+                            out.println("pushBack");
                         }
                     }
-                    out.print(r.size() + " ");
-                    if (r.size() == 3) {
+                    out.print(ans + " ");
+                    if (ans == 3) {
                         out.println("popStack popFront popQueue");
-                    } else if (r.size() == 2) {
+                    } else if (ans == 2) {
                         out.println("popStack popFront");
                     } else {
                         out.println("popStack");
@@ -119,6 +113,26 @@ public class C implements Runnable {
         public int compareTo(Object o) {
             Pair pair = (Pair) o;
             return pair.first.compareTo(this.first);
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            Pair pair = (Pair) o;
+
+            if (first != null ? !first.equals(pair.first) : pair.first != null) return false;
+            if (second != null ? !second.equals(pair.second) : pair.second != null) return false;
+
+            return true;
+        }
+
+        @Override
+        public int hashCode() {
+            int result = first != null ? first.hashCode() : 0;
+            result = 31 * result + (second != null ? second.hashCode() : 0);
+            return result;
         }
     }
 }
