@@ -2,6 +2,7 @@ package org.mystic.codeforces.cf208div2;
 
 
 import java.io.*;
+import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
 public class A implements Runnable {
@@ -56,7 +57,7 @@ public class A implements Runnable {
             for (int j = i; j < n - 1; ++j) {
                 int pFrom = Math.min(a1[j], a1[j + 1]);
                 int pTo = Math.max(a1[j], a1[j + 1]);
-                if (pTo <= from && pFrom <= from || pTo >= to && pFrom >= to || pFrom >= from && pTo <= to || from >= pFrom && to <= pTo){
+                if (pTo <= from && pFrom <= from || pTo >= to && pFrom >= to || pFrom >= from && pTo <= to || from >= pFrom && to <= pTo) {
                 } else {
                     out.println("yes");
                     return;

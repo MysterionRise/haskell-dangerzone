@@ -1,9 +1,9 @@
 package org.mystic.codeforces.cf214div2;
 
 import java.io.*;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
-//@todo failed
 public class C implements Runnable {
 
     PrintWriter out;
@@ -45,61 +45,36 @@ public class C implements Runnable {
         final int k = nextInt();
         final int[] a = new int[n];
         final int[] b = new int[n];
+        final int[] w = new int[n];
         for (int i = 0; i < n; ++i) {
             a[i] = nextInt();
         }
         for (int i = 0; i < n; ++i) {
             b[i] = nextInt();
         }
-        class Utils {
-            int brute(int[] a, int[] b, int s, int f) {
-                int z = f - s;
-                int max = Integer.MIN_VALUE;
-                double pow = Math.pow(2, z);
-                for (int i = 0; i <= pow; ++i) {
-                    char[] chars = Integer.toBinaryString(i).toCharArray();
-                    int top = 0;
-                    int btm = 0;
-                    for (int j = 0; j < chars.length; ++j) {
-                        if (chars[j] == '1') {
-                            top += a[s + j];
-                            btm += b[s + j];
-                        }
-                    }
-                    if (btm != 0 && top / btm == k) {
-                        max = Math.max(max, top);
-                    }
-                }
-                if (max == Integer.MIN_VALUE) {
-                    return -1;
-                }
-                return max;
-            }
+        for (int i = 0; i < n; ++i) {
+            w[i] = a[i] - k * b[i];
         }
-
-        Utils u = new Utils();
-        int ans = 0;
-        final int dividers = 8;
-        if (n < dividers) {
-            ans = u.brute(a, b, 0, n - 1);
-        } else {
-            int x = n / dividers;
-            for (int i = 0; i < dividers; ++i) {
-                int tmp;
-                if (x * i + x < n) {
-                    tmp = u.brute(a, b, x * i, x * i + x);
+        final int ZERO = 10000;
+        final int len = ZERO * 2;
+        final int[][] dp = new int[n + 1][len];
+        for (int i = 0; i < n + 1; ++i) {
+            Arrays.fill(dp[i], Integer.MIN_VALUE);
+        }
+        dp[0][ZERO] = 0;
+        for (int i = 1; i <= n; ++i) {
+            for (int j = 0; j < len; ++j) {
+                if (j - w[i - 1] >= 0 && j - w[i - 1] < dp[i].length) {
+                    dp[i][j] = Math.max(dp[i - 1][j], dp[i - 1][j - w[i - 1]] + a[i - 1]);
                 } else {
-                    tmp = u.brute(a, b, x * i, n - 1);
-                }
-                if (tmp != -1) {
-                    ans += tmp;
+                    dp[i][j] = dp[i - 1][j];
                 }
             }
         }
-        if (ans == 0) {
+        if (dp[n][ZERO] == 0) {
             out.println(-1);
         } else {
-            out.println(ans);
+            out.println(dp[n][ZERO]);
         }
     }
 }
