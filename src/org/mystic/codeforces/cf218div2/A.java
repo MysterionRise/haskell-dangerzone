@@ -1,4 +1,4 @@
-package org.mystic.codeforces.cf217div2;
+package org.mystic.codeforces.cf218div2;
 
 
 import java.io.*;
@@ -45,23 +45,39 @@ public class A implements Runnable {
     }
 
     public void solve() throws IOException {
-        int r1 = nextInt();
-        int c1 = nextInt();
-        int r2 = nextInt();
-        int c2 = nextInt();
-        if (r1 == r2 || c1 == c2) {
-            out.print(1 + " ");
-        } else {
-            out.print(2 + " ");
+        int n = nextInt();
+        int k = nextInt();
+        int[] a = new int[n];
+        for (int i = 0; i < n; ++i) {
+            a[i] = nextInt();
         }
-        if (r1 + c1 == r2 + c2 || Math.abs(r1 - r2) == Math.abs(c1 - c2)) {
-            out.print(1 + " ");
-        } else if ((r1 + c1) % 2 == (r2 + c2) % 2) {
-            out.print(2 + " ");
-        } else {
-            out.print(0 + " ");
+        int[] b = new int[k];
+        for (int i = 0; i < k; ++i) {
+            b[i] = a[i];
         }
-        out.println(Math.max(Math.abs(r1 - r2), Math.abs(c1 - c2)));
+        int cnt = 0;
+        for (int i = 0; i < n; ++i) {
+            if (a[i] == b[i % k]) {
+                ++cnt;
+            }
+        }
+        if (cnt == n) {
+            out.println(0);
+            return;
+        }
+
+        int[] num = new int[k];
+        for (int i = 0; i < n; ++i) {
+            if (a[i] == 1) {
+                num[i % k]++;
+            }
+        }
+        int ans = 0;
+        for (int i = 0; i < k; ++i) {
+            ans += Math.min(num[i], n / k - num[i]);
+        }
+        out.println(ans);
     }
+
 
 }

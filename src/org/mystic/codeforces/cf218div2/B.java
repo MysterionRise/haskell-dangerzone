@@ -1,17 +1,16 @@
-package org.mystic.codeforces.cf217div2;
-
+package org.mystic.codeforces.cf218div2;
 
 import java.io.*;
 import java.util.StringTokenizer;
 
-public class A implements Runnable {
+public class B implements Runnable {
 
     PrintWriter out;
     BufferedReader br;
     StringTokenizer st;
 
     public static void main(String[] args) throws IOException {
-        new Thread(new A()).start();
+        new Thread(new B()).start();
     }
 
     public String next() throws IOException {
@@ -29,10 +28,6 @@ public class A implements Runnable {
         return Long.parseLong(next());
     }
 
-    public double nextDouble() throws IOException {
-        return Double.parseDouble(next());
-    }
-
     public void run() {
         try {
             br = new BufferedReader(new InputStreamReader(System.in));
@@ -45,23 +40,35 @@ public class A implements Runnable {
     }
 
     public void solve() throws IOException {
-        int r1 = nextInt();
-        int c1 = nextInt();
-        int r2 = nextInt();
-        int c2 = nextInt();
-        if (r1 == r2 || c1 == c2) {
-            out.print(1 + " ");
-        } else {
-            out.print(2 + " ");
+        int a = nextInt();
+        int b = nextInt();
+        if (a == b) {
+            out.println(0);
+            return;
         }
-        if (r1 + c1 == r2 + c2 || Math.abs(r1 - r2) == Math.abs(c1 - c2)) {
-            out.print(1 + " ");
-        } else if ((r1 + c1) % 2 == (r2 + c2) % 2) {
-            out.print(2 + " ");
-        } else {
-            out.print(0 + " ");
+        int[] div = new int[]{2, 3, 5};
+        int[] a1 = new int[3];
+        int[] b1 = new int[3];
+        for (int i = 0; i < div.length; ++i) {
+            while (a % div[i] == 0) {
+                a /= div[i];
+                a1[i]++;
+            }
         }
-        out.println(Math.max(Math.abs(r1 - r2), Math.abs(c1 - c2)));
+        for (int i = 0; i < div.length; ++i) {
+            while (b % div[i] == 0) {
+                b /= div[i];
+                b1[i]++;
+            }
+        }
+        if (a != b) {
+            out.println(-1);
+            return;
+        }
+        int ans = 0;
+        for (int i = 0; i < div.length; ++i) {
+            ans += Math.abs(a1[i] - b1[i]);
+        }
+        out.println(ans);
     }
-
 }
