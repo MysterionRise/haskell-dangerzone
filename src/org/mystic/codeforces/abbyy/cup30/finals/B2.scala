@@ -1,4 +1,4 @@
-package scala.org.mystic.codeforces
+package org.mystic.codeforces.abbyy.cup30.finals
 
 import java.io.{BufferedOutputStream, InputStreamReader, BufferedReader, PrintWriter}
 import java.util.StringTokenizer
@@ -7,10 +7,7 @@ import scala.Array
 import scala.math._
 import scala.Predef._
 
-/**
- * @author kperikov
- */
-object B2_331 {
+object B2 {
 
   var out: PrintWriter = null
   var br: BufferedReader = null

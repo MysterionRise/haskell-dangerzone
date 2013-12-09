@@ -1,14 +1,11 @@
-package org.mystic.codeforces
+package org.mystic.codeforces.abbyy.cup30.finals
 
 import collection.mutable.HashMap
 import java.util._
 import java.lang._
 import java.io._
 
-/**
- * @author kperikov
- */
-object A_331 {
+object A {
 
   var out: PrintWriter = null
   var br: BufferedReader = null

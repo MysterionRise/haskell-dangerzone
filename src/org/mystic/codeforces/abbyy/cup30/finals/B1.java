@@ -1,20 +1,17 @@
-package org.mystic.codeforces;
+package org.mystic.codeforces.abbyy.cup30.finals;
 
 import java.io.*;
 import java.util.HashSet;
 import java.util.StringTokenizer;
 
-/**
- * @author kperikov
- */
-public class B1_331 implements Runnable {
+public class B1 implements Runnable {
 
     PrintWriter out;
     BufferedReader br;
     StringTokenizer st;
 
     public static void main(String[] args) throws IOException {
-        new Thread(new B1_331()).start();
+        new Thread(new B1()).start();
     }
 
     public String next() throws IOException {
@@ -68,7 +65,7 @@ public class B1_331 implements Runnable {
                         }
                     }
                 }
-                HashSet<Integer> s = new HashSet<Integer>();
+                HashSet<Integer> s = new HashSet<>();
                 for (int i = 0; i < n; ++i) {
                     if (!s.contains(dp[i]) && dp[i] != 0) {
                         s.add(dp[i]);
