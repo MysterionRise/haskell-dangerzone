@@ -4,9 +4,6 @@ import java.util._
 import java.lang._
 import java.io._
 
-/**
- * @author kperikov
- */
 object B_332 {
 
   var out: PrintWriter = null

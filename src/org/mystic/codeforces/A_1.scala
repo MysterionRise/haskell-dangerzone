@@ -1,9 +1,6 @@
 package org.mystic.codeforces
 
 import scala.math._
-/**
- * @author kperikov
- **/
 
 object A_1 {
 
