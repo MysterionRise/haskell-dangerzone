@@ -5,16 +5,28 @@ import java.util.StringTokenizer
 import scala.annotation.tailrec
 
 /**
- * Get 14.54
+ * Full solution
  */
 object CommonDivisors {
 
   @tailrec
   def gcd(a: Int, b: Int): Int = if (b == 0) a.abs else gcd(b, a % b)
 
+  def getResult(num: Int, acc: Int, accMul: Int, stream: List[Int]): Int = {
+    stream.size match {
+      case 0 => acc
+      case _ => {
+        num % stream.head match {
+          case 0 => getResult(num / stream.head, acc, accMul + 1, stream)
+          case _ => getResult(num, acc * accMul, 1, stream.tail)
+        }
+      }
+    }
+  }
+
   def commonDivisors(a: Int, b: Int) = {
     val g = gcd(a, b)
-    println(Stream.from(1).takeWhile(x => x <= g).filter(x => g % x == 0).size)
+    println(getResult(g, 1, 1, primes.takeWhile(i => i <= 10 * Math.sqrt(g)).toList)) // tricky to go until 10 times of Math.sqrt of GCD
   }
 
   val primes: Stream[Int] = 2 #:: Stream.from(3, 2).filter(i => primes.takeWhile(j => j * j <= i).forall(k => i % k > 0))
