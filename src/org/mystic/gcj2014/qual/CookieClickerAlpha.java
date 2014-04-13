@@ -3,9 +3,6 @@ package org.mystic.gcj2014.qual;
 import java.io.*;
 import java.util.StringTokenizer;
 
-/**
- * Only solve small input
- */
 public class CookieClickerAlpha implements Runnable {
 
     PrintWriter out;
@@ -52,16 +49,15 @@ public class CookieClickerAlpha implements Runnable {
             double C = nextDouble();
             double F = nextDouble();
             double X = nextDouble();
-            double ans = Double.MAX_VALUE;
-            for (int j = 0; j < 20000; ++j) {
-                double temp = 0.0d;
-                double speed = 2.0d;
-                for (int k = 1; k < j; ++k) {
-                    temp += C / speed;
-                    speed += F;
-                }
-                temp += X / speed;
-                ans = Math.min(ans, temp);
+            double ans = X / 2;
+            double[] memoTemp = new double[500000];
+            double[] memoSpeed = new double[500000];
+            memoTemp[0] = 0.0d;
+            memoSpeed[0] = 2.0d;
+            for (int j = 1; j < 500000; ++j) {
+                memoTemp[j] = memoTemp[j - 1] + C / memoSpeed[j - 1];
+                memoSpeed[j] = memoSpeed[j - 1] + F;
+                ans = Math.min(ans, memoTemp[j] + X / memoSpeed[j]);
             }
             out.print("Case #" + i + ": ");
             out.printf("%.7f", ans);
