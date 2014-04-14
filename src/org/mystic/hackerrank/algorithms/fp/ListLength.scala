@@ -7,7 +7,7 @@ object ListLength {
     countSize(1, arr)
   }
 
-  val s = Stream.from(1).takeWhile(x => x < n)
+//  val s = Stream.from(1).takeWhile(x => x < n)
 
   @tailrec
   def countSize(acc: Int, list: List[Int]): Int = {
