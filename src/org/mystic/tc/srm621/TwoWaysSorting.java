@@ -6,16 +6,15 @@ import java.text.*;
 import java.math.*;
 
 public class TwoWaysSorting {
-    
+
     public String sortingMethod(String[] s) {
         boolean isLexi = false;
         boolean isSize = false;
-        int i = 1;
+        int i;
         for (i = 1; i < s.length && s[i - 1].length() <= s[i].length(); ++i) ;
         if (i == s.length) {
             isSize = true;
         }
-        i = 1;
         for (i = 1; i < s.length && s[i - 1].compareTo(s[i]) <= 0; ++i) ;
         if (i == s.length) {
             isLexi = true;
