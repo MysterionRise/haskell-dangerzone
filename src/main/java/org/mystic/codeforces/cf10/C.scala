@@ -45,19 +45,20 @@ object C {
 
   def divNumber(x: Int): Long = {
     var C = x
-    val dividers = new Array[Int](5001)
-    for (i <- 2 to 5000) {
+    val sqrt = (Math.sqrt(x) + 1).toInt
+    val dividers = new Array[Int](sqrt + 1)
+    for (i <- 2 to sqrt) {
       while (C % i == 0) {
         dividers(i) += 1
         C /= i
       }
     }
-    if (C != 1) {
-      return 2
-    }
     var divNumbers: Long = 1L
-    for (i <- 1 to 5000) {
+    for (i <- 1 to sqrt) {
       divNumbers *= (dividers(i) + 1)
+    }
+    if (C != 1) {
+      return 2 * divNumbers
     }
     divNumbers
   }
@@ -79,8 +80,8 @@ object C {
         X += (f(da) * f(db) * f(digRoot(da * db)))
       }
     }
-    for (dc <- 1 to n) {
-      X -= divNumber(dc)
+    for (divider <- 1 to n) {
+        X -= n / divider
     }
     out.println(X)
   }
