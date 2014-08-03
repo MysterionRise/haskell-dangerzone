@@ -21,20 +21,25 @@ object C {
     return java.lang.Long.parseLong(next)
   }
 
-  def isParralel(x: (Long, Long), y: (Long, Long)): Boolean = {
-    x._1 == y._1 || x._2 == x._2
+  def isParralel(x: ((Long, Long), (Long, Long))): Boolean = {
+    x._1._1 == x._2._1 || x._1._2 == x._2._2
   }
 
   def dist(x: (Long, Long), y: (Long, Long)): Long = {
     (x._1 - y._1) * (x._1 - y._1) + (x._2 - y._2) * (x._2 - y._2)
   }
 
-  def angleBetweenLines(a: (Long, Long), b: (Long, Long), c: (Long, Long)): Long = {
-    if (dist(a, b) + dist(a, c) == dist(b, c)) {
-      90
-    } else {
-      -1
+  def angleBetweenLines(a: (Long, Long), b: (Long, Long), c: (Long, Long), d: (Long, Long)): Boolean = {
+    if (a == c) {
+      return dist(a, b) + dist(a, d) == dist(b, d)
+    } else if (a == d) {
+      return dist(a, b) + dist(a, c) == dist(b, c)
+    } else if (b == c) {
+      return dist(a, b) + dist(b, d) == dist(a, d)
+    } else if (b == d) {
+      return dist(a, b) + dist(b, c) == dist(a, c)
     }
+    return false
   }
 
   def solve = {
@@ -51,26 +56,23 @@ object C {
     }
     var parralel = 0
     val dotArray = dots.toArray(new Array[(Long, Long)](0))
-    for (i <- 0 until dotArray.length) {
-      for (j <- 0 until dotArray.length)
-        if (isParralel(dotArray(i), dotArray(j))) {
-          parralel += 1
-        }
+    for (i <- 0 until 4) {
+      if (isParralel(lines(i))) {
+        parralel += 1
+      }
     }
-    if (parralel != 16) {
+    if (parralel != 4) {
       flag = false
     }
     var numberOf90 = 0
-    for (i <- 0 until dotArray.length) {
-      for (j <- 0 until dotArray.length) {
-        for (k <- 0 until dotArray.length) {
-          if (angleBetweenLines(dotArray(i), dotArray(j), dotArray(k)) == 90) {
-            numberOf90 += 1
-          }
+    for (i <- 0 until 4) {
+      for (j <- 0 until 4) {
+        if (angleBetweenLines(lines(i)._1, lines(i)._2, lines(j)._1, lines(j)._2)) {
+          numberOf90 += 1
         }
       }
     }
-    if (numberOf90 != 36) {
+    if (numberOf90 != 8) {
       flag = false
     }
     for (i <- 0 until 4) {
