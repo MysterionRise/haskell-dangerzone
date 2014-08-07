@@ -25,11 +25,11 @@ object C {
     return Long.parseLong(next)
   }
 
-  def bruteForse(a: Int, b: Int, x: Int, y: Int): (Int, Int) = {
+  def bruteForse(a: Long, b: Long, x: Long, y: Long): (Long, Long) = {
     var i = a
     var j = b
-    var maxSq = Int.MinValue
-    var ans = (0, 0)
+    var maxSq: Long = Int.MinValue
+    var ans: (Long, Long) = (0, 0)
     while (i > 0) {
       j = b
       while (j > 0) {
@@ -46,51 +46,53 @@ object C {
     return ans
   }
 
-  def cleverSolver(a: Int, b: Int, x: Int, y: Int): (Int, Int) = {
-    var la = 0
-    var ra = a
-    var lb = 0
-    val rb = b
 
+  def gcd(a: Long, b: Long): Long = {
+    if (b == 0) {
+      return a
+    }
+    return gcd(b, a % b)
+  }
+
+  def cleverSolver(a: Long, b: Long, x1: Long, y1: Long): (Long, Long) = {
+    val x = x1 / gcd(x1, y1)
+    val y = y1 / gcd(x1, y1)
     if (a % x == 0 && a / x == b / y && b % y == 0) {
-      return (a.toInt, b.toInt)
+      return (a, b)
     } else {
       val ax: Double = a / x
       val by: Double = b / y
       val min = Math.min(ax, by)
       val max = Math.max(ax, by)
-      if (max * x <= a && max * y <= b && (max * x) * y == (max * y) * x) {
-        if (max * x < 1.0 || max * y < 1.0) {
-          return (0, 0)
-        }
-        return ((max * x).toInt, (max * y).toInt)
-      } else if (min * x <= a && min * y <= b && (min * x) * y == (min * y) * x) {
-        if (min * x < 1d || min * y < 1d) {
-          return (0, 0)
-        }
-        return ((min * x).toInt, (min * y).toInt)
-      } else {
+      val sq = Math.max(min * x * min * y, max * max * x * y)
+      if (sq == 0) {
         return (0, 0)
+      } else {
+        if (max * x <= a && max * y <= b) {
+          return ((max * x).toInt, (max * y).toInt)
+        } else {
+          return ((min * x).toInt, (min * y).toInt)
+        }
       }
     }
   }
 
   def solve = {
-    val a = nextLong.toDouble
-    val b = nextLong.toDouble
-    val x = nextLong.toDouble
-    val y = nextLong.toDouble
+    val a = nextLong
+    val b = nextLong
+    val x = nextLong
+    val y = nextLong
     val ans = cleverSolver(a, b, x, y)
     //    val ans = bruteForse(a, b, x, y)
-    out.println(ans._1.toInt + " " + ans._2.toInt)
+    out.println(ans._1 + " " + ans._2)
     //    out.println("START")
     //    out.flush()
     //    val rand = new Random()
     //    for (i <- 0 to 100000) {
     //      val a = rand.nextInt(500) + 1
     //      val b = rand.nextInt(500) + 1
-    //      val x = rand.nextInt(5000) + 1
-    //      val y = rand.nextInt(5000) + 1
+    //      val x = rand.nextInt(10) + 1
+    //      val y = rand.nextInt(10) + 1
     //      val correctAns = bruteForse(a, b, x, y)
     //      val cleverAns = cleverSolver(a, b, x, y)
     //      if (cleverAns != correctAns) {
