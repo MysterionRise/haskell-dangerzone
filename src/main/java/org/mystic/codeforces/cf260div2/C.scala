@@ -27,7 +27,7 @@ object C {
   def solve: Int = {
     val n = nextInt
     val a = new Array[Int](n)
-    val num = new Array[Int](100005)
+    val num = new Array[Long](100005)
     for (i <- 0 until n) {
       a(i) = nextInt
       num(a(i)) += 1
@@ -37,7 +37,7 @@ object C {
     dp(1) = num(1)
     var i = 2
     while (i <= 100002) {
-      dp(i) = Math.max(dp(i - 1), dp(i - 2) + num(i) * i)
+      dp(i) = Math.max(dp(i - 1), dp(i - 2) + num(i) * i.toLong)
       i += 1
     }
     out.println(dp(100002))
