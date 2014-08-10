@@ -26,7 +26,7 @@ object A {
   }
 
   def comp(x: (Int, Int), y: (Int, Int)): Boolean = {
-    x._1 < y._1
+    x._1 > y._1
   }
 
   def solve: Int = {
@@ -39,7 +39,16 @@ object A {
       b(i) = nextInt
       notebooks(i) = (a(i), b(i))
     }
+    val sorted = notebooks.sortWith(comp)
+    var min = sorted(0)._2
+    for (i <- 1 until n) {
+      if (sorted(i)._2 > min) {
     out.println("Happy Alex")
+        out.println("Happy Alex")
+        return 1
+      }
+      min = Math.min(min, sorted(i)._2)
+    }
     out.println("Poor Alex")
     return 1
   }
