@@ -5,30 +5,15 @@ public class CandyMaking {
     public double findSuitableDensity(int[] containerVolume, int[] desiredWeight) {
         int n = containerVolume.length;
         double[] perfectD = new double[n];
-        double maxD = Double.MIN_VALUE;
-        double minD = Double.MAX_VALUE;
+        double min = Double.MAX_VALUE;
         for (int i = 0; i < n; ++i) {
             perfectD[i] = (desiredWeight[i] * 1.0d) / (containerVolume[i] * 1.0d);
-            maxD = Math.max(maxD, perfectD[i]);
-            minD = Math.min(minD, perfectD[i]);
         }
-        double a = minD;
-        double b = maxD;
-        double len = (b - a);
-        double fi = 1.61803d;
-        while (len >= 5e-11) {
-            double x1 = b - ((b - a) * 1.0d) / fi;
-            double x2 = a + ((b - a) * 1.0d) / fi;
-            double fx1 = f(containerVolume, desiredWeight, x1);
-            double fx2 = f(containerVolume, desiredWeight, x2);
-            if (fx1 < fx2) {
-                b = x2;
-            } else {
-                a = x1;
-            }
-            len = (b - a);
+        for (int i = 0; i < n; ++i) {
+            double fi = f(containerVolume, desiredWeight, perfectD[i]);
+            min = Math.min(min, fi);
         }
-        return f(containerVolume, desiredWeight, (a + b) / 2.0d);
+        return min;
     }
 
     private double f(int[] c, int[] w, double x) {

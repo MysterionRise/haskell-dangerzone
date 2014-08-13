@@ -1,4 +1,4 @@
-package org.mystic.memsql2.round1
+package org.mystic.codeforces.memsql2.round1
 
 import java.util._
 import java.lang._
