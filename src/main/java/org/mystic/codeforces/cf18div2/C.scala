@@ -1,11 +1,9 @@
 package org.mystic.codeforces.cf18div2
 
-import java.util
 import java.util._
-import java.lang._
 import java.io._
 
-object B {
+object C {
 
   var out: PrintWriter = null
   var br: BufferedReader = null
@@ -23,16 +21,27 @@ object B {
   }
 
   def nextLong: Long = {
-    return Long.parseLong(next)
+    return java.lang.Long.parseLong(next)
   }
 
   def solve: Int = {
     val n = nextInt
-    val d = nextInt
-    val m = nextInt
-    val l = nextInt
-    var pos = 0
-    out.println(pos)
+    val a = new Array[Int](n)
+    var sum2 = 0
+    for (i <- 0 until n) {
+      a(i) = nextInt
+      sum2 += a(i)
+    }
+    var sum1 = 0
+    var ans = 0
+    for (i <- 1 until n) {
+      sum1 += a(i - 1)
+      sum2 -= a(i - 1)
+      if (sum1 == sum2) {
+        ans += 1
+      }
+    }
+    out.println(ans)
     return 1
   }
 
