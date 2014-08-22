@@ -28,58 +28,24 @@ object A {
     val n = nextInt
     val x = nextInt
     val y = nextInt
-    val a0 = nextInt
+    var a0 = nextInt
     val m = nextInt
     val z = nextInt
     val t = nextInt
     val b0 = nextInt
     val two16: Int = Math.pow(2, 16).toInt
     val two30: Int = Math.pow(2, 30).toInt
-
-    object SegmentTree {
-
-      val N = 10000000
-      //      val N = 8
-      val tree = new Array[Int](2 * N)
-
-      def build(a: Array[Int]): Unit = {
-        for (i <- N until tree.length) {
-          tree(i) = a(i - N)
-        }
-        for (i <- N - 1 to 1 by -1) {
-          tree(i) = tree(2 * i) + tree(2 * i + 1)
-        }
-      }
-
-      def sum(l: Int, r: Int): Int = {
-        var sum = 0
-        var left = l + N
-        var right = r + N
-        while (left < right) {
-          if (left % 2 == 1) {
-            sum += tree(left)
-            left += 1
-          }
-          if (right % 2 != 1) {
-            sum += tree(right)
-            right -= 1
-          }
-          left >>= 1
-          right >>= 1
-        }
-        if (left == right) {
-          return sum + tree(left)
-        }
-        return sum
-      }
-    }
-    val a = new Array[Int](SegmentTree.N)
-    a(0) = a0
+    val prefixSum = new Array[Long](n + 1)
+    var sum: Long = a0
+    prefixSum(0) = 0
     for (i <- 1 until n) {
-      a(i) = (((x.toLong * a(i - 1)) % two16 + y) % two16).toInt
+      val ai = (((x.toLong * a0) % two16 + y) % two16).toInt
+      prefixSum(i) = sum
+      sum += ai
+      a0 = ai
     }
-    SegmentTree.build(a)
-    var sum: Long = 0
+    prefixSum(n) = sum
+    sum = 0
     var c0 = b0 % n
     var bi1 = b0
     for (i <- 1 until 2 * m) {
@@ -94,7 +60,7 @@ object A {
       val c1 = b1.toInt
       bi1 = zz.toInt
       if (i % 2 == 1) {
-        sum += SegmentTree.sum(Math.min(c0, c1), Math.max(c0, c1))
+        sum += (prefixSum(Math.max(c0, c1) + 1) - prefixSum(Math.min(c0, c1)))
       } else {
         c0 = c1
       }
@@ -104,10 +70,10 @@ object A {
   }
 
   def main(args: Array[String]): Unit = {
-//    br = new BufferedReader(new InputStreamReader(System.in))
-//    out = new PrintWriter(new BufferedOutputStream(System.out))
-            br = new BufferedReader(new InputStreamReader(new FileInputStream("sum0.in")))
-        out = new PrintWriter(new BufferedOutputStream(new FileOutputStream("sum0.out")))
+            br = new BufferedReader(new InputStreamReader(System.in))
+            out = new PrintWriter(new BufferedOutputStream(System.out))
+//    br = new BufferedReader(new InputStreamReader(new FileInputStream("sum0.in")))
+//    out = new PrintWriter(new BufferedOutputStream(new FileOutputStream("sum0.out")))
     solve
     out.close
   }
