@@ -28,33 +28,24 @@ public class Egalitarianism3Easy {
         }
 
         int ans = 1;
-        for (int i = 0; i < n; ++i) {
-            Set<Integer> s = new HashSet<>();
-            for (int j = i + 1; j < n; ++j) {
-                s.add(g[i][j]);
+        for (int i = 1; i <= Math.pow(2, n); ++i) {
+            List<Integer> pool = new ArrayList<>();
+            for (int j = 0; j < n; ++j) {
+                if ((i & (1 << j)) != 0) {
+                    pool.add(j);
+                }
             }
-            final Iterator<Integer> it = s.iterator();
-            while (it.hasNext()) {
-                int v = it.next();
-                List<Integer> pool = new ArrayList<>();
-                pool.add(i);
-                for (int j = i + 1; j < n; ++j) {
-                    if (g[i][j] == v) {
-                        pool.add(j);
+            int l = pool.size();
+            Set<Integer> d = new HashSet<>();
+            for (int j = 0; j < l; ++j) {
+                for (int k = 0; k < l; ++k) {
+                    if (k != j) {
+                        d.add(g[pool.get(k)][pool.get(j)]);
                     }
                 }
-                int l = pool.size();
-                Set<Integer> d = new HashSet<>();
-                for (int j = 0; j < l; ++j) {
-                    for (int k = 0; k < l; ++k) {
-                        if (k != j) {
-                            d.add(g[pool.get(k)][pool.get(j)]);
-                        }
-                    }
-                }
-                if (d.size() == 1) {
-                    ans = Math.max(ans, pool.size());
-                }
+            }
+            if (d.size() == 1) {
+                ans = Math.max(ans, pool.size());
             }
         }
         return ans;
