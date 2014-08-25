@@ -4,7 +4,7 @@ import java.util._
 import java.io._
 import java.util
 
-class A {
+object A {
 
   var out: PrintWriter = null
   var br: BufferedReader = null
@@ -37,35 +37,36 @@ class A {
       if (s != 0) {
         graph.get(s - 1).add(i)
       } else {
-      	root = i
+        root = i
       }
     }
     object Helper {
-    	
-    	val parent = new Array[Int](n)
-    	
-    	def isParent(from: Int, to: Int): Boolean = {
-    		return parent(from) == to 
-    	}	
-    	
-      def dfs(root: Int) = {
-        val used = new Array[Boolean](n)
-        Arrays.fill(used, false)
-        used(root) = true
-        val q: util.Deque[Int] = new util.LinkedList[Int]()
-        q.addFirst(root)
-        while (!q.isEmpty) {
-          val v = q.pollFirst()
-          used(v) = true
-          for (i <- 0 until graph.get(v).size()) {
-            if (!used(graph.get(v).get(i))) {
-              q.addFirst(graph.get(v).get(i))
-            }
+
+      val d = new Array[Int](n)
+      val f = new Array[Int](n)
+      val used = new Array[Boolean](n)
+      var time: Int = 0
+
+      def isParent(from: Int, to: Int): Boolean = {
+        return d(to) > d(from) && f(to) < f(from)
+      }
+
+      def dfs(v: Int): Unit = {
+        used(v) = true
+        time += 1
+        d(v) = time
+        for (i <- 0 until graph.get(v).size()) {
+          if (!used(graph.get(v).get(i))) {
+            dfs(graph.get(v).get(i))
           }
         }
+        time += 1
+        f(v) = time
       }
     }
+
     val m = nextInt
+    Helper.time = 0
     Helper.dfs(root)
     for (i <- 0 until m) {
       val a = nextInt - 1
@@ -80,10 +81,10 @@ class A {
   }
 
   def main(args: Array[String]): Unit = {
-    br = new BufferedReader(new InputStreamReader(System.in))
-    out = new PrintWriter(new BufferedOutputStream(System.out))
-        // br = new BufferedReader(new InputStreamReader(new FileInputStream("ancestor.in")))
-        // out = new PrintWriter(new BufferedOutputStream(new FileOutputStream("ancestor.out")))
+//    br = new BufferedReader(new InputStreamReader(System.in))
+//    out = new PrintWriter(new BufferedOutputStream(System.out))
+    br = new BufferedReader(new InputStreamReader(new FileInputStream("ancestor.in")))
+    out = new PrintWriter(new BufferedOutputStream(new FileOutputStream("ancestor.out")))
     solve
     out.close
   }
