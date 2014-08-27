@@ -39,8 +39,8 @@ object B {
     object Helper {
 
       val color = new Array[Char](n)
-      val p = new Array[Int](n)
-      var end: Int = -1
+      val path = new util.ArrayList[Int]()
+      var end = -1
 
       def isACycle(v: Int): Boolean = {
         if (color(v) == 'g') {
@@ -50,14 +50,19 @@ object B {
         color(v) = 'g'
         for (i <- 0 until graph(v).size()) {
           val j: Int = graph(v).get(i)
-          p(j) = v
-          return isACycle(j)
+          if (color(j) != 'b') {
+            if (isACycle(j)) {
+              if (j != end) {
+                path.add(j)
+              }
+              return true
+            }
+          }
         }
         color(v) = 'b'
         return false
       }
     }
-    Arrays.fill(Helper.p, -1)
     Arrays.fill(Helper.color, 'w')
     var flag = false
     for (i <- 0 until n) {
@@ -67,15 +72,9 @@ object B {
     }
     if (flag) {
       out.println("YES")
-      var start = Helper.end
-      val path = new util.ArrayList[Int]()
-      path.add(start)
-      while (Helper.p(start) != Helper.end) {
-        path.add(Helper.p(start))
-        start = Helper.p(start)
-      }
-      for (i <- path.size - 1 to 0 by -1) {
-        out.print((path.get(i) + 1) + " ")
+      Helper.path.add(Helper.end)
+      for (i <- Helper.path.size - 1 to 0 by -1) {
+        out.print((Helper.path.get(i) + 1) + " ")
       }
     } else {
       out.println("NO")
