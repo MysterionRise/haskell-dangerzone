@@ -44,7 +44,6 @@ object B {
           return true
         }
         color(v) = 'g'
-
         for (i <- 0 until graph(v).size()) {
           val j: Int = graph(v).get(i)
           if (color(j) != 'b') {
@@ -62,11 +61,14 @@ object B {
     var flag = false
     (0 until n).toStream.takeWhile(_ => !flag).foreach(i => flag |= Helper.isACycle(i))
     if (flag) {
-      out.println("YES")
       val len: Int = Helper.path.size()
-      if ((len == 2 && n == 2) || (len == 1 && n == 1)) {
+      val diffVertexes = new HashSet[Int]()
+      (0 until len).toStream.foreach(i => diffVertexes.add(Helper.path.get(i)))
+      out.println("YES")
+      if (len == diffVertexes.size()) {
         (len - 1 to 0 by -1).foreach(i => out.print((Helper.path.get(i) + 1) + " "))
-      } else {
+      }
+      else {
         (len - 1 to 1 by -1).dropWhile(i => Helper.path.get(i) != Helper.end).foreach(i => out.print((Helper.path.get(i) + 1) + " "))
       }
     } else {
@@ -78,8 +80,8 @@ object B {
   def main(args: Array[String]): Unit = {
 //    br = new BufferedReader(new InputStreamReader(System.in))
 //    out = new PrintWriter(new BufferedOutputStream(System.out))
-                    br = new BufferedReader(new InputStreamReader(new FileInputStream("cycle2.in")))
-                out = new PrintWriter(new BufferedOutputStream(new FileOutputStream("cycle2.out")))
+    br = new BufferedReader(new InputStreamReader(new FileInputStream("cycle2.in")))
+    out = new PrintWriter(new BufferedOutputStream(new FileOutputStream("cycle2.out")))
     solve
     out.close
   }
