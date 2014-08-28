@@ -29,9 +29,16 @@ object B {
   def solve: Int = {
     val n = nextInt
     val m = nextInt
-    val graph = new Array[util.ArrayList[Int]](n)
-    (0 until n).toStream.foreach(i => graph(i) = new util.ArrayList[Int]())
-    (0 until m).toStream.foreach(_ => graph(nextInt - 1).add(nextInt - 1))
+    val g = new Array[util.ArrayList[Int]](n)
+    (0 until n).foreach(i => g(i) = new util.ArrayList[Int]())
+    (0 until m).foreach(_ => g(nextInt - 1).add(nextInt - 1))
+    val graph = new Array[Array[Int]](n)
+    (0 until n).foreach {
+      i =>
+        graph(i) = new Array[Int](g(i).size())
+        (0 until graph(i).length).foreach(j => graph(i)(j) = g(i).get(j))
+    }
+
     object Helper {
 
       val color = new Array[Char](n)
@@ -44,11 +51,12 @@ object B {
           return true
         }
         color(v) = 'g'
-        for (i <- 0 until graph(v).size()) {
-          val j: Int = graph(v).get(i)
+        for (i <- 0 until graph(v).length) {
+          val j: Int = graph(v)(i)
           if (color(j) != 'b') {
             if (isACycle(j)) {
               path.add(j)
+              color(j) = 'b'
               return true
             }
           }
@@ -59,17 +67,22 @@ object B {
     }
     Arrays.fill(Helper.color, 'w')
     var flag = false
-    (0 until n).toStream.takeWhile(_ => !flag).foreach(i => flag |= Helper.isACycle(i))
+    (0 until n).takeWhile(_ => !flag).foreach(i => flag |= Helper.isACycle(i))
     if (flag) {
       val len: Int = Helper.path.size()
-      val diffVertexes = new HashSet[Int]()
-      (0 until len).toStream.foreach(i => diffVertexes.add(Helper.path.get(i)))
-      out.println("YES")
-      if (len == diffVertexes.size()) {
-        (len - 1 to 0 by -1).foreach(i => out.print((Helper.path.get(i) + 1) + " "))
+      var cnt = 0
+      for (i <- 0 until len) {
+        if (Helper.path.get(i) == Helper.end) {
+          cnt += 1
+        }
       }
-      else {
-        (len - 1 to 1 by -1).dropWhile(i => Helper.path.get(i) != Helper.end).foreach(i => out.print((Helper.path.get(i) + 1) + " "))
+      out.println("YES")
+      if (cnt == 1) {
+        (len - 1 to 0 by -1).foreach(i => out.print((Helper.path.get(i) + 1) + " "))
+      } else {
+        val cleaned = (len - 1 to 0 by -1).dropWhile(i => Helper.path.get(i) != Helper.end)
+        out.print((Helper.path.get(cleaned.head) + 1) + " ")
+        cleaned.drop(1).takeWhile(i => Helper.path.get(i) != Helper.end).foreach(i => out.print((Helper.path.get(i) + 1) + " "))
       }
     } else {
       out.println("NO")
@@ -80,8 +93,8 @@ object B {
   def main(args: Array[String]): Unit = {
 //    br = new BufferedReader(new InputStreamReader(System.in))
 //    out = new PrintWriter(new BufferedOutputStream(System.out))
-    br = new BufferedReader(new InputStreamReader(new FileInputStream("cycle2.in")))
-    out = new PrintWriter(new BufferedOutputStream(new FileOutputStream("cycle2.out")))
+        br = new BufferedReader(new InputStreamReader(new FileInputStream("cycle2.in")))
+        out = new PrintWriter(new BufferedOutputStream(new FileOutputStream("cycle2.out")))
     solve
     out.close
   }
