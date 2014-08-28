@@ -52,9 +52,7 @@ object B {
           val j: Int = graph(v).get(i)
           if (color(j) != 'b') {
             if (isACycle(j)) {
-              if (j != end) {
-                path.add(j)
-              }
+              path.add(j)
               return true
             }
           }
@@ -65,16 +63,18 @@ object B {
     }
     Arrays.fill(Helper.color, 'w')
     var flag = false
-    for (i <- 0 until n) {
-      if (Helper.color(i) == 'w') {
-        flag |= Helper.isACycle(i)
-      }
-    }
+    (0 to n).toStream.takeWhile(_ => !flag).foreach(i => flag |= Helper.isACycle(i))
     if (flag) {
       out.println("YES")
-      Helper.path.add(Helper.end)
-      for (i <- Helper.path.size - 1 to 0 by -1) {
-        out.print((Helper.path.get(i) + 1) + " ")
+      var ind = 1
+      out.print((Helper.path.get(0) + 1) + " ")
+      while (ind < Helper.path.size) {
+        if (Helper.path.get(ind) == Helper.end) {
+          ind = Helper.path.size()
+        } else {
+          out.print((Helper.path.get(ind) + 1) + " ")
+          ind += 1
+        }
       }
     } else {
       out.println("NO")
@@ -83,10 +83,10 @@ object B {
   }
 
   def main(args: Array[String]): Unit = {
-//    br = new BufferedReader(new InputStreamReader(System.in))
-    //    out = new PrintWriter(new BufferedOutputStream(System.out))
-        br = new BufferedReader(new InputStreamReader(new FileInputStream("cycle2.in")))
-        out = new PrintWriter(new BufferedOutputStream(new FileOutputStream("cycle2.out")))
+    br = new BufferedReader(new InputStreamReader(System.in))
+    out = new PrintWriter(new BufferedOutputStream(System.out))
+    //            br = new BufferedReader(new InputStreamReader(new FileInputStream("cycle2.in")))
+    //        out = new PrintWriter(new BufferedOutputStream(new FileOutputStream("cycle2.out")))
     solve
     out.close
   }
