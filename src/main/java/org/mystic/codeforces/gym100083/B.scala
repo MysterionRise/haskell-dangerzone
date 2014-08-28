@@ -30,12 +30,8 @@ object B {
     val n = nextInt
     val m = nextInt
     val graph = new Array[util.ArrayList[Int]](n)
-    for (i <- 0 until n) {
-      graph(i) = new util.ArrayList[Int]()
-    }
-    for (i <- 0 until m) {
-      graph(nextInt - 1).add(nextInt - 1)
-    }
+    (0 until n).toStream.foreach(i => graph(i) = new util.ArrayList[Int]())
+    (0 until m).toStream.foreach(_ => graph(nextInt - 1).add(nextInt - 1))
     object Helper {
 
       val color = new Array[Char](n)
@@ -48,6 +44,7 @@ object B {
           return true
         }
         color(v) = 'g'
+
         for (i <- 0 until graph(v).size()) {
           val j: Int = graph(v).get(i)
           if (color(j) != 'b') {
@@ -63,18 +60,14 @@ object B {
     }
     Arrays.fill(Helper.color, 'w')
     var flag = false
-    (0 to n).toStream.takeWhile(_ => !flag).foreach(i => flag |= Helper.isACycle(i))
+    (0 until n).toStream.takeWhile(_ => !flag).foreach(i => flag |= Helper.isACycle(i))
     if (flag) {
       out.println("YES")
-      var ind = 1
-      out.print((Helper.path.get(0) + 1) + " ")
-      while (ind < Helper.path.size) {
-        if (Helper.path.get(ind) == Helper.end) {
-          ind = Helper.path.size()
-        } else {
-          out.print((Helper.path.get(ind) + 1) + " ")
-          ind += 1
-        }
+      val len: Int = Helper.path.size()
+      if ((len == 2 && n == 2) || (len == 1 && n == 1)) {
+        (len - 1 to 0 by -1).foreach(i => out.print((Helper.path.get(i) + 1) + " "))
+      } else {
+        (len - 1 to 1 by -1).dropWhile(i => Helper.path.get(i) != Helper.end).foreach(i => out.print((Helper.path.get(i) + 1) + " "))
       }
     } else {
       out.println("NO")
@@ -83,10 +76,10 @@ object B {
   }
 
   def main(args: Array[String]): Unit = {
-    br = new BufferedReader(new InputStreamReader(System.in))
-    out = new PrintWriter(new BufferedOutputStream(System.out))
-    //            br = new BufferedReader(new InputStreamReader(new FileInputStream("cycle2.in")))
-    //        out = new PrintWriter(new BufferedOutputStream(new FileOutputStream("cycle2.out")))
+//    br = new BufferedReader(new InputStreamReader(System.in))
+//    out = new PrintWriter(new BufferedOutputStream(System.out))
+                    br = new BufferedReader(new InputStreamReader(new FileInputStream("cycle2.in")))
+                out = new PrintWriter(new BufferedOutputStream(new FileOutputStream("cycle2.out")))
     solve
     out.close
   }
