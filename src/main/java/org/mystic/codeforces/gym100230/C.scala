@@ -27,46 +27,65 @@ object C {
 
   def solve: Int = {
     val n = nextInt
-    val graph = new Array[util.ArrayList[(Int, Long)]](n)
-    (0 until n).foreach(i => graph(i) = new util.ArrayList[(Int, Long)]())
     val m = nextInt
     val s = nextInt - 1
-    (0 until m).foreach(_ => graph(nextInt - 1).add((nextInt - 1, nextInt)))
-    val g = new Array[Array[(Int, Long)]](n)
-    (0 until n).foreach({
-      i =>
-        g(i) = new Array[(Int, Long)](graph(i).size())
-        (0 until g(i).length).foreach(j => g(i)(j) = (1, 2.toLong))
-    })
-
+    val edges = new Array[(Int, Int, Long)](m)
+    (0 until m).foreach(i => edges(i) = (nextInt - 1, nextInt - 1, nextLong))
     object Helper {
 
       val d = new Array[Long](n)
 
+      val INF: Long = Long.MaxValue
+      val INF1: Long = INF - 1
+
       def findShortestPathsFrom(v: Int) = {
-        Arrays.fill(d, Long.MaxValue)
+        Arrays.fill(d, INF)
         d(v) = 0
+        (0 until n).foreach({
+          i =>
+            (0 until m).foreach({
+              j =>
+                if (d(edges(j)._1) < INF) {
+                  d(edges(j)._2) = Math.min(d(edges(j)._2), d(edges(j)._1) + edges(j)._3)
+                }
+            })
+        })
+        val e = new Array[Long](n)
+        (0 until n).foreach(i => e(i) = d(i))
+        (0 until m).foreach({
+          j =>
+            if (d(edges(j)._1) < INF) {
+              d(edges(j)._2) = Math.min(d(edges(j)._2), d(edges(j)._1) + edges(j)._3)
+            }
+        })
+        (0 until n).foreach({
+          i =>
+            if(d(i) < e(i)) {
+              d(i) = INF1
+            }
+        })
 
       }
 
       def format(ans: Long): String = ans match {
-        case -1 => "*"
-        case -2 => "-"
+        case INF => "*"
+        case INF1 => "-"
         case _ => ans.toString
       }
     }
+    Helper.findShortestPathsFrom(s)
     (0 until n).foreach({
       i =>
-        if (i != s) out.println(Helper.format(Helper.d(i)))
+        out.println(Helper.format(Helper.d(i)))
     })
     return 1
   }
 
   def main(args: Array[String]): Unit = {
-    br = new BufferedReader(new InputStreamReader(System.in))
-    out = new PrintWriter(new BufferedOutputStream(System.out))
-    //    br = new BufferedReader(new InputStreamReader(new FileInputStream("path.in")))
-    //    out = new PrintWriter(new BufferedOutputStream(new FileOutputStream("path.out")))
+//    br = new BufferedReader(new InputStreamReader(System.in))
+//        out = new PrintWriter(new BufferedOutputStream(System.out))
+        br = new BufferedReader(new InputStreamReader(new FileInputStream("path.in")))
+        out = new PrintWriter(new BufferedOutputStream(new FileOutputStream("path.out")))
     solve
     out.close
   }
