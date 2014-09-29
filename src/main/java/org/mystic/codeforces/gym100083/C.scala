@@ -25,6 +25,11 @@ object C {
     return java.lang.Long.parseLong(next)
   }
 
+
+  def comp(a: Int, b: Int): Boolean = {
+    a < b
+  }
+
   def solve: Int = {
     val n = nextInt
     val graph = new Array[util.ArrayList[Int]](n)
@@ -87,20 +92,23 @@ object C {
         }
     })
     out.println(Helper.bridges.size())
+    val edgeNumbers = new Array[Int](Helper.bridges.size())
     (0 until Helper.bridges.size()).foreach({
       i =>
         val a = Helper.bridges.get(i)._1
         val b = Helper.bridges.get(i)._2
-        out.println(edges.get((Math.min(a, b), Math.max(a, b))))
+        edgeNumbers(i) = (edges.get((Math.min(a, b), Math.max(a, b))))
     })
+    val sorted = edgeNumbers.sortWith(comp)
+    (0 until sorted.length).foreach(i => out.println(sorted(i)))
     return 1
   }
 
   def main(args: Array[String]): Unit = {
-//    br = new BufferedReader(new InputStreamReader(System.in))
-//    out = new PrintWriter(new BufferedOutputStream(System.out))
-        br = new BufferedReader(new InputStreamReader(new FileInputStream("bridges.in")))
-        out = new PrintWriter(new BufferedOutputStream(new FileOutputStream("bridges.out")))
+//        br = new BufferedReader(new InputStreamReader(System.in))
+//        out = new PrintWriter(new BufferedOutputStream(System.out))
+    br = new BufferedReader(new InputStreamReader(new FileInputStream("bridges.in")))
+    out = new PrintWriter(new BufferedOutputStream(new FileOutputStream("bridges.out")))
     solve
     out.close
   }
