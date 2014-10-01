@@ -4,6 +4,9 @@ import java.util._
 import java.io._
 import java.util
 
+/**
+ * TLed solution
+ */
 object C {
 
   var out: PrintWriter = null
@@ -25,7 +28,6 @@ object C {
     return java.lang.Long.parseLong(next)
   }
 
-
   def comp(a: Int, b: Int): Boolean = {
     a < b
   }
@@ -33,25 +35,25 @@ object C {
   def solve: Int = {
     val n = nextInt
     val graph = new Array[util.ArrayList[Int]](n)
-    (0 until n).foreach(i => graph(i) = new util.ArrayList[Int]())
+    for (i <- 0 until n) {
+      graph(i) = new util.ArrayList[Int]()
+    }
     val m = nextInt
     val edges = new util.HashMap[(Int, Int), Int]()
-    (1 to m).foreach({
-      i =>
-        val a: Int = nextInt - 1
-        val b: Int = nextInt - 1
-        edges.put((Math.min(a, b), Math.max(a, b)), i)
-        graph(a).add(b)
-        graph(b).add(a)
-    })
+    for (i <- 1 to m) {
+      val a: Int = nextInt - 1
+      val b: Int = nextInt - 1
+      edges.put((Math.min(a, b), Math.max(a, b)), i)
+      graph(a).add(b)
+      graph(b).add(a)
+    }
     val g = new Array[Array[Int]](n)
-    (0 until n).foreach({
-      i =>
-        g(i) = new Array[Int](graph(i).size())
-        (0 until g(i).length).foreach({ j =>
-          g(i)(j) = graph(i).get(j)
-        })
-    })
+    for (i <- 0 until n) {
+      g(i) = new Array[Int](graph(i).size())
+      for (j <- 0 until g(i).length) {
+        g(i)(j) = graph(i).get(j)
+      }
+    }
 
     object Helper {
 
@@ -66,47 +68,47 @@ object C {
         inTime(v) = timer
         low(v) = timer
         timer += 1
-        (0 until g(v).length).foreach({
-          i =>
-            val w = g(v)(i)
-            if (!used(w)) {
-              findBridge(v, w)
-              low(v) = Math.min(low(v), low(w))
-              if (low(w) == inTime(w)) {
-                bridges.add((v, w))
-              }
+        for (i <- 0 until g(v).length) {
+          val w = g(v)(i)
+          if (!used(w)) {
+            findBridge(v, w)
+            low(v) = Math.min(low(v), low(w))
+            if (low(w) == inTime(w)) {
+              bridges.add((v, w))
             }
-            else {
-              if (w != u)
-                low(v) = Math.min(low(v), inTime(w));
-            }
-        })
+          }
+          else {
+            if (w != u)
+              low(v) = Math.min(low(v), inTime(w));
+          }
+        }
       }
     }
 
     Arrays.fill(Helper.used, false)
-    (0 until n).foreach({
-      i =>
-        if (!Helper.used(i)) {
-          Helper.findBridge(i, i)
-        }
-    })
-    out.println(Helper.bridges.size())
-    val edgeNumbers = new Array[Int](Helper.bridges.size())
-    (0 until Helper.bridges.size()).foreach({
-      i =>
-        val a = Helper.bridges.get(i)._1
-        val b = Helper.bridges.get(i)._2
-        edgeNumbers(i) = (edges.get((Math.min(a, b), Math.max(a, b))))
-    })
+    for (i <- 0 until n) {
+      if (!Helper.used(i)) {
+        Helper.findBridge(i, i)
+      }
+    }
+    val size: Int = Helper.bridges.size()
+    out.println(size)
+    val edgeNumbers = new Array[Int](size)
+    for (i <- 0 until size) {
+      val a = Helper.bridges.get(i)._1
+      val b = Helper.bridges.get(i)._2
+      edgeNumbers(i) = (edges.get((Math.min(a, b), Math.max(a, b))))
+    }
     val sorted = edgeNumbers.sortWith(comp)
-    (0 until sorted.length).foreach(i => out.println(sorted(i)))
+    for (i <- 0 until sorted.length) {
+      out.println(sorted(i))
+    }
     return 1
   }
 
   def main(args: Array[String]): Unit = {
-//        br = new BufferedReader(new InputStreamReader(System.in))
-//        out = new PrintWriter(new BufferedOutputStream(System.out))
+    //        br = new BufferedReader(new InputStreamReader(System.in))
+    //        out = new PrintWriter(new BufferedOutputStream(System.out))
     br = new BufferedReader(new InputStreamReader(new FileInputStream("bridges.in")))
     out = new PrintWriter(new BufferedOutputStream(new FileOutputStream("bridges.out")))
     solve
