@@ -10,7 +10,6 @@ object C {
   var out: PrintWriter = null
   var br: BufferedReader = null
   var st: StringTokenizer = null
-  val heights = new LinkedHashSet[Int]()
 
   def next: String = {
     while (st == null || !st.hasMoreTokens) {
@@ -27,9 +26,19 @@ object C {
     return java.lang.Long.parseLong(next)
   }
 
+  def baseHouse(n: Long): Long = {
+    return (3L * n * n + n) / 2L
+  }
+
   def solve: Int = {
     val n = nextLong
-    out.println(heights.size())
+    var ans = 0
+    for (i <- 1 to 1e6.toInt) {
+      if (n - baseHouse(i) >= 0 && (n - baseHouse(i)) % 3 == 0) {
+        ans += 1
+      }
+    }
+    out.println(ans)
     return 1
   }
 
