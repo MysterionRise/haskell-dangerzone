@@ -1,10 +1,7 @@
-package org.mystic.ir.bayan
+package org.mystic.ir.bayan.shortcut2014
 
-import java.util._
 import java.io._
-import java.util
-
-import scala.collection.immutable.HashSet.HashSet1
+import java.util._
 
 object A {
 
