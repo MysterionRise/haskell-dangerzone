@@ -2,8 +2,8 @@ package org.mystic.ir.bayan.qual2014
 
 import java.io._
 import java.util._
+import java.util
 
-// WA
 object C {
 
   var out: PrintWriter = null
@@ -25,107 +25,52 @@ object C {
     return java.lang.Long.parseLong(next)
   }
 
-  def foo(): Map[String, Int] = {
-    return new HashMap[String, Int]
-  }
-
-  def shift(s: String, ind: Int): String = {
+  def shift(s: Array[Int], ind: Int): Array[Int] = {
     var cnt = 0
-    var i = ind
-    val sb = new StringBuilder
+    val res = new Array[Int](4)
+    var i = (s.length - ind) % s.length
     while (cnt < s.length) {
-      sb.append(s.charAt(i))
+      res(cnt) = s(i)
       i = (i + 1) % s.length
       cnt += 1
     }
-    return sb.toString()
+    return res
   }
 
-  def rotateX(ss: Array[Array[Char]], n: Int): Array[Array[Char]] = {
-    val s = new StringBuilder
+  def rotate(sh: Array[Int], arr: Array[Int], num: Int): Array[Int] = {
+    val s = new Array[Int](4)
     for (i <- 0 until 4) {
-      s.append(ss(i)(1))
+      s(i) = arr(sh(i))
     }
-    val shifted = shift(s.toString(), n).toCharArray
+    val shifted = shift(s, num)
     for (i <- 0 until 4) {
-      ss(i)(1) = shifted(i)
+      arr(sh(i)) = shifted(i)
     }
-    return ss
-  }
-
-  def rotateY(ss: Array[Array[Char]], n: Int): Array[Array[Char]] = {
-    val s = new StringBuilder
-    s.append(ss(1)(1))
-    s.append(ss(2)(2))
-    s.append(ss(3)(1))
-    s.append(ss(2)(0))
-    val shifted = shift(s.toString(), n).toCharArray
-    ss(1)(1) = shifted(0)
-    ss(2)(2) = shifted(1)
-    ss(3)(1) = shifted(2)
-    ss(2)(0) = shifted(3)
-    return ss
-  }
-
-  def rotateZ(ss: Array[Array[Char]], n: Int): Array[Array[Char]] = {
-    val s = new StringBuilder
-    s.append(ss(2)(0))
-    s.append(ss(2)(1))
-    s.append(ss(2)(2))
-    s.append(ss(0)(1))
-    val shifted = shift(s.toString(), n).toCharArray
-    ss(2)(0) = shifted(0)
-    ss(2)(1) = shifted(1)
-    ss(2)(2) = shifted(2)
-    ss(0)(1) = shifted(3)
-    return ss
+    return arr
   }
 
   def solve: Int = {
+    val map = new util.HashMap[String, Array[Int]]()
+    map.put("X", Array(0, 1, 5, 2))
+    map.put("Y", Array(1, 4, 2, 3))
+    map.put("Z", Array(0, 4, 5, 3))
+
     (0 until nextInt).foreach(_ => {
       val sides = new Array[String](6)
-      var f = new Array[Array[Char]](4)
-      f(0) = "060".toCharArray
-      f(1) = "020".toCharArray
-      f(2) = "415".toCharArray
-      f(3) = "030".toCharArray
+      //            F  T  B  L  R  Rear
+      var f = Array(0, 1, 2, 3, 4, 5)
       (0 until 6).foreach(i => sides(i) = next)
-      (0 until nextInt).foreach(_ => {
-        next match {
-          case "X" => nextInt % 4 match {
-            case 1 => f = rotateX(f, 1)
-            case 2 => f = rotateX(f, 2)
-            case 3 => f = rotateX(f, 3)
-            case _ =>
-          }
-          case "Y" => nextInt % 4 match {
-            case 1 => f = rotateY(f, 1)
-            case 2 => f = rotateY(f, 2)
-            case 3 => f = rotateY(f, 3)
-            case _ =>
-          }
-          case "Z" => nextInt % 4 match {
-            case 1 => f = rotateZ(f, 1)
-            case 2 => f = rotateZ(f, 2)
-            case 3 => f = rotateZ(f, 3)
-            case _ =>
-          }
-        }
-      })
-      out.print(sides(f(2)(1) - 49) + " ")
-      out.print(sides(f(1)(1) - 49) + " ")
-      out.print(sides(f(3)(1) - 49) + " ")
-      out.print(sides(f(2)(0) - 49) + " ")
-      out.print(sides(f(2)(2) - 49) + " ")
-      out.print(sides(f(0)(1) - 49) + " ")
-      out.println
+            (0 until nextInt).foreach(_ => {
+              f = rotate(map.get(next), f, nextInt % 4)
+            })
+      (0 until 6).foreach(i => out.print(sides(f(i)) + " "))
+      out.println()
     })
     return 1
   }
 
   def main(args: Array[String]): Unit = {
     br = new BufferedReader(new InputStreamReader(System.in))
-//    br = new BufferedReader(new InputStreamReader(new FileInputStream("/home/kperikov/16.in")))
     out = new PrintWriter(new BufferedOutputStream(System.out))
     solve
     out.close
