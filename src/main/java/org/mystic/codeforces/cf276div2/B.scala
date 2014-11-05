@@ -1,16 +1,14 @@
-package org.mystic.codeforces.cf266div2
+package org.mystic.codeforces.cf276div2
 
 import java.util._
 import java.io._
 import java.util
-import scala.annotation.tailrec
 
 object B {
 
   var out: PrintWriter = null
   var br: BufferedReader = null
   var st: StringTokenizer = null
-  var ans = 0
 
   def next: String = {
     while (st == null || !st.hasMoreTokens) {
@@ -28,6 +26,24 @@ object B {
   }
 
   def solve: Int = {
+    val n = nextInt
+    var minX = Int.MaxValue
+    var minY = Int.MaxValue
+    var maxX = Int.MinValue
+    var maxY = Int.MinValue
+    for (i <- 0 until n) {
+      val x = nextInt
+      minX = Math.min(minX, x)
+      maxX = Math.max(maxX, x)
+      val y = nextInt
+      minY = Math.min(minY, y)
+      maxY = Math.max(maxY, y)
+    }
+    var sq1: Long = Math.abs(minX - maxX).toLong
+    sq1 *= sq1;
+    var sq2: Long = Math.abs(minY - maxY).toLong
+    sq2 *= sq2
+    out.println(Math.max(sq1, sq2))
 
     return 1
   }
