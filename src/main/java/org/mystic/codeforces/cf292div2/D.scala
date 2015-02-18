@@ -27,7 +27,7 @@ object D {
   def solve: Int = {
     val n = nextInt
     val m = nextInt
-    val field = new Array[Array[Char]]
+    val field = new Array[Array[Char]](n)
     for (i <- 0 until n) {
       field(i) = next.toCharArray
     }
