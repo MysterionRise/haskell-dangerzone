@@ -3,7 +3,7 @@ package org.mystic.codeforces.cf292div2
 import java.io._
 import java.util._
 
-object D {
+object E {
 
   var out: PrintWriter = null
   var br: BufferedReader = null
@@ -27,9 +27,18 @@ object D {
   def solve: Int = {
     val n = nextInt
     val m = nextInt
-    val field = new Array[Array[Char]](n)
+    val d = new Array[Int](n)
+    val h = new Array[Int](n)
     for (i <- 0 until n) {
-      field(i) = next.toCharArray
+      d(i) = nextInt
+    }
+    for (i <- 0 until n) {
+      h(i) = nextInt
+    }
+    for (i <- 0 until m) {
+      val a = nextInt
+      val b = nextInt
+
     }
     return 1
   }
