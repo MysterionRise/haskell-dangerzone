@@ -29,27 +29,25 @@ object C {
     val n = nextInt
     val m = nextInt
     val k = nextInt
-    //    val screenNumber = new Array[Int](n)
+    val order = new Array[Int](n)
     val rank = new Array[Int](n)
-    val valueByRank = new util.HashMap[Int, Int]()
     for (i <- 0 until n) {
-      val j: Int = nextInt - 1
-      //      screenNumber(j) = Math.ceil(i / k).toInt
+      val j = nextInt - 1
+      order(i) = j
       rank(j) = i
-      valueByRank.put(i, j)
     }
-    var ans = 0L
+    var ans:Long = 0L
     for (i <- 0 until m) {
       val b = nextInt - 1
-      ans += Math.ceil(rank(b) / k).toInt + 1
-      if (b != 0) {
-        val next = valueByRank.get(rank(b) - 1)
+      ans += Math.ceil(rank(b) / k).toLong + 1
+      if (rank(b) != 0) {
+        val next = order(rank(b) - 1)
         val pS = rank(b)
         val pN = rank(next)
         rank(b) = pN
         rank(next) = pS
-        valueByRank.put(pN, b)
-        valueByRank.put(pS, next)
+        order(pN) = b
+        order(pS) = next
       }
     }
     out.println(ans)

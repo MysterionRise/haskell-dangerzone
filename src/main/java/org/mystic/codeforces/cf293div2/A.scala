@@ -25,48 +25,18 @@ object A {
     return java.lang.Long.parseLong(next)
   }
 
-  def ans(s: String, t: String, ind: Int): String = {
-    var res = ""
-    for (i <- 0 until s.length) {
-      if (i != ind) {
-        res += s.charAt(i)
-      } else {
-        res += (t.charAt(i) - 1).toChar
-      }
-    }
-    return res
-  }
-
   def solve: Int = {
     val s = next
     val t = next
     val len = s.size
-    val a = new Array[Int](len)
-    for (i <- 0 until len) {
-      a(i) = t.charAt(i) - s.charAt(i)
+    val s1 = s.toCharArray
+    var i = len - 1
+    while (i >= 0 && s(i) == 'z') {
+      s1(i) = 'a'
+      i -= 1
     }
-    var res = ""
-    var ind1 = -1
-    var ind2 = -1
-    for (i <- 0 until len) {
-      if (a(i) >= 2) {
-        out.println(ans(s, t, i))
-        return 1
-      }
-      if (a(i) == 1 && ind1 == -1) {
-        ind1 = i
-      }
-    }
-    for (i <- 0 until len) {
-      if (i < ind1) {
-        res += s.charAt(i)
-      } else
-      if (i == ind1) {
-        res += t.charAt(i)
-      } else {
-        res += "a"
-      }
-    }
+    s1(i) = (s1(i) + 1).toChar
+    val res = new String(s1)
     if (res > s && res < t) {
       out.println(res)
       return 1
