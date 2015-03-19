@@ -25,28 +25,69 @@ object C {
     return java.lang.Long.parseLong(next)
   }
 
-  class Interval(val start: Int, val length: Int) extends Comparable[Interval] {
-    override def compareTo(o: Interval): Int = Integer.compare(this.length, o.length)
+  class MultiTreeSet[T <: Comparable[T]] {
+    val map = new util.TreeMap[T, Int]()
+
+    def count(x: T): Int = {
+      val res = map.get(x)
+      if (res == null)
+        return 0
+      return res
+    }
+
+    def add(x: T): Unit = map.put(x, count(x) + 1)
+
+    def first(): T = return map.firstKey()
+
+    def last(): T = return map.lastKey()
+
+    def remove(x: T): Boolean = {
+      val prev = count(x)
+      if (prev == 0)
+        return false
+      if (prev == 1) {
+        map.remove(x)
+      } else {
+        map.put(x, prev - 1)
+      }
+      return true
+    }
   }
 
   def solve: Int = {
     val w = nextInt
     val h = nextInt
     val n = nextInt
-    val m1 = new util.HashMap[Int, Interval]()
-    val i1 = new util.TreeSet[Interval]()
-    val interval = new Interval(0, w)
-    i1.add(interval)
-    
+    val hor = new TreeSet[Int]()
+    val vert = new TreeSet[Int]()
+    val hCuts = new MultiTreeSet[Integer]
+    val vCuts = new MultiTreeSet[Integer]
+    hCuts.add(h)
+    vCuts.add(w)
+    hor.add(0)
+    hor.add(h)
+    vert.add(0)
+    vert.add(w)
     for (i <- 0 until n) {
-      val dir = next.charAt(0)
-      var z = nextInt
+      val dir = next.toCharArray.apply(0)
       if (dir == 'H') {
-
+        val pos = h - nextInt
+        val lo = hor.lower(pos)
+        val hi = hor.higher(pos)
+        hCuts.remove(hi - lo)
+        hCuts.add(hi - pos)
+        hCuts.add(pos - lo)
+        hor.add(pos)
       } else {
-
+        val pos = nextInt
+        val lo = vert.lower(pos)
+        val hi = vert.higher(pos)
+        vCuts.remove(hi - lo)
+        vCuts.add(hi - pos)
+        vCuts.add(pos - lo)
+        vert.add(pos)
       }
-
+      out.println(vCuts.last().toLong * hCuts.last().toLong)
     }
     return 1
   }
