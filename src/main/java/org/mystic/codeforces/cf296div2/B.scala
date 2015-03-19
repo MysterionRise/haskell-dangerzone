@@ -30,54 +30,41 @@ object B {
     val s = next.toCharArray
     val t = next.toCharArray
     var curr = 0
-    val t1 = new util.HashMap[Character, ArrayList[Int]]()
+    val a = new Array[Array[Int]](27)
+    for (i <- 0 until 27) {
+      a(i) = new Array[Int](27)
+    }
     for (i <- 0 until n) {
       if (s(i) != t(i)) {
         curr += 1
-        if (!t1.containsKey(t(i))) {
-          val list = new util.ArrayList[Int]()
-          list.add(i)
-          t1.put(t(i), list)
-        } else {
-          t1.get(t(i)).add(i)
+        a(s(i) - 'a')(t(i) - 'a') = i + 1
+      }
+    }
+    for (i <- 0 until a.length) {
+      for (j <- i + 1 until a(i).length) {
+        if (a(i)(j) >= 1 && a(j)(i) >= 1) {
+          out.println(curr - 2)
+          out.println(a(i)(j) + " " + a(j)(i))
+          return 1
         }
       }
     }
-    var i1 = -1
-    var i2 = -1
-    var min = curr
-    for (i <- 0 until n) {
-      if (s(i) != t(i)) {
-        if (null != t1.get(s(i))) {
-          val ind = t1.get(s(i))
-          for (j <- 0 until ind.size()) {
-            if (s(ind.get(j)) == t(i)) {
-              if (curr - 2 < min) {
-                min = curr - 2
-                i1 = i
-                i2 = ind.get(j)
-                out.println(min)
-                out.println((i1 + 1) + " " + (i2 + 1))
-                return 1
-              }
-            } else {
-              if (curr - 1 < min) {
-                min = curr - 1
-                i1 = i
-                i2 = ind.get(j)
-              }
-            }
-          }
-        }
+
+    for (i <- 0 until a.length) {
+      var a1 = 0
+      var a2 = 0
+      for (j <- 0 until a(i).length) {
+        a1 = Math.max(a1, a(i)(j))
+        a2 = Math.max(a2, a(j)(i))
+      }
+      if (a1 >= 1 && a2 >= 1) {
+        out.println(curr - 1)
+        out.println(a1 + " " + a2)
+        return 1
       }
     }
-    if (min == curr) {
-      out.println(curr)
-      out.println("-1 -1")
-    } else {
-      out.println(min)
-      out.println((i1 + 1) + " " + (i2 + 1))
-    }
+    out.println(curr)
+    out.println("-1 -1")
     return 1
   }
 
