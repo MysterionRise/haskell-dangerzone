@@ -3,14 +3,14 @@ package org.mystic.acmp;
 import java.io.*;
 import java.util.StringTokenizer;
 
-public class T217 implements Runnable {
+public class T165 implements Runnable {
 
     PrintWriter out;
     BufferedReader br;
     StringTokenizer st;
 
     public static void main(String[] args) throws IOException {
-        new Thread(new T217()).start();
+        new Thread(new T165()).start();
     }
 
     public String next() throws IOException {
@@ -41,26 +41,36 @@ public class T217 implements Runnable {
         }
     }
 
-    class Tree {
-        final int w;
-        final int e;
-
-        public Tree(int w, int e) {
-            this.w = w;
-            this.e = e;
-        }
-    }
-
     public void solve() throws IOException {
-        final int m = nextInt();
-        final Tree[] trees = new Tree[m];
-        for (int i = 0; i < m; ++i) {
-            trees[i] = new Tree(nextInt(), nextInt());
-        }
         final int n = nextInt();
-        final int[] positions = new int[n];
-        for (int i = 0; i < n; ++i) {
-            positions[i] = nextInt();
+        final int m = nextInt();
+        final int[][] field = new int[n][m];
+        for (int i = n - 1; i >= 0; --i) {
+            for (int j = m - 1; j >= 0; --j) {
+                field[i][j] = nextInt();
+            }
         }
+        final int[][] dp = new int[n][m];
+        dp[0][0] = 1;
+        for (int i = 1; i < n; ++i) {
+            final int x = field[i][0];
+            if (i - x >= 0)
+                dp[i][0] += dp[i - x][0];
+        }
+        for (int j = 1; j < m; ++j) {
+            final int x = field[0][j];
+            if (j - x >= 0)
+                dp[0][j] += dp[0][j - x];
+        }
+        for (int i = 1; i < n; ++i) {
+            for (int j = 1; j < m; ++j) {
+                final int x = field[i][j];
+                if (i - x >= 0)
+                    dp[i][j] += dp[i - x][j];
+                if (j - x >= 0)
+                    dp[i][j] += dp[i][j - x];
+            }
+        }
+        out.println(dp[n - 1][m - 1]);
     }
 }

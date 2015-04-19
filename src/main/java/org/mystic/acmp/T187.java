@@ -3,14 +3,14 @@ package org.mystic.acmp;
 import java.io.*;
 import java.util.StringTokenizer;
 
-public class T356 implements Runnable {
+public class T187 implements Runnable {
 
     PrintWriter out;
     BufferedReader br;
     StringTokenizer st;
 
     public static void main(String[] args) throws IOException {
-        new Thread(new T356()).start();
+        new Thread(new T187()).start();
     }
 
     public String next() throws IOException {
@@ -41,30 +41,32 @@ public class T356 implements Runnable {
         }
     }
 
-    class Coin implements Comparable<Coin> {
-        final int cost;
-        final int weight;
-
-        public Coin(int weight, int cost) {
-            this.weight = weight;
-            this.cost = cost;
+    public void solve() throws IOException {
+        final int n = nextInt();
+        final int sz = 2 * n - 1;
+        final long[][] dp = new long[sz][sz];
+        dp[0][0] = 1L;
+        for (int i = 0; i < n; ++i) {
+            dp[0][i] = 1L;
+            dp[i][0] = 1L;
         }
-
-        @Override
-        public int compareTo(Coin o) {
-            return 0;
+        for (int i = 1; i < sz; ++i) {
+            for (int j = getStart(i, n); j < getFinsh(i, n, sz); ++j) {
+                dp[i][j] = dp[i - 1][j - 1] + dp[i - 1][j] + dp[i][j - 1];
+            }
         }
+        out.println(dp[sz - 1][sz - 1]);
     }
 
-    public void solve() throws IOException {
-        final int e = nextInt();
-        final int f = nextInt();
-        final int n = nextInt();
-        final Coin[] coins = new Coin[n];
-        for (int i = 0; i < n; ++i) {
-            coins[i] = new Coin(nextInt(), nextInt());
-        }
+    private int getFinsh(int i, int n, int sz) {
+        if (i < n)
+            return i + n;
+        return sz;
+    }
 
-
+    private int getStart(int i, int n) {
+        if (i < n)
+            return 1;
+        return i - n + 1;
     }
 }
