@@ -43,6 +43,6 @@ public class T113 implements Runnable {
 
     public void solve() throws IOException {
         final int n = nextInt();
-        
+
     }
 }
