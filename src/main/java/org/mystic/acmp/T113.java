@@ -43,6 +43,19 @@ public class T113 implements Runnable {
 
     public void solve() throws IOException {
         final int n = nextInt();
-
+        int max = 0;
+        final int[][] dp = new int[n + 1][n + 1];
+        for (int i = 1; i <= n; ++i) {
+            final char[] in = next().toCharArray();
+            for (int j = 1; j <= n; ++j) {
+                if (in[j - 1] == '1') {
+                    dp[i][j] = Math.min(dp[i - 1][j], Math.min(dp[i - 1][j - 1], dp[i][j - 1])) + 1;
+                } else {
+                    dp[i][j] = 0;
+                }
+                max = Math.max(dp[i][j], max);
+            }
+        }
+        out.println(max * max);
     }
 }
