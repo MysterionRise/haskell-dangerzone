@@ -3,14 +3,14 @@ package org.mystic.acmp;
 import java.io.*;
 import java.util.StringTokenizer;
 
-public class T113 implements Runnable {
+public class T481 implements Runnable {
 
     PrintWriter out;
     BufferedReader br;
     StringTokenizer st;
 
     public static void main(String[] args) throws IOException {
-        new Thread(new T113()).start();
+        new Thread(new T481()).start();
     }
 
     public String next() throws IOException {
@@ -42,20 +42,25 @@ public class T113 implements Runnable {
     }
 
     public void solve() throws IOException {
-        final int n = nextInt();
-        int max = 0;
-        final int[][] dp = new int[n + 1][n + 1];
-        for (int i = 1; i <= n; ++i) {
-            final char[] in = next().toCharArray();
-            for (int j = 1; j <= n; ++j) {
-                if (in[j - 1] == '1') {
-                    dp[i][j] = Math.min(dp[i - 1][j], Math.min(dp[i - 1][j - 1], dp[i][j - 1])) + 1;
-                } else {
-                    dp[i][j] = 0;
+        final char[] in = next().toCharArray();
+        final int N = in.length;
+        final int[][] dp = new int[N + 2][N + 2];
+        for (int len = 0; len <= N; ++len) {
+            for (int i = 1; (i + len) <= N; ++i) {
+                int j = i + len;
+                if (i == j) {
+                    dp[i][j] = 1;
+                } else if (Math.abs(i - j) == 1 && in[i - 1] == in[j - 1]) {
+                    dp[i][j] = 3;
+                } else if (Math.abs(i - j) == 1 && in[i - 1] != in[j - 1]) {
+                    dp[i][j] = 2;
+                } else if (in[i - 1] == in[j - 1]) {
+                    dp[i][j] = 1 + dp[i][j - 1] + dp[i + 1][j];
+                } else if (in[i - 1] != in[j - 1]) {
+                    dp[i][j] = dp[i][j - 1] + dp[i + 1][j] - dp[i + 1][j - 1];
                 }
-                max = Math.max(dp[i][j], max);
             }
         }
-        out.println(max * max);
+        out.println(dp[1][N]);
     }
 }
