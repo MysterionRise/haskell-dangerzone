@@ -82,6 +82,54 @@ object Template {
     }
   }
 
+  class SegmentSumTree(values: Array[Int]) {
+    private val SIZE = 1e5.toInt
+    private val n = values.length
+    val t = new Array[Int](2 * n)
+    Array.copy(values, 0, t, n, n)
+
+    // build segment tree
+    def build = {
+      for (i <- n - 1 until 0 by -1) {
+        t(i) = t(2 * i) + t(2 * i + 1)
+      }
+    }
+
+    // change value at position p to x
+    // TODO beatify
+    def modify(p: Int, x: Int) = {
+      var pos = p + n
+      t(pos) = x
+      while (pos > 1) {
+        t(pos / 2) = t(pos) + t(pos ^ 1)
+        pos /= 2
+      }
+    }
+
+    // sum [l, r)
+    // min l = 0
+    // max r = n
+    // TODO beatify
+    def query(left: Int, right: Int): Int = {
+      var res = 0
+      var r = right + n
+      var l = left + n
+      while (l < r) {
+        if (l % 2 == 1) {
+          res += t(l)
+          l += 1
+        }
+        if (r % 2 == 1) {
+          r -= 1
+          res += t(r)
+        }
+        l /= 2
+        r /= 2
+      }
+      res
+    }
+  }
+
   def solve: Int = {
     // TODO add your solution here
     return 0
