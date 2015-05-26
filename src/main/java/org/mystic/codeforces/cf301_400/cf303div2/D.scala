@@ -5,7 +5,7 @@ import java.util._
 
 import scala.collection.mutable
 
-object C {
+object D {
 
   var out: PrintWriter = null
   var br: BufferedReader = null
