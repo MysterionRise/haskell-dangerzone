@@ -82,7 +82,13 @@ object Template {
     }
   }
 
-  class SegmentSumTree(values: Array[Int]) {
+  /**
+   * Segment tree for any commutative function
+   * @param values Array of Int
+   * @param commutative function like min, max, sum
+   * @param zero zero value - e.g. 0 for sum, Inf for min, max
+   */
+  class SegmentTree(values: Array[Int])(commutative: (Int, Int) => Int)(zero: Int) {
     private val SIZE = 1e5.toInt
     private val n = values.length
     val t = new Array[Int](2 * n)
@@ -91,7 +97,7 @@ object Template {
     // build segment tree
     def build = {
       for (i <- n - 1 until 0 by -1) {
-        t(i) = t(2 * i) + t(2 * i + 1)
+        t(i) = commutative(t(2 * i), t(2 * i + 1))
       }
     }
 
@@ -101,27 +107,31 @@ object Template {
       var pos = p + n
       t(pos) = x
       while (pos > 1) {
-        t(pos / 2) = t(pos) + t(pos ^ 1)
+        t(pos / 2) = commutative(t(pos), t(pos ^ 1))
         pos /= 2
       }
     }
+
+    // TODO implement me!
+    def modify(p: Int, left: Int, right: Int) = ???
+    def query(p: Int) = ???
 
     // sum [l, r)
     // min l = 0
     // max r = n
     // TODO beatify
     def query(left: Int, right: Int): Int = {
-      var res = 0
+      var res = zero
       var r = right + n
       var l = left + n
       while (l < r) {
         if (l % 2 == 1) {
-          res += t(l)
+          res = commutative(res, t(l))
           l += 1
         }
         if (r % 2 == 1) {
           r -= 1
-          res += t(r)
+          res = commutative(res, t(r))
         }
         l /= 2
         r /= 2
@@ -131,6 +141,24 @@ object Template {
   }
 
   def solve: Int = {
+    val sumTree = new SegmentTree(Array(1, 2, 3, 4, 5, 6, 7))((a, b) => a + b)(0)
+    sumTree.build
+    println(sumTree.query(0, 7))
+    println(sumTree.query(1, 7))
+    println(sumTree.query(2, 7))
+    println(sumTree.query(3, 7))
+    println(sumTree.query(4, 7))
+    println(sumTree.query(5, 7))
+    println(sumTree.query(6, 7))
+    val minTree = new SegmentTree(Array(1, 2, 3, 4, 5, 6, 7))((a, b) => Math.min(a, b))(Int.MaxValue)
+    minTree.build
+    println(minTree.query(0, 7))
+    println(minTree.query(1, 7))
+    println(minTree.query(2, 7))
+    println(minTree.query(3, 7))
+    println(minTree.query(4, 7))
+    println(minTree.query(5, 7))
+    println(minTree.query(6, 7))
     // TODO add your solution here
     return 0
   }
