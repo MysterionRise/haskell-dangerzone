@@ -1,11 +1,11 @@
-package org.mystic.codeforces.cf201_300.cf253div2
+package org.mystic.codeforces.gyms.gym100093
 
 import java.io._
-import java.util.{StringTokenizer, TreeMap}
+import java.util._
 
 import scala.collection.mutable
 
-object C {
+object A {
 
   var out: PrintWriter = null
   var br: BufferedReader = null
@@ -14,6 +14,8 @@ object C {
   def main(args: Array[String]): Unit = {
     br = new BufferedReader(new InputStreamReader(System.in))
     out = new PrintWriter(new BufferedOutputStream(System.out))
+//    br = new BufferedReader(new FileReader("stupid_rmq.in"))
+//    out = new PrintWriter(new BufferedOutputStream(new FileOutputStream("stupid_rmq.out")))
     solve
     out.close
   }
@@ -114,7 +116,6 @@ object C {
 
     // TODO implement me!
     def modify(p: Int, left: Int, right: Int) = ???
-
     def query(p: Int) = ???
 
     // sum [l, r)
@@ -143,30 +144,28 @@ object C {
 
   def solve: Int = {
     val n = nextInt
-    val cards = new Array[(Int, Int)](n)
-    val numbers = new mutable.HashSet[Int]()
-    val colors = new mutable.HashSet[Int]()
+    val a = new Array[Int](n)
     for (i <- 0 until n) {
-      val card = next
-      val color = card(0)
-      val num = card(1)
-      cards(i) = (color, num)
-      numbers.add(num)
-      colors.add(color)
+      a(i) = nextInt
     }
-    if (colors.size == 1 && colors.size == numbers.size) {
-      out.println(0)
-      return 1
+    val minTree = new SegmentTree(a)((a, b) => Math.min(a, b))(Int.MaxValue)
+    minTree.build
+    val m = nextInt
+    for (i <- 0 until m) {
+      val l = nextInt
+      val r = nextInt
+      out.println(minTree.query(l - 1, r ))
+
     }
-    if (colors.size == 1) {
-      out.println(numbers.size - 1)
-      return 0
-    }
-    if (numbers.size == 1) {
-      out.println(colors.size - 1)
-      return 0
-    }
-    out.println(colors.size * numbers.size)
+
+//    println(minTree.query(0, 7))
+//    println(minTree.query(1, 7))
+//    println(minTree.query(2, 7))
+//    println(minTree.query(3, 7))
+//    println(minTree.query(4, 7))
+//    println(minTree.query(5, 7))
+//    println(minTree.query(6, 7))
+    // TODO add your solution here
     return 0
   }
 }
