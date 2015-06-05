@@ -5,7 +5,7 @@ import java.util.{StringTokenizer, TreeMap}
 
 import scala.collection.mutable
 
-object C {
+object B {
 
   var out: PrintWriter = null
   var br: BufferedReader = null
@@ -142,30 +142,30 @@ object C {
   }
 
   def solve: Int = {
-    val n = nextInt
-    val cards = new Array[(Int, Int)](n)
-    val numbers = new mutable.HashSet[Int]()
-    val colors = new mutable.HashSet[Int]()
-    for (i <- 0 until n) {
-      val card = next
-      val color = card(0)
-      val num = card(1)
-      cards(i) = (color, num)
-      numbers.add(num)
-      colors.add(color)
+    val str = next
+    val n = str.length
+    val k = nextInt
+    var ans = 0
+    for {
+      i <- 0 until n + k
+      j <- 2 to n + k by 2
+    } yield {
+      if (i + j <= n + k) {
+        var ind = i
+        while (ind < i + j / 2) {
+          if (ind < n && ind + j / 2 < n) {
+            if (str(ind) != str(ind + j / 2)) {
+              ind = 10000
+            }
+          }
+          ind += 1
+        }
+        if (ind == i + j / 2) {
+          ans = Math.max(ans, j)
+        }
+      }
     }
-    if (colors.size == 1 && colors.size == numbers.size) {
-      out.println(0)
-      return 1
-    }
-    if (colors.size == 1) {
-      out.println(numbers.size - 1)
-      return 0
-    }
-    if (numbers.size == 1) {
-      out.println(colors.size - 1)
-      return 0
-    }
+    out.println(ans)
     out.println(colors.size * numbers.size)
     return 0
   }
