@@ -1,11 +1,11 @@
-package org.mystic.codeforces.cf201_300.cf253div2
+package org.mystic.codeforces.custom.looksery2015
 
 import java.io._
 import java.util.{StringTokenizer, TreeMap}
 
 import scala.collection.mutable
 
-object B {
+object D {
 
   var out: PrintWriter = null
   var br: BufferedReader = null
@@ -141,8 +141,74 @@ object B {
     }
   }
 
-  def solve: Int = {
+  var ft1: Array[Array[Int]] = _
+  var ft2: Array[Array[Int]] = _
+  var in: Array[Array[Char]] = _
+  var bValue: Int = -1
+  var wValue: Int = 1
 
+  def invert1(x: Int, y: Int, diff: Int) = {
+    for (i <- 0 to x)
+      for (j <- 0 to y) {
+        ft1(i)(j) += diff
+      }
+  }
+
+//  def invert2(x: Int, y: Int) = {
+//    for (i <- 0 to x)
+//      for (j <- 0 to y) {
+//        ft2(i)(j) = !ft2(i)(j)
+//      }
+//  }
+
+  def check1(): Boolean = {
+    val n = ft1.length
+    val m = ft1(0).length
+    for (i <- n - 1 to 0 by -1) {
+      for (j <- m - 1 to 0 by -1) {
+        if (in(i)(j) == 'B' && ft1(i)(j) != bValue) {
+          invert1(i, j, bValue - ft1(i)(j))
+          return false
+        }
+        if (in(i)(j) == 'W' && ft1(i)(j) != wValue) {
+          invert1(i, j, wValue - ft1(i)(j))
+          return false
+        }
+      }
+    }
+    true
+  }
+
+//  def check2(): Boolean = {
+//    val n = ft2.length
+//    val m = ft2(0).length
+//    for (i <- n - 1 to 0 by -1) {
+//      for (j <- m - 1 to 0 by -1) {
+//        if ((in(i)(j) == 'B' && ft2(i)(j) != bValue) || (in(i)(j) == 'W' && ft2(i)(j) != wValue)) {
+//          invert2(i, j)
+//          return false
+//        }
+//      }
+//    }
+//    true
+//  }
+
+  def solve: Int = {
+    val n = nextInt
+    val m = nextInt
+    ft1 = new Array[Array[Int]](n)
+    ft2 = new Array[Array[Int]](n)
+    in = new Array[Array[Char]](n)
+    for (i <- 0 until n) {
+      ft1(i) = new Array[Int](m)
+      ft2(i) = new Array[Int](m)
+      in(i) = next.toCharArray
+    }
+    var ans1 = 0
+    while (!check1 && ans1 <= 10000) {
+      ans1 += 1
+    }
+    out.println(ans1)
     return 0
   }
 }

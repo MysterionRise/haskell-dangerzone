@@ -1,11 +1,11 @@
-package org.mystic.codeforces.cf201_300.cf253div2
+package org.mystic.codeforces.custom.looksery2015
 
 import java.io._
 import java.util.{StringTokenizer, TreeMap}
 
 import scala.collection.mutable
 
-object B {
+object A {
 
   var out: PrintWriter = null
   var br: BufferedReader = null
@@ -114,7 +114,6 @@ object B {
 
     // TODO implement me!
     def modify(p: Int, left: Int, right: Int) = ???
-
     def query(p: Int) = ???
 
     // sum [l, r)
@@ -142,7 +141,33 @@ object B {
   }
 
   def solve: Int = {
+    val n = nextInt
+    val m = nextInt
+    val a = new Array[Array[Char]](n)
+    for (i <- 0 until n) {
+      a(i) = next.toCharArray
+    }
+    var ans = 0
+    val b = Array('f', 'a', 'c', 'e')
+    for (i <- 0 until n - 1) {
+      for (j <- 0 until m - 1) {
+        val s = new mutable.HashSet[Char]()
+        var flag = true
+        s.add(a(i)(j))
+        s.add(a(i + 1)(j))
+        s.add(a(i + 1)(j + 1))
+        s.add(a(i)(j + 1))
+        b.foreach(x => {
+          if (!s.contains(x)) {
+            flag = false
+          }
+        })
+        if (flag)
+          ans += 1
 
+      }
+    }
+    out.println(ans)
     return 0
   }
 }

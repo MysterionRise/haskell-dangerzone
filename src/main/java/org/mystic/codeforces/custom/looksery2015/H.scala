@@ -1,11 +1,11 @@
-package org.mystic.codeforces.cf201_300.cf253div2
+package org.mystic.codeforces.custom.looksery2015
 
 import java.io._
 import java.util.{StringTokenizer, TreeMap}
 
 import scala.collection.mutable
 
-object B {
+object H {
 
   var out: PrintWriter = null
   var br: BufferedReader = null
@@ -142,6 +142,10 @@ object B {
   }
 
   def solve: Int = {
+    val a = nextDouble
+    val b = nextDouble
+    val c = nextDouble
+    val d = nextDouble
 
     return 0
   }
