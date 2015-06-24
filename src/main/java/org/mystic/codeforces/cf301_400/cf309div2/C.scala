@@ -143,26 +143,10 @@ object C {
 
   private val MOD = (1e9 + 7).toInt
 
-  def findReverse(a: Int, m: Int): Int = {
-    val g = gcdex(a, m)
-    return (g._1 % m + m) % m
-  }
-
-  def gcdex(a: Int, b: Int): (Int, Int) = {
-    if (a == 0) {
-      return (0, 1)
-    }
-    val g = gcdex(b % a, a)
-    val x = g._2 - (b / a) * g._1
-    val y = g._1
-    return (x, y)
-  }
-
   def binomialCoefficient(n: Int, k: Int): Long = {
     var c = 1L
     for (i <- 0 until k) {
-      val x = ((c * (n - i)) / (i + 1)).toInt
-      c = x * findReverse(x, MOD)
+      val x = (c * (n - i)) / (i + 1)
     }
     return c
   }
@@ -173,11 +157,21 @@ object C {
     for (i <- 0 until k) {
       c(i) = nextInt
     }
+    val coeff = new Array[Array[Long]](1010)
+    for (i <- 0 until coeff.length)
+      coeff(i) = new Array[Long](1010)
+    coeff(0)(0) = 1
+    for (i <- 1 until 1010) {
+      coeff(i)(0) = 1
+      for (j <- 1 to i) {
+        coeff(i)(j) = (coeff(i - 1)(j) + coeff(i - 1)(j - 1)) % MOD
+      }
+    }
     val ans = new Array[Long](k)
     ans(0) = 1
     var sum = c(0)
     for (i <- 1 until k) {
-      ans(i) = ((ans(i - 1) % MOD) * (binomialCoefficient(sum + c(i) - 1, sum) % MOD)) % MOD
+      ans(i) = ((ans(i - 1) % MOD) * coeff(sum + c(i) - 1)(sum) % MOD) % MOD
       sum += c(i)
     }
     out.println(ans(k - 1))
