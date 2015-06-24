@@ -1,11 +1,12 @@
-package org.mystic.ipsc2015
+package org.mystic.codeforces.cf201_300.cf253div2
 
 import java.io._
-import java.util._
+import java.util
+import java.util.{StringTokenizer, TreeMap}
 
 import scala.collection.mutable
 
-object B2 {
+object C {
 
   var out: PrintWriter = null
   var br: BufferedReader = null
@@ -13,7 +14,7 @@ object B2 {
 
   def main(args: Array[String]): Unit = {
     br = new BufferedReader(new InputStreamReader(System.in))
-    out = new PrintWriter(new FileOutputStream("b1.out"))
+    out = new PrintWriter(new BufferedOutputStream(System.out))
     solve
     out.close
   }
@@ -142,69 +143,55 @@ object B2 {
   }
 
   def solve: Int = {
-    var m = nextInt
-    val arr1 = new Array[(String, Int)](m)
-    val arr2 = new Array[(String, Int)](m)
-    val arr3 = new Array[(String, Int)](m)
-    val map1 = mutable.HashMap[String, Int]()
-    val map2 = mutable.HashMap[String, Int]()
-    val map3 = mutable.HashMap[String, Int]()
-    for (j <- 0 until m) {
-      arr1(j) = (next, nextInt)
-      map1 += (arr1(j)._1 -> arr1(j)._2)
+    val guessers = Array(49, 50, 51, 52, 53, 66, 71, 82, 87, 89)
+    val n = nextInt
+    val cards = new mutable.HashSet[(Int, Int)]
+    for (i <- 0 until n) {
+      val card = next
+      cards.add(card(0), card(1))
     }
-    m = nextInt
-    for (j <- 0 until m) {
-      arr2(j) = (next, nextInt)
-      map2 += (arr2(j)._1 -> arr1(j)._2)
+    if (cards.size == 1) {
+      println(0)
+      return 0
     }
-    m = nextInt
-    for (j <- 0 until m) {
-      arr3(j) = (next, nextInt)
-      map3 += (arr3(j)._1 -> arr1(j)._2)
-    }
-    m = nextInt
-    val used = mutable.HashSet[String]()
-    for (i <- 0 until m) {
-      val a = next
-      val b = next
-      val c = next
-      val str = a + " " + b + " " + c
-      val forceA = map1.getOrElse(a, 0)
-      val forceB = map2.getOrElse(b, 0)
-      val forceC = map3.getOrElse(c, 0)
-      var j = 0
+    val arr = cards.toList.toArray
+    var ans = n
+    for (i <- 1 to Math.pow(2, 10).toInt) {
+      val s = new util.ArrayList[Int]()
+      val line = Integer.toBinaryString(i)
+      for (j <- 0 until line.length) {
+        if (line.charAt(j) == '1') {
+          s.add(guessers(j))
+        }
+      }
+      val check = new Array[Int](arr.length)
+      for (j <- 0 until s.size()) {
+        val guess = s.get(j)
+        for (x <- 0 until arr.length) {
+          for (y <- 0 until arr.length) {
+            if (x != y) {
+              val a = arr(x)
+              val b = arr(y)
+              if ((a._1 != b._1 && a._1 == guess) || (a._2 != b._2 && a._2 == guess)) {
+                check(x) += 1
+              }
+            }
+          }
+        }
+      }
       var flag = true
-      while (j < arr1.length && flag) {
-        if (arr1(j)._2 - 1 == forceA && !used.contains(s"${arr1(j)._1} $b $c")) {
-          out.println(s"${arr1(j)._1} $b $c")
-          used.add(s"${arr1(j)._1} $b $c")
+      for (j <- 0 until check.length) {
+        if (check(j) != arr.length - 1) {
           flag = false
         }
-        j += 1
       }
-      j = 0
-      while (j < arr2.length && flag) {
-        if (arr2(j)._2 - 1 == forceB && !used.contains(s"$a ${arr2(j)._1} $c")) {
-          out.println(s"$a ${arr2(j)._1} $c")
-          used.add(s"$a ${arr2(j)._1} $c")
-          flag = false
-        }
-
-        j += 1
-      }
-      j = 0
-      while (j < arr3.length && flag) {
-        if (arr3(j)._2 - 1 == forceC && !used.contains(s"$a $b ${arr3(j)._1}")) {
-          out.println(s"$a $b ${arr3(j)._1}")
-          used.add(s"$a $b ${arr3(j)._1}")
-          flag = false
-        }
-
-        j += 1
+      if (flag) {
+        ans = Math.min(ans, i)
       }
     }
 
+    println(ans)
     return 0
   }
+
 }
