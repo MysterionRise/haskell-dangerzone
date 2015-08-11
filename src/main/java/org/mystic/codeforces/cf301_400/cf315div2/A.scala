@@ -4,7 +4,6 @@ import java.io._
 import java.util._
 
 import scala.collection.mutable
-import scala.collection.mutable.ArrayBuffer
 
 object A {
 
@@ -143,6 +142,15 @@ object A {
   }
 
   def solve: Int = {
-    
+    val t = nextInt
+    var s = nextInt
+    val q = nextInt
+    var count = 0
+    while (s < t) {
+      s *= q
+      count += 1
+    }
+    out.println(count)
+    return 0
   }
 }
