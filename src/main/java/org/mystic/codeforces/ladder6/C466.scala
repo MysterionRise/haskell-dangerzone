@@ -1,15 +1,14 @@
 package org.mystic.codeforces.ladder6
 
 import java.io._
+import java.util
 import java.util.StringTokenizer
 
 import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
 
-
 object C466 {
 
-  var result = true
   var out: PrintWriter = null
   var br: BufferedReader = null
   var st: StringTokenizer = null
@@ -59,14 +58,21 @@ object C466 {
       val sum = prefixSum(pos - 1)
       val left = prefixSum(n - 1) - prefixSum(pos - 1)
       if (left / 2 == sum && left % 2 == 0) {
-        val positions = map.getOrElse(2 * sum, ArrayBuffer[Int]())
-        positions.foreach(p => {
-          if (p >= pos && prefixSum(n - 1) - prefixSum(p) == sum && p != n - 1)
-            ans += 1
-        })
+        val positions = map.getOrElse(2 * sum, ArrayBuffer[Int]()).toArray
+        var ind = util.Arrays.binarySearch(positions, pos)
+        if (ind < 0) {
+          ind = -ind - 1
+        }
+        val p = positions(ind + 1)
+        if (p >= pos && prefixSum(n - 1) - prefixSum(p) == sum) {
+          ans += (positions.length - ind)
+        }
+        if (positions(positions.length - 1) == a.length - 1) {
+          ans -= 1
+        }
       }
     }
-    println(ans)
+    out.println(ans)
     return 0
   }
 }
