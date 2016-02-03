@@ -7,7 +7,7 @@ import org.apache.http.client.methods.HttpGet
 import org.apache.http.client.{HttpResponseException, ResponseHandler}
 import org.apache.http.impl.client.{BasicResponseHandler, DefaultHttpClient}
 
-import scala.xml.parsing.XhtmlParser
+import scala.xml.XML
 
 object DotaBuffCall {
 
@@ -25,7 +25,7 @@ object DotaBuffCall {
         val responseHandler: ResponseHandler[String] = new BasicResponseHandler
         val responseBody = client.execute(get, responseHandler)
         if (responseBody.length > 0) {
-          val html = XhtmlParser(scala.io.Source.fromString(responseBody))
+          val html = XML.loadString(responseBody.substring(responseBody.indexOf("<body>"), responseBody.indexOf("</body>") + 7))
 
           val out = new PrintWriter(name.substring(name.lastIndexOf("/") + 1))
           out.println((html \ "html" \ "body" \ "div[1]" \ "div[7]" \ "div[2]" \ "div[1]" \ "div[2]").text)
@@ -43,15 +43,6 @@ object DotaBuffCall {
           //          out.println(responseBody.substring(start, end))
           out.flush()
           out.close()
-          //          val patternBody: Pattern = Pattern.compile("\"_score\":([^]])+]")
-          //          val m: Matcher = patternBody.matcher(responseBody)
-          //          if (m.find) {
-          //            val data: Array[String] = m.group(0).split("/")
-          //            val score_family: String = data(0).replace("\"all_pubs_datasource\":[\"[[\\\"", "")
-          //            val tmp = score_family.split(",")
-          //            val score: String = tmp(0).replace("\"_score\":", "")
-          //            val pubId: String = tmp(1).replace("\"fields\":{", "")
-          //            System.out.println(s"score = ${score}, publicationID = ${pubId} pn=${pn}")
         }
       }
       catch {
