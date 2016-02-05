@@ -17,6 +17,8 @@ object DotaBuffCall {
 
   val wins = new MultiHashSet[String]
   val losses = new MultiHashSet[String]
+  val cmPicks = new MultiHashSet[String]
+  val cmBans = new MultiHashSet[String]
 
   def printWin(ourTeam: String, win: String) = if (winOrLoss(ourTeam, win)) "W" else "L"
 
@@ -34,10 +36,27 @@ object DotaBuffCall {
     case "radiant" => radiantResults
   }
 
+  def findOurTeam(radiantBans: Elements, direBans: Elements, ourTeam: String) =
+    ourTeam match {
+      case "dire" => direBans
+      case "radiant" => radiantBans
+    }
 
   def printSet(set: MultiHashSet[String]) = {
     set.map.keySet.foreach(key => println(s"$key ${set.count(key)}"))
   }
+
+  def addBansAndPicks(ourTeam: Elements) = {
+    for (i <- 0 until ourTeam.size()) {
+      val fullHero: String = ourTeam.get(i).children().first().children().first().children().attr("href")
+      val ind = fullHero.lastIndexOf("/") + 1
+      i match {
+        case 0 | 1 | 4 | 5 | 8 => cmBans.add(fullHero.substring(ind))
+        case _ => cmPicks.add(fullHero.substring(ind))
+      }
+    }
+  }
+
 
   def main(args: Array[String]): Unit = {
     val in = new Scanner(System.in)
@@ -88,18 +107,19 @@ object DotaBuffCall {
       // radiant
       val radiantResults: Element = teamsResults.first.children().get(0)
       val direResults: Element = teamsResults.first.children().get(1)
-      //      if (gameMode.equalsIgnoreCase("Captains Mode")) {
-      //        // todo get statistics about bans
-      //        direResults = teamsResults.first.children().get(2)
-      //        val radiantBans = teamsResults.first.children().get(0)
-      //        val direBans = teamsResults.first.children().last()
-      //      }
       var ourTeam = ""
       if (!userNames.filter(name => radiantResults.text.toLowerCase.contains(name.toLowerCase)).isEmpty) {
         ourTeam = "radiant"
       } else {
         ourTeam = "dire"
       }
+      if (gameMode.equalsIgnoreCase("Captains Mode")) {
+        // todo get statistics about bans
+        val radiantBans = teamsResults.first.children().get(0).children().get(2).children().get(0).children()
+        val direBans = teamsResults.first.children().get(1).children().get(2).children().get(0).children()
+        addBansAndPicks(findOurTeam(radiantBans, direBans, ourTeam))
+      }
+
       val numberOfPlayers = userNames.filter(name => radiantResults.text.toLowerCase.contains(name.toLowerCase)).size + userNames.filter(name => direResults.text.toLowerCase.contains(name.toLowerCase)).size
       addWinsAndLosses(findOurTeam(radiantResults, direResults, ourTeam), winOrLoss(ourTeam, win))
       out.println(s"${printWin(ourTeam, win)}\t${printGameMode(gameMode)}\t$lobbyType\t$skillBracket\t$numberOfPlayers\t$duration\t$region")
@@ -109,6 +129,10 @@ object DotaBuffCall {
     printSet(losses)
     println("--------")
     printSet(wins)
+    println("--------")
+    printSet(cmPicks)
+    println("--------")
+    printSet(cmBans)
     out.close()
   }
 }
