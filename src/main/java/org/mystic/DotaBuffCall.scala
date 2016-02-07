@@ -24,26 +24,34 @@ object DotaBuffCall {
     var page = 1
     var added = 1
     while (added > 0) {
-      val doc = Jsoup.connect(s"http://www.dotabuff.com/players/$userID/matches?page=$page")
-        .userAgent("Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:25.0) Gecko/20100101 Firefox/25.0")
-        .get()
-      Thread.sleep(15000)
-      val wonGames = doc.getElementsByClass("won")
-      val lostGames = doc.getElementsByClass("lost")
-      val abandonedGames = doc.getElementsByClass("abandoned")
-      for (i <- 0 until wonGames.size()) {
-        results.append(wonGames.get(i).attr("href"))
+      try {
+        val doc = Jsoup.connect(s"http://www.dotabuff.com/players/$userID/matches?page=$page")
+          .userAgent("Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:25.0) Gecko/20100101 Firefox/25.0")
+          .timeout(0)
+          .get()
+        Thread.sleep(5000)
+        val wonGames = doc.getElementsByClass("won")
+        val lostGames = doc.getElementsByClass("lost")
+        val abandonedGames = doc.getElementsByClass("abandoned")
+        for (i <- 0 until wonGames.size()) {
+          results.append(wonGames.get(i).attr("href"))
+        }
+        for (i <- 0 until lostGames.size()) {
+          results.append(lostGames.get(i).attr("href"))
+        }
+        for (i <- 0 until abandonedGames.size()) {
+          results.append(abandonedGames.get(i).attr("href"))
+        }
+        added = wonGames.size + lostGames.size + abandonedGames.size
+        println(results.size)
+        totalMatches += added
+        page += 1
+      } catch {
+        case e: Exception => {
+          e.printStackTrace(System.out)
+          println(s"http://www.dotabuff.com/players/$userID/matches?page=$page")
+        }
       }
-      for (i <- 0 until lostGames.size()) {
-        results.append(lostGames.get(i).attr("href"))
-      }
-      for (i <- 0 until abandonedGames.size()) {
-        results.append(abandonedGames.get(i).attr("href"))
-      }
-      added = wonGames.size + lostGames.size + abandonedGames.size
-      println(results.size)
-      totalMatches += added
-      page += 1
     }
     println(totalMatches)
     results.toSet
