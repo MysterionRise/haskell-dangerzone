@@ -166,7 +166,6 @@ object DotaBuffCall {
       try {
         duration = (formatter.parseLocalTime(children.get(4 + ind).child(0).text()).getMillisOfDay / 1000)
         date = formatter.parseDateTime(children.get(5 + ind).child(0).text())
-        //todo get date of match
       } catch {
         case e: Exception => {
           println(children.get(4).child(0).text())
@@ -174,28 +173,30 @@ object DotaBuffCall {
           println(name)
         }
       }
-      val teamsResults = doc.select("div[class*=team-results")
-      // radiant
-      val radiantResults: Element = teamsResults.first.children().get(0)
-      val direResults: Element = teamsResults.first.children().get(1)
-      var ourTeam = ""
-      if (!users.values.filter(name => radiantResults.text.toLowerCase.contains(name.toLowerCase)).isEmpty) {
-        ourTeam = "radiant"
-      } else {
-        ourTeam = "dire"
-      }
-      if (gameMode.equalsIgnoreCase("Captains Mode")) {
-        // todo get statistics about bans
-        val radiantBans = teamsResults.first.children().get(0).children().get(2).children().get(0).children()
-        val direBans = teamsResults.first.children().get(1).children().get(2).children().get(0).children()
-        addBansAndPicks(findOurTeam(radiantBans, direBans, ourTeam))
-      }
+      if (date.minusYears(2016).getMillis > 0) {
+        val teamsResults = doc.select("div[class*=team-results")
+        // radiant
+        val radiantResults: Element = teamsResults.first.children().get(0)
+        val direResults: Element = teamsResults.first.children().get(1)
+        var ourTeam = ""
+        if (!users.values.filter(name => radiantResults.text.toLowerCase.contains(name.toLowerCase)).isEmpty) {
+          ourTeam = "radiant"
+        } else {
+          ourTeam = "dire"
+        }
+        if (gameMode.equalsIgnoreCase("Captains Mode")) {
+          // todo get statistics about bans
+          val radiantBans = teamsResults.first.children().get(0).children().get(2).children().get(0).children()
+          val direBans = teamsResults.first.children().get(1).children().get(2).children().get(0).children()
+          addBansAndPicks(findOurTeam(radiantBans, direBans, ourTeam))
+        }
 
-      val numberOfPlayers = users.values.filter(name => radiantResults.text.toLowerCase.contains(name.toLowerCase)).size + users.values.filter(name => direResults.text.toLowerCase.contains(name.toLowerCase)).size
-      addWinsAndLosses(findOurTeam(radiantResults, direResults, ourTeam), winOrLoss(ourTeam, win))
-      out.println(s"${printWin(ourTeam, win)}\t${printGameMode(gameMode)}\t$lobbyType\t$skillBracket\t$numberOfPlayers\t$duration\t$region\t${date.toString("dd-mm-yyyy")}")
-      out.flush()
-      val teamAbilityBuilds = doc.select("div[class*=match-ability-builds")
+        val numberOfPlayers = users.values.filter(name => radiantResults.text.toLowerCase.contains(name.toLowerCase)).size + users.values.filter(name => direResults.text.toLowerCase.contains(name.toLowerCase)).size
+        addWinsAndLosses(findOurTeam(radiantResults, direResults, ourTeam), winOrLoss(ourTeam, win))
+        out.println(s"${printWin(ourTeam, win)}\t${printGameMode(gameMode)}\t$lobbyType\t$skillBracket\t$numberOfPlayers\t$duration\t$region\t${date.toString("dd-mm-yyyy")}")
+        out.flush()
+        val teamAbilityBuilds = doc.select("div[class*=match-ability-builds")
+      }
     })
     printSet(losses)
     println("--------")
