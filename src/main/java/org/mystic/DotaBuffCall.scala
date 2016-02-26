@@ -124,10 +124,11 @@ object DotaBuffCall {
         combinedMatches ++= allMatches(i).intersect(allMatches(j))
       }
     }
-    println(combinedMatches.size)
-    combinedMatches.foreach(name => println(s"http://www.dotabuff.com$name"))
+    //    println(combinedMatches.size)
+    //    combinedMatches.foreach(name => println(s"http://www.dotabuff.com$name"))
     val n = combinedMatches.size
     val out = new PrintWriter("advanced-stats.txt")
+    var size = 0
     combinedMatches.foreach(name => {
       val doc = Jsoup.connect(s"http://www.dotabuff.com$name")
         .userAgent("Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:25.0) Gecko/20100101 Firefox/25.0")
@@ -173,7 +174,9 @@ object DotaBuffCall {
           println(name)
         }
       }
-      if (date.minusYears(2016).getMillis > 0) {
+      if (!date.minusYears(2016).toString().startsWith("-")) {
+        println(s"http://www.dotabuff.com$name")
+        size += 1
         val teamsResults = doc.select("div[class*=team-results")
         // radiant
         val radiantResults: Element = teamsResults.first.children().get(0)
@@ -198,6 +201,7 @@ object DotaBuffCall {
         val teamAbilityBuilds = doc.select("div[class*=match-ability-builds")
       }
     })
+    println(size)
     printSet(losses)
     println("--------")
     printSet(wins)
