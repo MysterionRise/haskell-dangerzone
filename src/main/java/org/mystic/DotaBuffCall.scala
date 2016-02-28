@@ -16,6 +16,7 @@ import scala.collection.mutable.ArrayBuffer
 object DotaBuffCall {
 
   //"238193250" - out of scope, strange bug with matches
+  // TODO add possibility to get name by id, to prevent renaming issues
   val users = Map(
     "112427189" -> "LilAngryBoy",
     "116894024" -> "LeCassette",
