@@ -6,7 +6,7 @@ import java.net.{PasswordAuthentication, Authenticator}
 import org.joda.time.DateTime
 import org.joda.time.format.{DateTimeFormatterBuilder, DateTimeFormat}
 import org.jsoup.Jsoup
-import org.jsoup.nodes.Element
+import org.jsoup.nodes.{TextNode, Node, Element}
 import org.jsoup.select.Elements
 import org.mystic.Template.MultiHashSet
 
@@ -15,27 +15,50 @@ import scala.collection.mutable.ArrayBuffer
 
 object DotaBuffCall {
 
+  setupProxy
+
   //"238193250" - out of scope, strange bug with matches
   // TODO add possibility to get name by id, to prevent renaming issues
-  val users = Map(
-    "112427189" -> "LilAngryBoy",
-    "116894024" -> "LeCassette",
-    "92253911" -> "Grace",
-    "224417226" -> "Paul",
-    "120301254" -> "Cableman",
-    "165818364" -> "JK",
-    "133208812" -> "Klydd",
-    "42344936" -> "improve",
-    "141246748" -> "Ice-CreaM^",
-    "98365520" -> "P11",
-    "118794347" -> "Gwaed Oer",
-    "117746168" -> "RALFGTS",
-    "248823035" -> "Zlodey")
+  val users = List(
+    "112427189",
+    "116894024",
+    "92253911",
+    "224417226",
+    "120301254",
+    "165818364",
+    "133208812",
+    "42344936",
+    "141246748",
+    "98365520",
+    "118794347",
+    "117746168",
+    "248823035")
+
+  val userNames = users.map(getUserName)
 
   val wins = new MultiHashSet[String]
   val losses = new MultiHashSet[String]
   val cmPicks = new MultiHashSet[String]
   val cmBans = new MultiHashSet[String]
+
+  def getUserName(userID: String): String = {
+    try {
+      val doc = Jsoup.connect(s"http://www.dotabuff.com/players/$userID/")
+        .userAgent("Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:25.0) Gecko/20100101 Firefox/25.0")
+        .timeout(0)
+        .get()
+      Thread.sleep(10000)
+      val userName: TextNode = doc.getElementsByClass("header-content-title").get(0).childNode(0).childNode(0).asInstanceOf[TextNode]
+      userName.text()
+    } catch {
+      case e: Exception => {
+        e.printStackTrace(System.out)
+        println(s"http://www.dotabuff.com/players/$userID/")
+      }
+        // return userId if some error happens
+        userID
+    }
+  }
 
   def getAllMatches(userID: String): Set[String] = {
     val results = new ArrayBuffer[String]()
@@ -83,7 +106,7 @@ object DotaBuffCall {
   def printGameMode(gameMode: String) = gameMode.split(" ").map(mode => mode.charAt(0)).mkString
 
   def addWinsAndLosses(ourTeam: Element, win: Boolean) = {
-    users.values.filter(name => ourTeam.text.toLowerCase.contains(name.toLowerCase)).foreach(name =>
+    userNames.filter(name => ourTeam.text.toLowerCase.contains(name.toLowerCase)).foreach(name =>
       if (win) wins.add(name) else losses.add(name))
   }
 
@@ -126,16 +149,13 @@ object DotaBuffCall {
   }
 
   def main(args: Array[String]): Unit = {
-    setupProxy
-    val allMatches = users.keySet.map(getAllMatches).toList
+    val allMatches = users.map(getAllMatches)
     val combinedMatches = new mutable.HashSet[String]
     for (i <- 0 until allMatches.size) {
       for (j <- i + 1 until allMatches.size) {
         combinedMatches ++= allMatches(i).intersect(allMatches(j))
       }
     }
-    //    println(combinedMatches.size)
-    //    combinedMatches.foreach(name => println(s"http://www.dotabuff.com$name"))
     val n = combinedMatches.size
     val out = new PrintWriter("advanced-stats.txt")
     var size = 0
@@ -192,7 +212,7 @@ object DotaBuffCall {
         val radiantResults: Element = teamsResults.first.children().get(0)
         val direResults: Element = teamsResults.first.children().get(1)
         var ourTeam = ""
-        if (!users.values.filter(name => radiantResults.text.toLowerCase.contains(name.toLowerCase)).isEmpty) {
+        if (!userNames.filter(name => radiantResults.text.toLowerCase.contains(name.toLowerCase)).isEmpty) {
           ourTeam = "radiant"
         } else {
           ourTeam = "dire"
@@ -208,7 +228,7 @@ object DotaBuffCall {
           addPicks(findOurTeam(radiantHeroes, direHeroes, ourTeam))
         }
 
-        val numberOfPlayers = users.values.filter(name => radiantResults.text.toLowerCase.contains(name.toLowerCase)).size + users.values.filter(name => direResults.text.toLowerCase.contains(name.toLowerCase)).size
+        val numberOfPlayers = userNames.filter(name => radiantResults.text.toLowerCase.contains(name.toLowerCase)).size + userNames.filter(name => direResults.text.toLowerCase.contains(name.toLowerCase)).size
         addWinsAndLosses(findOurTeam(radiantResults, direResults, ourTeam), winOrLoss(ourTeam, win))
         out.println(s"${printWin(ourTeam, win)}\t${printGameMode(gameMode)}\t$lobbyType\t$skillBracket\t$numberOfPlayers\t$duration\t$region\t${date.toString("dd-mm-yyyy")}")
         out.flush()
