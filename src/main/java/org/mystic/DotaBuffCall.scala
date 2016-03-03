@@ -66,7 +66,7 @@ object DotaBuffCall {
     var totalMatches = 0
     var page = 1
     var added = 1
-    while (totalMatches < 50) {
+    while (added > 0) {
       try {
         val doc = Jsoup.connect(s"http://www.dotabuff.com/players/$userID/matches?page=$page")
           .userAgent("Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:25.0) Gecko/20100101 Firefox/25.0")
@@ -242,10 +242,12 @@ object DotaBuffCall {
     printSet(losses)
     println("--------")
     printSet(wins)
-    println("--------")
+    println("----CM-picks----")
     printSet(cmPicks)
-    println("--------")
+    println("---CM-bans-----")
     printSet(cmBans)
+    println("----other-mode-picks----")
+    printSet(otherModePicks)
     out.close()
   }
 
