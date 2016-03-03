@@ -42,7 +42,7 @@ object DotaBuffCall {
     var totalMatches = 0
     var page = 1
     var added = 1
-    while (added > 0) {
+    while (totalMatches < 50) {
       try {
         val doc = Jsoup.connect(s"http://www.dotabuff.com/players/$userID/matches?page=$page")
           .userAgent("Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:25.0) Gecko/20100101 Firefox/25.0")
@@ -115,6 +115,15 @@ object DotaBuffCall {
     }
   }
 
+
+  def addPicks(ourTeam: Elements) = {
+    for (i <- 0 until ourTeam.size()) {
+      val fullHero = ourTeam.get(i).children()
+      val userName = fullHero.get(1).text() // username
+      val heroName = fullHero.first().children().first().children().first().attr("href").substring(8) // hero name
+
+    }
+  }
 
   def main(args: Array[String]): Unit = {
     setupProxy
@@ -193,6 +202,10 @@ object DotaBuffCall {
           val radiantBans = teamsResults.first.children().get(0).children().get(2).children().get(0).children()
           val direBans = teamsResults.first.children().get(1).children().get(2).children().get(0).children()
           addBansAndPicks(findOurTeam(radiantBans, direBans, ourTeam))
+        } else {
+          val radiantHeroes = teamsResults.first.children().get(0).children().get(1).children().get(0).children().get(1).children()
+          val direHeroes = teamsResults.first.children().get(1).children().get(1).children().get(0).children().get(1).children()
+          addPicks(findOurTeam(radiantHeroes, direHeroes, ourTeam))
         }
 
         val numberOfPlayers = users.values.filter(name => radiantResults.text.toLowerCase.contains(name.toLowerCase)).size + users.values.filter(name => direResults.text.toLowerCase.contains(name.toLowerCase)).size
