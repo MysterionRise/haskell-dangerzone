@@ -32,7 +32,8 @@ object DotaBuffCall {
     "98365520",
     "118794347",
     "117746168",
-    "248823035")
+    "248823035",
+    "302522553")
 
   val userNames = users.map(getUserName)
 
