@@ -1,12 +1,12 @@
 package org.mystic
 
 import java.io.PrintWriter
-import java.net.{PasswordAuthentication, Authenticator}
+import java.net.{Authenticator, PasswordAuthentication}
 
 import org.joda.time.DateTime
-import org.joda.time.format.{DateTimeFormatterBuilder, DateTimeFormat}
+import org.joda.time.format.{DateTimeFormat, DateTimeFormatterBuilder}
 import org.jsoup.Jsoup
-import org.jsoup.nodes.{TextNode, Node, Element}
+import org.jsoup.nodes.{Element, TextNode}
 import org.jsoup.select.Elements
 import org.mystic.Template.MultiHashSet
 
@@ -40,6 +40,7 @@ object DotaBuffCall {
   val losses = new MultiHashSet[String]
   val cmPicks = new MultiHashSet[String]
   val cmBans = new MultiHashSet[String]
+  val otherModePicks = new MultiHashSet[String]
 
   def getUserName(userID: String): String = {
     try {
@@ -144,7 +145,9 @@ object DotaBuffCall {
       val fullHero = ourTeam.get(i).children()
       val userName = fullHero.get(1).text() // username
       val heroName = fullHero.first().children().first().children().first().attr("href").substring(8) // hero name
-
+      if (userNames.contains(userName)) {
+        otherModePicks.add(heroName)
+      }
     }
   }
 
