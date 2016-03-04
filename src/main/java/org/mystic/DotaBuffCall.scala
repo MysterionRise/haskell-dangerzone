@@ -265,3 +265,4 @@ object DotaBuffCall {
     System.setProperty("http.proxyPort", "-")
   }
 }
+
