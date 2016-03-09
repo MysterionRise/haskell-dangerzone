@@ -2,6 +2,7 @@ package org.mystic
 
 import java.io.PrintWriter
 import java.net.{Authenticator, PasswordAuthentication}
+import java.util
 
 import org.joda.time.DateTime
 import org.joda.time.format.{DateTimeFormat, DateTimeFormatterBuilder}
@@ -12,10 +13,13 @@ import org.mystic.Template.MultiHashSet
 
 import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
+import scala.io.StdIn
 
 object DotaBuffCall {
 
   setupProxy
+
+  val out = new PrintWriter("advanced-stats.txt")
 
   //"238193250" - out of scope, strange bug with matches
   // TODO add possibility to get name by id, to prevent renaming issues
@@ -24,7 +28,7 @@ object DotaBuffCall {
     "116894024",
     "92253911",
     "224417226",
-    "120301254",
+    //"120301254", // cableman
     "165818364",
     "133208812",
     "42344936",
@@ -124,9 +128,7 @@ object DotaBuffCall {
     }
 
   def printSet(set: MultiHashSet[String]) = {
-    set.map.keySet.foreach(key => println(s"$key ${
-      set.count(key)
-    }"))
+    set.map.keySet.foreach(key => out.println(s"$key\t${set.count(key)}"))
   }
 
   def addBansAndPicks(ourTeam: Elements) = {
@@ -135,7 +137,7 @@ object DotaBuffCall {
       val ind = fullHero.lastIndexOf("/") + 1
       i match {
         case 0 | 1 | 4 | 5 | 8 => cmBans.add(fullHero.substring(ind))
-        case _ => cmPicks.add(fullHero.substring(ind))
+        case _ => otherModePicks.add(fullHero.substring(ind))
       }
     }
   }
@@ -153,18 +155,20 @@ object DotaBuffCall {
   }
 
   def main(args: Array[String]): Unit = {
-    val allMatches = users.map(getAllMatches)
-    val combinedMatches = new mutable.HashSet[String]
-    for (i <- 0 until allMatches.size) {
-      for (j <- i + 1 until allMatches.size) {
-        combinedMatches ++= allMatches(i).intersect(allMatches(j))
-      }
+//    val allMatches = users.map(getAllMatches)
+//    val combinedMatches = new mutable.HashSet[String]
+//    for (i <- 0 until allMatches.size) {
+//      for (j <- i + 1 until allMatches.size) {
+//        combinedMatches ++= allMatches(i).intersect(allMatches(j))
+//      }
+//    }
+    val size = StdIn.readInt()
+    val combined = new util.ArrayList[String]()
+    for (i <- 0 until size) {
+      combined.add(StdIn.readLine())
     }
-    val n = combinedMatches.size
-    val out = new PrintWriter("advanced-stats.txt")
-    var size = 0
-    combinedMatches.foreach(name => {
-      val doc = Jsoup.connect(s"http://www.dotabuff.com$name")
+    combined.toArray(new Array[String](0)).foreach(name => {
+      val doc = Jsoup.connect(s"$name")
         .userAgent("Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:25.0) Gecko/20100101 Firefox/25.0")
         .timeout(0)
         .get()
@@ -210,7 +214,7 @@ object DotaBuffCall {
       }
       if (!date.minusYears(2016).toString().startsWith("-")) {
         println(s"http://www.dotabuff.com$name")
-        size += 1
+//        size += 1
         val teamsResults = doc.select("div[class*=team-results")
         // radiant
         val radiantResults: Element = teamsResults.first.children().get(0)
@@ -239,15 +243,16 @@ object DotaBuffCall {
         val teamAbilityBuilds = doc.select("div[class*=match-ability-builds")
       }
     })
-    println(size)
+    out.println(size)
+    out.println("---losses-----")
     printSet(losses)
-    println("--------")
+    out.println("---wins-----")
     printSet(wins)
-    println("----CM-picks----")
+    out.println("----CM-picks----")
     printSet(cmPicks)
-    println("---CM-bans-----")
+    out.println("---CM-bans-----")
     printSet(cmBans)
-    println("----other-mode-picks----")
+    out.println("----other-mode-picks----")
     printSet(otherModePicks)
     out.close()
   }
@@ -265,4 +270,3 @@ object DotaBuffCall {
     System.setProperty("http.proxyPort", "-")
   }
 }
-
