@@ -2,6 +2,7 @@ package org.mystic
 
 import java.io.PrintWriter
 import java.net.{Authenticator, PasswordAuthentication}
+import java.util.concurrent.TimeUnit
 
 import org.joda.time.DateTime
 import org.joda.time.format.{DateTimeFormat, DateTimeFormatterBuilder}
@@ -48,7 +49,7 @@ object DotaBuffCall {
         .userAgent("Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:25.0) Gecko/20100101 Firefox/25.0")
         .timeout(0)
         .get()
-      Thread.sleep(10000)
+      TimeUnit.SECONDS.sleep(10)
       val userName: TextNode = doc.getElementsByClass("header-content-title").get(0).childNode(0).childNode(0).asInstanceOf[TextNode]
       userName.text()
     } catch {
@@ -72,7 +73,7 @@ object DotaBuffCall {
           .userAgent("Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:25.0) Gecko/20100101 Firefox/25.0")
           .timeout(0)
           .get()
-        Thread.sleep(10000)
+        TimeUnit.SECONDS.sleep(10)
         val wonGames = doc.getElementsByClass("won")
         val lostGames = doc.getElementsByClass("lost")
         val abandonedGames = doc.getElementsByClass("abandoned")
@@ -167,7 +168,7 @@ object DotaBuffCall {
         .userAgent("Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:25.0) Gecko/20100101 Firefox/25.0")
         .timeout(0)
         .get()
-      Thread.sleep(10000)
+      TimeUnit.SECONDS.sleep(10)
       // who win the game
       var win = ""
       val dire: Elements = doc.select("div[class*=match-result team dire")
