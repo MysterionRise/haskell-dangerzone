@@ -157,6 +157,7 @@ object DotaBuffCall {
   }
 
   def main(args: Array[String]): Unit = {
+// 	TODO add some kind of a file cache for preventing not needed access to dotabuff
 //    val allMatches = users.map(getAllMatches)
 //    val combinedMatches = new mutable.HashSet[String]
 //    for (i <- 0 until allMatches.size) {
