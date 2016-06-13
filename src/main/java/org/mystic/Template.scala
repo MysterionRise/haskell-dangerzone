@@ -3,7 +3,11 @@ package org.mystic
 import java.io._
 import java.util.StringTokenizer
 import java.util.TreeMap
+
+import org.mystic.DotaBuffCall._
+
 import scala.collection.mutable
+import scala.io.StdIn
 
 object Template {
 
@@ -83,11 +87,12 @@ object Template {
   }
 
   /**
-   * Segment tree for any commutative function
-   * @param values Array of Int
-   * @param commutative function like min, max, sum
-   * @param zero zero value - e.g. 0 for sum, Inf for min, max
-   */
+    * Segment tree for any commutative function
+    *
+    * @param values      Array of Int
+    * @param commutative function like min, max, sum
+    * @param zero        zero value - e.g. 0 for sum, Inf for min, max
+    */
   class SegmentTree(values: Array[Int])(commutative: (Int, Int) => Int)(zero: Int) {
     private val SIZE = 1e5.toInt
     private val n = values.length
@@ -114,6 +119,7 @@ object Template {
 
     // TODO implement me!
     def modify(p: Int, left: Int, right: Int) = ???
+
     def query(p: Int) = ???
 
     // sum [l, r)
@@ -141,25 +147,29 @@ object Template {
   }
 
   def solve: Int = {
-    val sumTree = new SegmentTree(Array(1, 2, 3, 4, 5, 6, 7))((a, b) => a + b)(0)
-    sumTree.build
-    println(sumTree.query(0, 7))
-    println(sumTree.query(1, 7))
-    println(sumTree.query(2, 7))
-    println(sumTree.query(3, 7))
-    println(sumTree.query(4, 7))
-    println(sumTree.query(5, 7))
-    println(sumTree.query(6, 7))
-    val minTree = new SegmentTree(Array(1, 2, 3, 4, 5, 6, 7))((a, b) => Math.min(a, b))(Int.MaxValue)
-    minTree.build
-    println(minTree.query(0, 7))
-    println(minTree.query(1, 7))
-    println(minTree.query(2, 7))
-    println(minTree.query(3, 7))
-    println(minTree.query(4, 7))
-    println(minTree.query(5, 7))
-    println(minTree.query(6, 7))
-    // TODO add your solution here
+    eloRatings.put("1375614", 3120.5394664988)
+    eloRatings.put("350190", 1929.1905389442)
+    eloRatings.put("2586976", 2158.0109149173)
+    eloRatings.put("1148284", 1262.5916327787)
+    eloRatings.put("15", 1309.6203191338)
+    eloRatings.put("46", 1993.8585137004)
+    eloRatings.put("2512249", 1712.830206026)
+    eloRatings.put("2777247", 1928.6485997128)
+    eloRatings.put("2163", 2529.6553672996)
+    eloRatings.put("36", 1707.6304924386)
+    val p = scala.util.parsing.json.JSON.parseFull(StdIn.readLine()).get.asInstanceOf[List[String]]
+    p.sorted.foreach(game => {
+      getMatchData(game)
+      println(s"process match $game")
+    })
+    for (i <- 0 until teams.length) {
+      val id = teams(i)
+      val name = teamNames(i)
+      println(s"$name ${eloRatings.getOrElse(id, 1500)}")
+    }
+    println(calcWE(eloRatings.getOrElse("2163", 1500d) - eloRatings.getOrElse("1375614", 1500d)))
+    println(calcWE(eloRatings.getOrElse("2163", 1500d) - eloRatings.getOrElse("2586976", 1500d)))
+    println(calcWE(eloRatings.getOrElse("1375614", 1500d) - eloRatings.getOrElse("2586976", 1500d)))
     return 0
   }
 }

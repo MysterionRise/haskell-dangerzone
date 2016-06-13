@@ -220,7 +220,8 @@ object DotaBuffCall {
       combinedMatches ++= allMatches(i)
     }
     println(combinedMatches.size)
-    println(scala.util.parsing.json.JSONArray(combinedMatches.toList))
+    out.println(scala.util.parsing.json.JSONArray(combinedMatches.toList))
+    out.flush()
     //set the start elo rating
     val p = combinedMatches.toList
     teams.foreach(teamID => eloRatings.put(teamID, 1500f))
@@ -229,7 +230,8 @@ object DotaBuffCall {
       println(s"process match $game")
       getMatchObject(game)
     })
-    println(scala.util.parsing.json.JSONArray(data.toList))
+    out.println(scala.util.parsing.json.JSONArray(data))
+    out.flush()
     //    p.sorted.foreach(game => {
     //
     //      getMatchData(game)
@@ -243,7 +245,7 @@ object DotaBuffCall {
     //    println()
   }
 
-  val K: Double = 40d
+  val K: Double = 20d
 
   def updateEloRating(radiantTeamID: String, direTeamID: String, radiantKills: Int, direKills: Int, win: String) = {
     val oldRadiantElo = eloRatings.getOrElse(radiantTeamID, 0d)
@@ -260,7 +262,7 @@ object DotaBuffCall {
 
   def updateRating(oldRating: Double, K: Double, w: Double, we: Double) = oldRating + K * (w - we)
 
-  def calcWE(diffRating: Double) = 1f / (Math.pow(10, (-diffRating / 400)) + 1)
+  def calcWE(diffRating: Double) = 1f / (Math.pow(10, (-diffRating / 800)) + 1)
 
   def probabilityOfWin(ratingA: Double, ratingB: Double) = calcWE(ratingA - ratingB)
 
@@ -305,6 +307,7 @@ object DotaBuffCall {
       val direAssists = stats.get(57).text().toInt
       val direKDA = stats.get(59).text().toFloat
       val map = new mutable.HashMap[String, String]()
+      map.put("id", id)
       map.put("win", win)
       map.put("radiant", radiantTeamID)
       map.put("dire", direTeamID)
