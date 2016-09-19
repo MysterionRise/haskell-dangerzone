@@ -48,7 +48,7 @@ build.log
 # switch to regexp syntax.
 #  syntax: regexp
 #  ^\.pc/
-
+*.xls
 #SHITTY output not in target directory
 build.log
 =======

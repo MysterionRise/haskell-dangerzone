@@ -23,8 +23,8 @@ object VotingDownload {
       val script = doc.getElementsByTag("script").get(0).data()
       val sub = script.substring(script.indexOf("window.location.assign") + "window.location.assign".length + 1).replaceAllLiterally("\"", "").replaceAllLiterally("+", "")
       val upd = sub.substring(0, sub.indexOf(")")).replaceAllLiterally("\n", "").replaceAllLiterally("\r", "").replaceAllLiterally("\t", "")
-      val name = doc.getElementsByAttributeValue("width", "45%").first().parent().children().text()
-      saveExcelFile(upd, name)
+      val name = prevName + " " + doc.getElementsByAttributeValue("width", "45%").first().parent().children().text()
+      saveExcelFile(upd, name.replaceAllLiterally("Наименование избирательной комиссии", ""))
       val array: Array[Element] = doc.getElementsByTag("a").toArray(new Array[Element](1))
       val links = array.filter(p => p.attr("style").equalsIgnoreCase("TEXT-DECORATION: none"))
       for (i <- 0 until links.length) {
@@ -66,9 +66,7 @@ object VotingDownload {
   }
 
   def main(args: Array[String]) {
-    val root1 = "http://www.vybory.izbirkom.ru/region/region/izbirkom?action=show&tvd=100100067795854&vrn=100100067795849&region=0&global=1&sub_region=0&prver=0&pronetvd=0&vibid=100100067795856&type=233"
     val root0 = "http://www.vybory.izbirkom.ru/region/region/izbirkom?action=show&root=1&tvd=100100067795854&vrn=100100067795849&region=0&global=1&sub_region=0&prver=0&pronetvd=0&vibid=100100067795854&type=233"
-    val root2 = "http://www.vybory.izbirkom.ru/region/region/izbirkom?action=show&tvd=100100067795856&vrn=100100067795849&region=0&global=1&sub_region=0&prver=0&pronetvd=0&vibid=2012000295675&type=233"
     getChildLinks(root0, "")
   }
 
