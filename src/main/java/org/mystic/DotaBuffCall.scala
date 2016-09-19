@@ -245,6 +245,10 @@ object DotaBuffCall {
     //    println()
   }
 
+  def readAllData() = {
+//    val input = scala.util.parsing.json.JSON.parseFull().get.asInstanceOf[List[String]]
+  }
+
   val K: Double = 20d
 
   def updateEloRating(radiantTeamID: String, direTeamID: String, radiantKills: Int, direKills: Int, win: String) = {
