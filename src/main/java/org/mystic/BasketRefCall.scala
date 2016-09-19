@@ -4,8 +4,7 @@ import java.io.File
 
 import com.github.tototoshi.csv.CSVWriter
 import org.jsoup.Jsoup
-import org.jsoup.nodes.{Element, TextNode}
-import org.jsoup.select.Elements
+import org.jsoup.nodes.Element
 
 case class Player(name: String, stats: Array[SeasonStat]) {
 
