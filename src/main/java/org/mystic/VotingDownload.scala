@@ -24,7 +24,6 @@ object VotingDownload {
       val sub = script.substring(script.indexOf("window.location.assign") + "window.location.assign".length + 1).replaceAllLiterally("\"", "").replaceAllLiterally("+", "")
       val upd = sub.substring(0, sub.indexOf(")")).replaceAllLiterally("\n", "").replaceAllLiterally("\r", "").replaceAllLiterally("\t", "")
       val name = prevName + " " + doc.getElementsByAttributeValue("width", "45%").first().parent().children().text()
-      saveExcelFile(upd, name.replaceAllLiterally("Наименование избирательной комиссии", ""))
       val array: Array[Element] = doc.getElementsByTag("a").toArray(new Array[Element](1))
       val links = array.filter(p => p.attr("style").equalsIgnoreCase("TEXT-DECORATION: none"))
       for (i <- 0 until links.length) {
@@ -40,12 +39,16 @@ object VotingDownload {
         })
         if (!x.isEmpty) {
           getChildLinks(x(0).attr("href"), name)
+        } else {
+          saveExcelFile(upd, name.replaceAllLiterally("Наименование избирательной комиссии", "").trim().replaceAllLiterally("ЦИК России", "РФ")
+            .replaceAllLiterally("Территориальная избирательная комиссия", "ТИК").trim().replaceAll("-", "").replaceAll(" +", " ").trim())
         }
       }
     } catch {
       case e: Exception => {
         out.flush()
         println(e)
+        println(e.getStackTrace)
       }
     }
   }
@@ -66,8 +69,11 @@ object VotingDownload {
   }
 
   def main(args: Array[String]) {
-    val root0 = "http://www.vybory.izbirkom.ru/region/region/izbirkom?action=show&root=1&tvd=100100067795854&vrn=100100067795849&region=0&global=1&sub_region=0&prver=0&pronetvd=0&vibid=100100067795854&type=233"
-    getChildLinks(root0, "")
+    val millis: Long = System.currentTimeMillis()
+    println(millis)
+    val root = "http://www.vybory.izbirkom.ru/region/region/izbirkom?action=show&root=1&tvd=100100067795854&vrn=100100067795849&region=0&global=1&sub_region=0&prver=0&pronetvd=0&vibid=100100067795854&type=233"
+    getChildLinks(root, "")
+    println((System.currentTimeMillis() - millis) / 1000)
   }
 
 
