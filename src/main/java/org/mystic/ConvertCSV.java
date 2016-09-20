@@ -6,7 +6,6 @@ import jxl.Workbook;
 import jxl.WorkbookSettings;
 import jxl.read.biff.BiffException;
 
-import javax.swing.*;
 import java.io.*;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
@@ -14,30 +13,39 @@ import java.util.*;
 
 public class ConvertCSV {
 
-    private static void transformXLS(String absolutePath) throws IOException, BiffException {
+    private static File f = new File("all uiks.csv");
+    private static OutputStream os;
+    private static String encoding = "UTF8";
+    private static OutputStreamWriter osw;
+    private static BufferedWriter bw;
+
+    public ConvertCSV() throws FileNotFoundException, UnsupportedEncodingException {
+        f = new File("all uiks.csv");
+        os = new FileOutputStream(f, true);
+        encoding = "UTF8";
+        osw = new OutputStreamWriter(os, encoding);
+        bw = new BufferedWriter(osw);
+    }
+
+    private static void transformXLS(Path absolutePath) throws IOException, BiffException {
         WorkbookSettings ws = new WorkbookSettings();
         ws.setLocale(new Locale("en", "EN"));
-        Workbook w = Workbook.getWorkbook(new File(absolutePath), ws);
+        Workbook w = Workbook.getWorkbook(absolutePath.toFile(), ws);
 
         Sheet s = w.getSheet(0);
 
-        File f = new File(transformToLatin(absolutePath.trim()) + ".csv");
-
-        OutputStream os = new FileOutputStream(f);
-        String encoding = "UTF8";
-        OutputStreamWriter osw = new OutputStreamWriter(os, encoding);
-        BufferedWriter bw = new BufferedWriter(osw);
+//        File f = new File(transformToLatin(absolutePath.trim()) + ".csv");
 
         Cell[] column;
         boolean stopProcessing = false;
-        for (int i = 1; i < s.getColumns(); i++) {
+        for (int i = 3; i < s.getColumns(); i++) {
             column = s.getColumn(i);
             // limit stupid headers and bottoms
             final String name = column[7].getContents();
             if (column.length >= 55) {
                 if (i >= 3 && name.length() > 1) {
                     //TODO look up for place by name + absolute path
-                    bw.write(name + " " + absolutePath.substring(absolutePath.lastIndexOf("/") + 1, absolutePath.indexOf(".xls")));
+                    bw.write(name + " " + absolutePath.toString().substring(absolutePath.toString().lastIndexOf("/") + 1, absolutePath.toString().indexOf(".xls")));
                 } else {
                     if (name.isEmpty()) {
                         if (i > 3) {
@@ -52,7 +60,7 @@ public class ConvertCSV {
                 if (!stopProcessing) {
                     bw.write('$');
                     for (int j = 8; j < 55; j++) {
-                        final String contents = column[j].getContents();
+                        final String contents = column[j].getContents().replace("%", "");
                         if (contents.isEmpty()) {
                             bw.write("-");
                         } else {
@@ -62,11 +70,9 @@ public class ConvertCSV {
                     }
                     bw.newLine();
                 }
-
             }
         }
         bw.flush();
-        bw.close();
     }
 
     private static final Map<Character, String> map = new HashMap<Character, String>() {{
@@ -107,7 +113,7 @@ public class ConvertCSV {
 
     }};
 
-    private static String transformToLatin(String a) {
+    public static String transformToLatin(String a) {
         final StringBuilder sb = new StringBuilder();
         for (int i = 0; i < a.length(); ++i) {
             if (map.containsKey(Character.toLowerCase(a.charAt(i)))) {
@@ -121,6 +127,7 @@ public class ConvertCSV {
 
     public static void main(String[] args) {
         try {
+            new ConvertCSV();
             final Path path = Paths.get(".");
             Files.walkFileTree(path, new FileVisitor<Path>() {
                 @Override
@@ -132,8 +139,8 @@ public class ConvertCSV {
                 public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
                     if (file.toString().contains(".xls")) {
                         try {
-                            transformXLS(file.toAbsolutePath().toString());
-                            System.out.println();
+                            transformXLS(file.toAbsolutePath());
+                            System.out.println(file.toAbsolutePath().toString());
                         } catch (BiffException e) {
                             e.printStackTrace(System.err);
                         }
@@ -151,6 +158,8 @@ public class ConvertCSV {
                     return FileVisitResult.CONTINUE;
                 }
             });
+            bw.flush();
+            bw.close();
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace(System.err);
         } catch (IOException e) {
