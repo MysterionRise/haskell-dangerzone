@@ -111,6 +111,7 @@ public class ConvertCSV {
         put('х', "x");
         put('ъ', "");
 
+        put('ё', "yo");
     }};
 
     public static String transformToLatin(String a) {
