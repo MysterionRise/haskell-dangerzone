@@ -58,23 +58,30 @@
             <version>1.9.12</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.apache.lucene</groupId>
-            <artifactId>lucene-core</artifactId>
-            <version>4.10.4</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.apache.lucene</groupId>-->
+            <!--<artifactId>lucene-core</artifactId>-->
+            <!--<version>4.10.4</version>-->
+        <!--</dependency>-->
 
-        <dependency>
-            <groupId>org.elasticsearch</groupId>
-            <artifactId>elasticsearch</artifactId>
-            <version>1.7.3</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.elasticsearch</groupId>-->
+            <!--<artifactId>elasticsearch</artifactId>-->
+            <!--<version>1.7.3</version>-->
+        <!--</dependency>-->
 
         <!--<dependency>-->
         <!--<groupId>org.apache.lucene</groupId>-->
         <!--<artifactId>lucene-core</artifactId>-->
         <!--<version>5.0.0</version>-->
         <!--</dependency>-->
+
+        <dependency>
+            <groupId>org.apache.solr</groupId>
+            <artifactId>solr-solrj</artifactId>
+            <version>6.5.0</version>
+        </dependency>
+
 
         <dependency>
             <groupId>io.searchbox</groupId>
@@ -112,11 +119,11 @@
             <version>2.9.2</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.apache.solr</groupId>
-            <artifactId>solr-solrj</artifactId>
-            <version>5.5.2</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.apache.solr</groupId>-->
+            <!--<artifactId>solr-solrj</artifactId>-->
+            <!--<version>5.5.2</version>-->
+        <!--</dependency>-->
 
         <dependency>
             <groupId>com.github.tototoshi</groupId>
@@ -130,6 +137,11 @@
             <version>2.6.12</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-math3</artifactId>
+            <version>3.6.1</version>
+        </dependency>
 
     </dependencies>
 

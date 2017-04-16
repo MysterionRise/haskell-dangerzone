@@ -72,7 +72,7 @@ public class ConvertCSV {
         put('ь', "ya");
         put('б', "ya");
         put('ю', "ya");
-        
+
         put('ф', "ya");
         put('я', "ya");
         put('я', "ya");
