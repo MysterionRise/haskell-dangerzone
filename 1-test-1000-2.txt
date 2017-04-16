@@ -1,0 +1,9 @@
+name wildcard sa
+mean 143.556 144.116
+percentile 50 132.0 133.0
+percentile 60 132.0 133.0
+percentile 70 132.0 133.0
+percentile 80 132.0 133.0
+percentile 90 132.0 133.0
+percentile 95 132.0 133.0
+percentile 99 132.0 133.0

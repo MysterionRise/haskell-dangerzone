@@ -1,0 +1,11 @@
+name wildcard sa
+mean 417.432 398.506
+max 785.0 709.0
+min 374.0 359.0
+percentile 50 374.005 360.0
+percentile 60 375.0 360.0
+percentile 70 375.0 360.0
+percentile 80 375.0 360.0
+percentile 90 375.0 360.0
+percentile 95 375.0 360.0
+percentile 99 375.0 360.0
