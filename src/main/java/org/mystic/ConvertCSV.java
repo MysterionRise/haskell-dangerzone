@@ -6,7 +6,6 @@ import jxl.Workbook;
 import jxl.WorkbookSettings;
 import jxl.read.biff.BiffException;
 
-import javax.swing.*;
 import java.io.*;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
@@ -14,56 +13,71 @@ import java.util.*;
 
 public class ConvertCSV {
 
-    private static void transformXLS(String absolutePath) throws IOException, BiffException {
-        //Excel document to be imported
-//        String filename = "input.xls";
+    private static File f = new File("all uiks.csv");
+    private static OutputStream os;
+    private static String encoding = "UTF8";
+    private static OutputStreamWriter osw;
+    private static BufferedWriter bw;
+
+    public ConvertCSV() throws FileNotFoundException, UnsupportedEncodingException {
+        f = new File("all uiks.csv");
+        os = new FileOutputStream(f, true);
+        encoding = "UTF8";
+        osw = new OutputStreamWriter(os, encoding);
+        bw = new BufferedWriter(osw);
+    }
+
+    private static void transformXLS(Path absolutePath) throws IOException, BiffException {
         WorkbookSettings ws = new WorkbookSettings();
         ws.setLocale(new Locale("en", "EN"));
-        Workbook w = Workbook.getWorkbook(new File(absolutePath), ws);
+        Workbook w = Workbook.getWorkbook(absolutePath.toFile(), ws);
 
         Sheet s = w.getSheet(0);
 
-        //File to store data in form of CSV
-        File f = new File(transformToLatin(absolutePath.trim()) + ".csv");
-
-        OutputStream os = new FileOutputStream(f);
-        String encoding = "UTF8";
-        OutputStreamWriter osw = new OutputStreamWriter(os, encoding);
-        BufferedWriter bw = new BufferedWriter(osw);
+//        File f = new File(transformToLatin(absolutePath.trim()) + ".csv");
 
         Cell[] column;
-        // Gets the cells from sheet
-        for (int i = 1; i < s.getColumns(); i++) {
+        boolean stopProcessing = false;
+        for (int i = 3; i < s.getColumns(); i++) {
             column = s.getColumn(i);
             // limit stupid headers and bottoms
             final String name = column[7].getContents();
-            if (i >= 3) {
-                //TODO look up for place by name + absolute path
-                bw.write(name + " " + absolutePath.substring(absolutePath.lastIndexOf("\\") + 2, absolutePath.indexOf(".xls")));
-            } else {
-                if (name.isEmpty()) {
-                    bw.write("-");
-                }
-                bw.write(name);
-            }
-            bw.write('$');
-            for (int j = 8; j < 55; j++) {
-                final String contents = column[j].getContents();
-                if (contents.isEmpty()) {
-                    bw.write("-");
+            if (column.length >= 55) {
+                if (i >= 3 && name.length() > 1) {
+                    //TODO look up for place by name + absolute path
+                    bw.write(name + " " + absolutePath.toString().substring(absolutePath.toString().lastIndexOf("/") + 1, absolutePath.toString().indexOf(".xls")));
                 } else {
-                    bw.write(contents);
+                    if (name.isEmpty()) {
+                        if (i > 3) {
+                            stopProcessing = true;
+                        } else {
+                            bw.write("-");
+                        }
+                    } else {
+                        bw.write(name);
+                    }
                 }
-                bw.write('$');
+                if (!stopProcessing) {
+                    bw.write('$');
+                    for (int j = 8; j < 55; j++) {
+                        final String contents = column[j].getContents().replace("%", "");
+                        if (contents.isEmpty()) {
+                            bw.write("-");
+                        } else {
+                            bw.write(contents);
+                        }
+                        bw.write('$');
+                    }
+                    bw.newLine();
+                }
             }
-            bw.newLine();
         }
         bw.flush();
-        bw.close();
     }
 
     private static final Map<Character, String> map = new HashMap<Character, String>() {{
         put('я', "ya");
+<<<<<<< HEAD
         put('ч', "ya");
         put('с', "ya");
         put('м', "ya");
@@ -79,19 +93,60 @@ public class ConvertCSV {
         put('я', "ya");
         put('я', "ya");
         put('я', "ya");
+=======
+        put('ч', "ch");
+        put('с', "s");
+        put('м', "m");
+        put('и', "i");
+        put('т', "t");
+        put('ь', "");
+        put('б', "b");
+        put('ю', "yu");
 
+        put('ф', "f");
+        put('ы', "y");
+        put('в', "v");
+        put('а', "a");
+        put('п', "p");
+        put('р', "r");
+        put('о', "o");
+        put('л', "l");
+        put('д', "d");
+        put('ж', "zh");
+        put('э', "e");
+
+        put('й', "i");
+        put('ц', "c");
+        put('у', "u");
+        put('к', "k");
+        put('е', "e");
+        put('н', "n");
+        put('г', "g");
+        put('ш', "sh");
+        put('щ', "sh");
+        put('з', "z");
+        put('х', "x");
+        put('ъ', "");
+>>>>>>> a3c65bf66c9c623f1659c4d873633f78ba1d499b
+
+        put('ё', "yo");
     }};
 
-    private static String transformToLatin(String a) {
+    public static String transformToLatin(String a) {
         final StringBuilder sb = new StringBuilder();
         for (int i = 0; i < a.length(); ++i) {
-            sb.append(map.get(a.charAt(i)));
+            if (map.containsKey(Character.toLowerCase(a.charAt(i)))) {
+                sb.append(map.get(Character.toLowerCase(a.charAt(i))).toUpperCase());
+            } else {
+                sb.append(a.charAt(i));
+            }
         }
         return sb.toString();
     }
 
     public static void main(String[] args) {
         try {
+            new ConvertCSV();
             final Path path = Paths.get(".");
             Files.walkFileTree(path, new FileVisitor<Path>() {
                 @Override
@@ -102,11 +157,11 @@ public class ConvertCSV {
                 @Override
                 public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
                     if (file.toString().contains(".xls")) {
-                        System.out.println(file.toAbsolutePath().toString());
                         try {
-                            transformXLS(file.toAbsolutePath().toString());
+                            transformXLS(file.toAbsolutePath());
+                            System.out.println(file.toAbsolutePath().toString());
                         } catch (BiffException e) {
-                            System.err.println(e.toString());
+                            e.printStackTrace(System.err);
                         }
                     }
                     return FileVisitResult.CONTINUE;
@@ -122,12 +177,14 @@ public class ConvertCSV {
                     return FileVisitResult.CONTINUE;
                 }
             });
+            bw.flush();
+            bw.close();
         } catch (UnsupportedEncodingException e) {
-            System.err.println(e.toString());
+            e.printStackTrace(System.err);
         } catch (IOException e) {
-            System.err.println(e.toString());
+            e.printStackTrace(System.err);
         } catch (Exception e) {
-            System.err.println(e.toString());
+            e.printStackTrace(System.err);
         }
     }
 }

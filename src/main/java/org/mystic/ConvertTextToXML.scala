@@ -51,7 +51,7 @@ object ConvertTextToXML {
   def main(args: Array[String]) {
     solr.deleteByQuery("*:*")
     solr.commit()
-    for (i <- 0 until 500) {
+    for (i <- 0 until 2000) {
       val in = new Scanner(new File(s"D:\\wiki\\20140615-wiki-en_${convertToNDigits(i, 6)}.txt"))
       val text = new StringBuilder
       var title = ""

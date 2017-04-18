@@ -9,7 +9,7 @@ import scala.util.Random
 
 object SolrTester {
 
-  val TEST_SIZE = 1001
+  val TEST_SIZE = 1003
 
   val WORD_SIZE = 3
 
