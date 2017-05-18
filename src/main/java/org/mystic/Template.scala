@@ -146,30 +146,28 @@ object Template {
     }
   }
 
-  def solve: Int = {
-    eloRatings.put("1375614", 3120.5394664988)
-    eloRatings.put("350190", 1929.1905389442)
-    eloRatings.put("2586976", 2158.0109149173)
-    eloRatings.put("1148284", 1262.5916327787)
-    eloRatings.put("15", 1309.6203191338)
-    eloRatings.put("46", 1993.8585137004)
-    eloRatings.put("2512249", 1712.830206026)
-    eloRatings.put("2777247", 1928.6485997128)
-    eloRatings.put("2163", 2529.6553672996)
-    eloRatings.put("36", 1707.6304924386)
-    val p = scala.util.parsing.json.JSON.parseFull(StdIn.readLine()).get.asInstanceOf[List[String]]
-    p.sorted.foreach(game => {
-      getMatchData(game)
-      println(s"process match $game")
-    })
-    for (i <- 0 until teams.length) {
-      val id = teams(i)
-      val name = teamNames(i)
-      println(s"$name ${eloRatings.getOrElse(id, 1500)}")
+  def solve = {
+    println(solution(Array[Int](Int.MaxValue, Int.MaxValue, Int.MaxValue, Int.MaxValue, Int.MaxValue), Array[Int](2, 2, 2, 2, 2), 5, 5, 1))
+    0
+  }
+
+  def solution(a: Array[Int], b: Array[Int], m: Int, x: Int, y: Int): Int = {
+
+    var ans = 0
+    var zipped = a.zip(b)
+    while (!zipped.isEmpty) {
+      var curWeight = 0L
+      var curLimit = 0L
+      val passengers = zipped.takeWhile(el => {
+        curWeight += el._1
+        curLimit += 1L
+        curWeight <= y && curLimit <= x
+      })
+      zipped = zipped.drop(passengers.length)
+      val sortedByFloor = passengers.sortBy(f => f._2).map(pass => pass._2).toSet
+      ans += sortedByFloor.size + 1
     }
-    println(calcWE(eloRatings.getOrElse("2163", 1500d) - eloRatings.getOrElse("1375614", 1500d)))
-    println(calcWE(eloRatings.getOrElse("2163", 1500d) - eloRatings.getOrElse("2586976", 1500d)))
-    println(calcWE(eloRatings.getOrElse("1375614", 1500d) - eloRatings.getOrElse("2586976", 1500d)))
-    return 0
+
+    ans
   }
 }

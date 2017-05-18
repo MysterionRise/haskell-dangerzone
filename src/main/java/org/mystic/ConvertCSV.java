@@ -77,7 +77,6 @@ public class ConvertCSV {
 
     private static final Map<Character, String> map = new HashMap<Character, String>() {{
         put('я', "ya");
-<<<<<<< HEAD
         put('ч', "ya");
         put('с', "ya");
         put('м', "ya");
@@ -86,14 +85,12 @@ public class ConvertCSV {
         put('ь', "ya");
         put('б', "ya");
         put('ю', "ya");
-
         put('ф', "ya");
         put('я', "ya");
         put('я', "ya");
         put('я', "ya");
         put('я', "ya");
         put('я', "ya");
-=======
         put('ч', "ch");
         put('с', "s");
         put('м', "m");
@@ -127,8 +124,6 @@ public class ConvertCSV {
         put('з', "z");
         put('х', "x");
         put('ъ', "");
->>>>>>> a3c65bf66c9c623f1659c4d873633f78ba1d499b
-
         put('ё', "yo");
     }};
 
