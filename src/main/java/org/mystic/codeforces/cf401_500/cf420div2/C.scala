@@ -150,24 +150,28 @@ object C {
     val n = nextInt
     var posToRemove = 1
     var ans = 0
-    val set = new mutable.TreeSet[Int]()
     var list = scala.collection.immutable.List[Int]()
+    var howMuchToSkip = 0
     for (_ <- 0 until 2 * n) {
       val command = next
       if (command.equalsIgnoreCase("add")) {
         val id = nextInt
-        set.add(id)
+        howMuchToSkip = 0
         list = id :: list
       } else {
-        if (list.head == posToRemove) {
-          set.remove(list.head)
+        if (howMuchToSkip > 0) {
+          howMuchToSkip -= 1
           posToRemove += 1
-          list = list.tail
+        } else if (list.isEmpty || list.head == posToRemove) {
+          posToRemove += 1
+          if (!list.isEmpty)
+            list = list.tail
         } else {
           ans += 1
-          set.remove(posToRemove)
           posToRemove += 1
-          list = set.toList
+          //posToRemove += list.length
+          howMuchToSkip = list.length
+          list = Nil
         }
       }
     }
