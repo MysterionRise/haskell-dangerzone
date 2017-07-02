@@ -1,9 +1,10 @@
-package org.mystic.codeforces.cf401_500.cf421div2
+package org.mystic.codeforces.cf401_500.cf422div2
 
 import java.io._
 import java.util._
 
 import scala.collection.mutable
+import scala.collection.mutable.ArrayBuffer
 
 object C {
 
@@ -146,13 +147,43 @@ object C {
     }
   }
 
+  def gcd(a: Int, b: Int): Int =
+    if (b == 0) a
+    else gcd(b, a % b)
+
+
   def solve: Int = {
-    val a = nextInt
-    val b = nextInt
-    val l = nextInt
-    val r = nextInt
-
-
+    val n = nextInt
+    val x = nextInt
+    val vac = new Array[(Int, Int, Int, Int)](n)
+    val map = new mutable.HashMap[Int, ArrayBuffer[(Int, Int, Int, Int)]]()
+    for (i <- 0 until n) {
+      val l = nextInt
+      val r = nextInt
+      vac(i) = (l, r, nextInt, r - l + 1)
+      val buff = map.getOrElse(vac(i)._4, new ArrayBuffer[(Int, Int, Int, Int)]())
+      map.put(vac(i)._4, buff)
+      buff.append(vac(i))
+    }
+    var min = Int.MaxValue
+    for (i <- 0 until n) {
+      val col = map.getOrElse(x - vac(i)._4, ArrayBuffer())
+        .sortBy(_._3)
+        .filter(x => vac(i)._1 > x._2 || vac(i)._2 < x._1)
+      var pos = 0
+      var flag = true
+      while (pos < col.length && flag) {
+        if (vac(i)._3 + col(pos)._3 < min) {
+          flag = false
+          min = vac(i)._3 + col(pos)._3
+        }
+        pos += 1
+      }
+    }
+    if (min == Int.MaxValue)
+      out.println(-1)
+    else
+      out.println(min)
     return 0
   }
 }
