@@ -39,7 +39,28 @@ object DotaBuffCall {
     "248823035",
     "302522553")
 
-  val teams = List(
+  val tiTeams = Set(
+    "1838315", //Team Secret
+    "39", //EG
+    "2586976", //OG
+    "2163", // Liquid
+    "350190", // Fnatic
+    "1375614", // Newbee
+    "15", // LGD
+    "46", // Empire
+    "2512249", // DC
+    "1883502", //VP
+    "5", //IG
+    "3331948", //LFY
+    "3214108", // NP
+    "4593831", //Planet Dog
+    "2640025", // IG.V
+    "2108395", //TNC
+    "2672298", //Infamous
+    "2581813" //Execration
+  )
+
+  val teams = Set(
     "111474", //Alliance
     "1838315", //Team Secret
     "39", //EG
@@ -82,7 +103,11 @@ object DotaBuffCall {
     "1951061" //Newbee.Y
   )
 
-  val teamNames = teams.map(getUserName("http://www.dotabuff.com/esports/teams", _))
+  val popularTeamsLastMonth = getTeamsIdsFrom("https://www.dotabuff.com/esports/teams")
+
+  val allTeams = teams.++(tiTeams).++(popularTeamsLastMonth)
+
+  val teamNames = allTeams.map(getUserName("http://www.dotabuff.com/esports/teams", _))
 
   // will be commented for a while
   val userNames = List("123")
@@ -94,6 +119,79 @@ object DotaBuffCall {
   val cmBans = new MultiHashSet[String]
   val otherModePicks = new MultiHashSet[String]
 
+  def main(args: Array[String]) {
+    println(scala.util.parsing.json.JSONArray(allTeams.toList))
+    val allMatches = allTeams.toList.map(getAllMatchesForTeam)
+    val combinedMatches = new mutable.HashSet[String]
+    for (i <- 0 until allMatches.size) {
+      combinedMatches ++= allMatches(i)
+    }
+    println(combinedMatches.size)
+    out.println(scala.util.parsing.json.JSONArray(combinedMatches.toList))
+    out.flush()
+    //set the start elo rating
+    val p = combinedMatches.toList
+    teams.foreach(teamID => eloRatings.put(teamID, 1500f))
+    //    val p = scala.util.parsing.json.JSON.parseFull(StdIn.readLine()).get.asInstanceOf[List[String]]
+    val data = p.sorted.map(game => {
+      println(s"process match $game")
+      getMatchObject(game)
+    })
+    out.println(scala.util.parsing.json.JSONArray(data))
+    out.flush()
+    //    p.sorted.foreach(game => {
+    //
+    //      getMatchData(game)
+    //      println(s"process match $game")
+    //    })
+    //    for (i <- 0 until teams.length) {
+    //      val id = teams(i)
+    //      val name = teamNames(i)
+    //      println(s"$name ${eloRatings.getOrElse(id, 1500)}")
+    //    }
+    //    println()
+  }
+
+  private val USER_AGENT = "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:25.0) Gecko/20100101 Firefox/25.0"
+
+  def getTeamsIdsFrom(uri: String): Set[String] = {
+    try {
+      val doc = Jsoup.connect(s"$uri/")
+        .userAgent(USER_AGENT)
+        .timeout(0)
+        .get()
+      Thread.sleep(10000)
+      val names = doc.getElementsByAttributeValue("id"," teams-all").get(0).children().get(0).children().get(1).children().toArray().toList.map(x =>
+        x.asInstanceOf[Element].getElementsByAttribute("href").attr("href")).map(s => s.substring(s.indexOf("teams") + "teams".length + 1))
+      names.toSet
+    } catch {
+      case e: Exception => {
+        e.printStackTrace(System.out)
+        println(s"$uri")
+      }
+        Set()
+    }
+  }
+
+  def getPlayerObjectFromMatch(id: String): mutable.HashMap[String, String] = {
+    try {
+      val doc = Jsoup.connect(s"http://www.dotabuff.com/$id/")
+        .userAgent(USER_AGENT)
+        .timeout(0)
+        .get()
+      Thread.sleep(10000)
+      val map = new mutable.HashMap[String, String]()
+      map
+    } catch {
+      case e: Exception => {
+        e.printStackTrace(System.out)
+        println(s"http://www.dotabuff.com$id/")
+        new mutable.HashMap[String, String]()
+      }
+    }
+  }
+
+
   def getUserName(id: String): String = {
     getUserName("http://www.dotabuff.com/players", id)
   }
@@ -101,7 +199,7 @@ object DotaBuffCall {
   def getUserName(baseEndpont: String, id: String): String = {
     try {
       val doc = Jsoup.connect(s"$baseEndpont/$id/")
-        .userAgent("Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:25.0) Gecko/20100101 Firefox/25.0")
+        .userAgent(USER_AGENT)
         .timeout(0)
         .get()
       Thread.sleep(10000)
@@ -126,7 +224,7 @@ object DotaBuffCall {
       //    while (added > 0) {
       try {
         val doc = Jsoup.connect(s"$baseEndpoint/$id/matches?page=$page")
-          .userAgent("Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:25.0) Gecko/20100101 Firefox/25.0")
+          .userAgent(USER_AGENT)
           .timeout(0)
           .get()
         Thread.sleep(10000)
@@ -212,41 +310,9 @@ object DotaBuffCall {
 
   val eloRatings = new mutable.HashMap[String, Double]()
 
-  def main(args: Array[String]) {
-    println(scala.util.parsing.json.JSONArray(teamNames))
-    val allMatches = teams.map(getAllMatchesForTeam)
-    val combinedMatches = new mutable.HashSet[String]
-    for (i <- 0 until allMatches.size) {
-      combinedMatches ++= allMatches(i)
-    }
-    println(combinedMatches.size)
-    out.println(scala.util.parsing.json.JSONArray(combinedMatches.toList))
-    out.flush()
-    //set the start elo rating
-    val p = combinedMatches.toList
-    teams.foreach(teamID => eloRatings.put(teamID, 1500f))
-    //    val p = scala.util.parsing.json.JSON.parseFull(StdIn.readLine()).get.asInstanceOf[List[String]]
-    val data = p.sorted.map(game => {
-      println(s"process match $game")
-      getMatchObject(game)
-    })
-    out.println(scala.util.parsing.json.JSONArray(data))
-    out.flush()
-    //    p.sorted.foreach(game => {
-    //
-    //      getMatchData(game)
-    //      println(s"process match $game")
-    //    })
-    //    for (i <- 0 until teams.length) {
-    //      val id = teams(i)
-    //      val name = teamNames(i)
-    //      println(s"$name ${eloRatings.getOrElse(id, 1500)}")
-    //    }
-    //    println()
-  }
 
   def readAllData() = {
-//    val input = scala.util.parsing.json.JSON.parseFull().get.asInstanceOf[List[String]]
+    //    val input = scala.util.parsing.json.JSON.parseFull().get.asInstanceOf[List[String]]
   }
 
   val K: Double = 20d
@@ -286,7 +352,7 @@ object DotaBuffCall {
   def getMatchObject(id: String): mutable.HashMap[String, String] = {
     try {
       val doc = Jsoup.connect(s"http://www.dotabuff.com$id/")
-        .userAgent("Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:25.0) Gecko/20100101 Firefox/25.0")
+        .userAgent(USER_AGENT)
         .timeout(0)
         .get()
       Thread.sleep(10000)
@@ -336,7 +402,7 @@ object DotaBuffCall {
   def getMatchData(id: String) = {
     try {
       val doc = Jsoup.connect(s"http://www.dotabuff.com$id/")
-        .userAgent("Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:25.0) Gecko/20100101 Firefox/25.0")
+        .userAgent(USER_AGENT)
         .timeout(0)
         .get()
       Thread.sleep(10000)
