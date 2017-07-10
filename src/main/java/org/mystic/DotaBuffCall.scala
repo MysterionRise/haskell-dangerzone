@@ -22,7 +22,7 @@ object DotaBuffCall {
   val out = new PrintWriter("advanced-stats.txt")
 
   //"238193250" - out of scope, strange bug with matches
-  // TODO add possibility to get name by id, to prevent renaming issues
+  // TODO add possibility to get name by matchURI, to prevent renaming issues
   val users = List(
     "112427189",
     "116894024",
@@ -103,9 +103,13 @@ object DotaBuffCall {
     "1951061" //Newbee.Y
   )
 
-  val popularTeamsLastMonth = getTeamsIdsFrom("https://www.dotabuff.com/esports/teams")
+  val popularTeamsLastMonth = List()
 
-  val allTeams = teams.++(tiTeams).++(popularTeamsLastMonth)
+      //getTeamsIdsFrom("https://www.dotabuff.com/esports/teams")
+
+  val allTeams =  List()
+
+    //teams.++(tiTeams).++(popularTeamsLastMonth)
 
   val teamNames = allTeams.map(getUserName("http://www.dotabuff.com/esports/teams", _))
 
@@ -121,6 +125,7 @@ object DotaBuffCall {
 
   def main(args: Array[String]) {
     println(scala.util.parsing.json.JSONArray(allTeams.toList))
+    getPlayerObjectFromMatch("https://www.dotabuff.com/matches/3282412777")
     val allMatches = allTeams.toList.map(getAllMatchesForTeam)
     val combinedMatches = new mutable.HashSet[String]
     for (i <- 0 until allMatches.size) {
@@ -145,9 +150,9 @@ object DotaBuffCall {
     //      println(s"process match $game")
     //    })
     //    for (i <- 0 until teams.length) {
-    //      val id = teams(i)
+    //      val matchURI = teams(i)
     //      val name = teamNames(i)
-    //      println(s"$name ${eloRatings.getOrElse(id, 1500)}")
+    //      println(s"$name ${eloRatings.getOrElse(matchURI, 1500)}")
     //    }
     //    println()
   }
@@ -161,7 +166,7 @@ object DotaBuffCall {
         .timeout(0)
         .get()
       Thread.sleep(10000)
-      val names = doc.getElementsByAttributeValue("id"," teams-all").get(0).children().get(0).children().get(1).children().toArray().toList.map(x =>
+      val names = doc.getElementsByAttributeValue("matchURI"," teams-all").get(0).children().get(0).children().get(1).children().toArray().toList.map(x =>
         x.asInstanceOf[Element].getElementsByAttribute("href").attr("href")).map(s => s.substring(s.indexOf("teams") + "teams".length + 1))
       names.toSet
     } catch {
@@ -173,19 +178,34 @@ object DotaBuffCall {
     }
   }
 
-  def getPlayerObjectFromMatch(id: String): mutable.HashMap[String, String] = {
+  def createBasePlayer(element: Element): DotaPlayer = {
+    val player = new DotaPlayer()
+    player.assists = 1
+  }
+
+  def getPlayerObjectFromMatch(matchURI: String): mutable.HashMap[String, String] = {
     try {
-      val doc = Jsoup.connect(s"http://www.dotabuff.com/$id/")
+      val doc = Jsoup.connect(s"$matchURI")
         .userAgent(USER_AGENT)
         .timeout(0)
         .get()
       Thread.sleep(10000)
+      val players = doc.getElementsByAttributeValue("data-group-name", "team-table")
+        .toArray()
+        .map(x => x.asInstanceOf[Element]
+          .child(1)
+          .children()
+          .toArray()
+          .toList
+          .map(x => x.asInstanceOf[Element]))
+        .flatten
+      players.map(createBasePlayer(_))
       val map = new mutable.HashMap[String, String]()
       map
     } catch {
       case e: Exception => {
         e.printStackTrace(System.out)
-        println(s"http://www.dotabuff.com$id/")
+        println(s"$matchURI")
         new mutable.HashMap[String, String]()
       }
     }
@@ -377,7 +397,7 @@ object DotaBuffCall {
       val direAssists = stats.get(57).text().toInt
       val direKDA = stats.get(59).text().toFloat
       val map = new mutable.HashMap[String, String]()
-      map.put("id", id)
+      map.put("matchURI", id)
       map.put("win", win)
       map.put("radiant", radiantTeamID)
       map.put("dire", direTeamID)
