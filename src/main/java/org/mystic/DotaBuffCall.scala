@@ -160,13 +160,15 @@ object DotaBuffCall {
 
   private val USER_AGENT = "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:25.0) Gecko/20100101 Firefox/25.0"
 
+  private val TIMEOUT = 10000
+
   def getTeamsIdsFrom(uri: String): Set[String] = {
     try {
       val doc = Jsoup.connect(s"$uri/")
         .userAgent(USER_AGENT)
         .timeout(0)
         .get()
-      Thread.sleep(10000)
+      Thread.sleep(TIMEOUT)
       val names = doc.getElementsByAttributeValue("matchURI", " teams-all").get(0).children().get(0).children().get(1).children().toArray().toList.map(x =>
         x.asInstanceOf[Element].getElementsByAttribute("href").attr("href")).map(s => s.substring(s.indexOf("teams") + "teams".length + 1))
       names.toSet
@@ -202,14 +204,15 @@ object DotaBuffCall {
     builder.build
   }
 
+  // need to parse log data here as well
   def getPlayerObjectFromMatch(matchURI: String): mutable.HashMap[String, String] = {
     try {
-      val doc = Jsoup.connect(s"$matchURI")
+      val baseData = Jsoup.connect(s"$matchURI")
         .userAgent(USER_AGENT)
         .timeout(0)
         .get()
-      Thread.sleep(10000)
-      val players = doc.getElementsByAttributeValue("data-group-name", "team-table")
+      Thread.sleep(TIMEOUT)
+      val players = baseData.getElementsByAttributeValue("data-group-name", "team-table")
         .toArray()
         .map(x => x.asInstanceOf[Element]
           .child(1)
@@ -218,6 +221,13 @@ object DotaBuffCall {
           .toList
           .map(x => x.asInstanceOf[Element]))
         .flatten
+      val logData = Jsoup.connect(s"$matchURI/log")
+        .userAgent(USER_AGENT)
+        .timeout(0)
+        .get()
+      Thread.sleep(TIMEOUT)
+      logData.getElementsByClass("match-log").get(0).children().toArray().map(x => x.asInstanceOf[Element])
+      val wardsData = logData.getElementsByClass("match-log").get(0).children().toArray().map(x => x.asInstanceOf[Element]).filter(x => x.text().contains("Observer Ward") &&  x.text().contains("placed"))
       val listOfPlayers = players.map(createBasePlayer(_))
       val map = new mutable.HashMap[String, String]()
       map
@@ -241,7 +251,7 @@ object DotaBuffCall {
         .userAgent(USER_AGENT)
         .timeout(0)
         .get()
-      Thread.sleep(10000)
+      Thread.sleep(TIMEOUT)
       val userName: TextNode = doc.getElementsByClass("header-content-title").get(0).childNode(0).childNode(0).asInstanceOf[TextNode]
       userName.text()
     } catch {
@@ -266,7 +276,7 @@ object DotaBuffCall {
           .userAgent(USER_AGENT)
           .timeout(0)
           .get()
-        Thread.sleep(10000)
+        Thread.sleep(TIMEOUT)
         val wonGames = doc.getElementsByClass("won")
         val lostGames = doc.getElementsByClass("lost")
         val abandonedGames = doc.getElementsByClass("abandoned")
@@ -394,7 +404,7 @@ object DotaBuffCall {
         .userAgent(USER_AGENT)
         .timeout(0)
         .get()
-      Thread.sleep(10000)
+      Thread.sleep(TIMEOUT)
       var win = ""
       val dire: Elements = doc.select("div[class*=match-result team dire")
       val radiant: Elements = doc.select("div[class*=match-result team radiant")
@@ -444,7 +454,7 @@ object DotaBuffCall {
         .userAgent(USER_AGENT)
         .timeout(0)
         .get()
-      Thread.sleep(10000)
+      Thread.sleep(TIMEOUT)
       var win = ""
       val dire: Elements = doc.select("div[class*=match-result team dire")
       val radiant: Elements = doc.select("div[class*=match-result team radiant")
