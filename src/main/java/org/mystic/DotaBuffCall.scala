@@ -105,11 +105,11 @@ object DotaBuffCall {
 
   val popularTeamsLastMonth = List()
 
-      //getTeamsIdsFrom("https://www.dotabuff.com/esports/teams")
+  //getTeamsIdsFrom("https://www.dotabuff.com/esports/teams")
 
-  val allTeams =  List()
+  val allTeams = List()
 
-    //teams.++(tiTeams).++(popularTeamsLastMonth)
+  //teams.++(tiTeams).++(popularTeamsLastMonth)
 
   val teamNames = allTeams.map(getUserName("http://www.dotabuff.com/esports/teams", _))
 
@@ -125,7 +125,8 @@ object DotaBuffCall {
 
   def main(args: Array[String]) {
     println(scala.util.parsing.json.JSONArray(allTeams.toList))
-    getPlayerObjectFromMatch("https://www.dotabuff.com/matches/3282412777")
+    val players = getPlayerObjectFromMatch("https://www.dotabuff.com/matches/3282412777")
+    println()
     val allMatches = allTeams.toList.map(getAllMatchesForTeam)
     val combinedMatches = new mutable.HashSet[String]
     for (i <- 0 until allMatches.size) {
@@ -166,7 +167,7 @@ object DotaBuffCall {
         .timeout(0)
         .get()
       Thread.sleep(10000)
-      val names = doc.getElementsByAttributeValue("matchURI"," teams-all").get(0).children().get(0).children().get(1).children().toArray().toList.map(x =>
+      val names = doc.getElementsByAttributeValue("matchURI", " teams-all").get(0).children().get(0).children().get(1).children().toArray().toList.map(x =>
         x.asInstanceOf[Element].getElementsByAttribute("href").attr("href")).map(s => s.substring(s.indexOf("teams") + "teams".length + 1))
       names.toSet
     } catch {
@@ -178,9 +179,27 @@ object DotaBuffCall {
     }
   }
 
+  implicit def string2Int(s: String): Int = if (s.contains("-")) 0 else java.lang.Integer.parseInt(s)
+
+  implicit def string2Float(s: String): Float = java.lang.Float.parseFloat(s)
+
   def createBasePlayer(element: Element): DotaPlayer = {
-    val player = new DotaPlayer()
-    player.assists = 1
+    val builder = new DotaPlayerBuilder()
+    builder
+      .withKills(element.child(5).text())
+      .withDeaths(element.child(6).text())
+      .withAssists(element.child(7).text())
+      .withLastHits(element.child(9).text())
+      .withDenies(element.child(11).text())
+      .withGpm(element.child(12).text())
+      .withName(element.child(3).child(0).text())
+      .withID(element.child(3).child(0).attr("data-tooltip-url"))
+    if (element.child(3).child(0).text().isEmpty) {
+      builder
+        .withName(element.child(3).child(1).text())
+        .withID(element.child(3).child(1).attr("data-tooltip-url"))
+    }
+    builder.build
   }
 
   def getPlayerObjectFromMatch(matchURI: String): mutable.HashMap[String, String] = {
@@ -199,7 +218,7 @@ object DotaBuffCall {
           .toList
           .map(x => x.asInstanceOf[Element]))
         .flatten
-      players.map(createBasePlayer(_))
+      val listOfPlayers = players.map(createBasePlayer(_))
       val map = new mutable.HashMap[String, String]()
       map
     } catch {
@@ -388,14 +407,14 @@ object DotaBuffCall {
       val radiantTeamID = teams.first.children().first().attr("href").split("/")(3)
       val direTeamID = teams.last.children().first().attr("href").split("/")(3)
       val stats = doc.select("td[class*=r-tab r-group-1 cell-centered")
-      val radiantKills = stats.get(26).text().toInt
-      val radiantDeaths = stats.get(27).text().toInt
-      val radiantAssists = stats.get(28).text().toInt
-      val radiantKDA = stats.get(29).text().toFloat
-      val direKills = stats.get(56).text().toInt
-      val direDeaths = stats.get(57).text().toInt
-      val direAssists = stats.get(57).text().toInt
-      val direKDA = stats.get(59).text().toFloat
+      val radiantKills = stats.get(26).text()
+      val radiantDeaths = stats.get(27).text()
+      val radiantAssists = stats.get(28).text()
+      val radiantKDA: Float = stats.get(29).text()
+      val direKills = stats.get(56).text()
+      val direDeaths = stats.get(57).text()
+      val direAssists = stats.get(57).text()
+      val direKDA: Float = stats.get(59).text()
       val map = new mutable.HashMap[String, String]()
       map.put("matchURI", id)
       map.put("win", win)
@@ -438,14 +457,14 @@ object DotaBuffCall {
       val radiantTeamID = teams.first.children().first().attr("href").split("/")(3)
       val direTeamID = teams.last.children().first().attr("href").split("/")(3)
       val stats = doc.select("td[class*=r-tab r-group-1 cell-centered")
-      val radiantKills = stats.get(26).text().toInt
-      val radiantDeaths = stats.get(27).text().toInt
-      val radiantAssists = stats.get(28).text().toInt
-      val radiantKDA = stats.get(29).text().toFloat
-      val direKills = stats.get(56).text().toInt
-      val direDeaths = stats.get(57).text().toInt
-      val direAssists = stats.get(57).text().toInt
-      val direKDA = stats.get(59).text().toFloat
+      val radiantKills = stats.get(26).text()
+      val radiantDeaths = stats.get(27).text()
+      val radiantAssists = stats.get(28).text()
+      val radiantKDA: Float = stats.get(29).text()
+      val direKills = stats.get(56).text()
+      val direDeaths = stats.get(57).text()
+      val direAssists = stats.get(57).text()
+      val direKDA: Float = stats.get(59).text()
       updateEloRating(radiantTeamID, direTeamID, radiantKills, direKills, win)
     } catch {
       case e: Exception => {
