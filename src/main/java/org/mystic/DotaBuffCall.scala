@@ -227,8 +227,19 @@ object DotaBuffCall {
         .get()
       Thread.sleep(TIMEOUT)
       logData.getElementsByClass("match-log").get(0).children().toArray().map(x => x.asInstanceOf[Element])
-      val wardsData = logData.getElementsByClass("match-log").get(0).children().toArray().map(x => x.asInstanceOf[Element]).filter(x => x.text().contains("Observer Ward") &&  x.text().contains("placed"))
-      val listOfPlayers = players.map(createBasePlayer(_))
+      val wardsData = logData.getElementsByClass("match-log").get(0).children().toArray()
+        .map(x => x.asInstanceOf[Element]).filter(x => x.text().contains("Observer Ward") &&  x.text().contains("placed"))
+        .map(x => x.child(0).child(2).child(0).text())
+      val runeData = logData.getElementsByClass("match-log").get(0).children().toArray()
+        .map(x => x.asInstanceOf[Element]).filter(x => x.text().contains("Rune") && x.text().contains("activated"))
+        .map(x => x.child(0).child(2).child(0).text())
+      val fbHeroName = logData.getElementsByClass("match-log").get(0).children().toArray()
+        .map(x => x.asInstanceOf[Element]).filter(x => x.text().contains("killed by")).head.child(0).child(2).child(1).text
+      val towerKillsHeroName = logData.getElementsByClass("match-log").get(0).children().toArray()
+        .map(x => x.asInstanceOf[Element])
+        .filter(x => x.text.contains("destroys") && x.text.contains("Tower"))
+        .map(x => x.child(0).child(2).child(0).text()).filterNot(x => x.contains("Creep"))
+      val listOfPlayers = players.map(x => createBasePlayer(x))
       val map = new mutable.HashMap[String, String]()
       map
     } catch {
