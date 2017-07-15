@@ -12,7 +12,6 @@ class DotaPlayerBuilder {
   var towerKill: Int = 0
   var teamFightPercentage: Double = 0.0d
   var observerWardsPlaced: Int = 0
-  var stacksMade: Int = 0
   var runesPickedUp: Int = 0
   var firstBloods: Int = 0
 
@@ -71,11 +70,6 @@ class DotaPlayerBuilder {
     this
   }
 
-  def withStacks(stacksMade: Int): DotaPlayerBuilder = {
-    this.stacksMade = stacksMade
-    this
-  }
-
   def withRunes(runesPickedUp: Int): DotaPlayerBuilder = {
     this.runesPickedUp = runesPickedUp
     this
@@ -98,7 +92,6 @@ class DotaPlayerBuilder {
     this.towerKill,
     this.teamFightPercentage,
     this.observerWardsPlaced,
-    this.stacksMade,
     this.runesPickedUp,
     this.firstBloods)
 }

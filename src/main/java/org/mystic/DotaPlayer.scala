@@ -11,7 +11,6 @@ case class DotaPlayer(name: String,
                       towerKill: Int,
                       teamFightPercentage: Double,
                       observerWardsPlaced: Int,
-                      stacksMade: Int,
                       runesPickedUp: Int,
                       firstBloods: Int) {
 

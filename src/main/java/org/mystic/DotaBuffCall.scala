@@ -17,9 +17,12 @@ import scala.io.StdIn
 
 object DotaBuffCall {
 
-  setupProxy
-
   val out = new PrintWriter("advanced-stats.txt")
+
+  private val USER_AGENT = "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:25.0) Gecko/20100101 Firefox/25.0"
+  private val TIMEOUT = 10000
+  private val MAX_SIZE_DOC = 12000000
+  private val NUMBER_OF_PAGES = 2
 
   //"238193250" - out of scope, strange bug with matches
   // TODO add possibility to get name by matchURI, to prevent renaming issues
@@ -103,13 +106,13 @@ object DotaBuffCall {
     "1951061" //Newbee.Y
   )
 
-  val popularTeamsLastMonth = List()
+  val popularTeamsLastMonth = getTeamsIdsFrom("https://www.dotabuff.com/esports/teams")
 
-  //getTeamsIdsFrom("https://www.dotabuff.com/esports/teams")
+  //
 
-  val allTeams = List()
+  val allTeams = teams.++(tiTeams).++(popularTeamsLastMonth)
 
-  //teams.++(tiTeams).++(popularTeamsLastMonth)
+  //
 
   val teamNames = allTeams.map(getUserName("http://www.dotabuff.com/esports/teams", _))
 
@@ -125,26 +128,32 @@ object DotaBuffCall {
 
   def main(args: Array[String]) {
     println(scala.util.parsing.json.JSONArray(allTeams.toList))
-    val players = getPlayerObjectFromMatch("https://www.dotabuff.com/matches/3282412777")
-    println()
     val allMatches = allTeams.toList.map(getAllMatchesForTeam)
     val combinedMatches = new mutable.HashSet[String]
     for (i <- 0 until allMatches.size) {
       combinedMatches ++= allMatches(i)
     }
     println(combinedMatches.size)
-    out.println(scala.util.parsing.json.JSONArray(combinedMatches.toList))
-    out.flush()
+    val playerMatchesData = combinedMatches.map(matchId => getPlayerObjectFromMatch(matchId))
+    val players1 = getPlayerObjectFromMatch("https://www.dotabuff.com/matches/3282475291")
+    val players2 = getPlayerObjectFromMatch("https://www.dotabuff.com/matches/3280169747")
+    val players3 = getPlayerObjectFromMatch("https://www.dotabuff.com/matches/3282263076")
+    val players4 = getPlayerObjectFromMatch("https://www.dotabuff.com/matches/3282010340")
+    val groupedUpPlayers = (players1.toSeq ++ players2.toSeq ++ players3.toSeq ++ players4.toSeq).groupBy(_._1).mapValues(_.map(_._2).toList)
+    var averagedPlayers = groupedUpPlayers.map(x => averageDotaPlayer(x._2))
+    println()
+
+
     //set the start elo rating
-    val p = combinedMatches.toList
-    teams.foreach(teamID => eloRatings.put(teamID, 1500f))
-    //    val p = scala.util.parsing.json.JSON.parseFull(StdIn.readLine()).get.asInstanceOf[List[String]]
-    val data = p.sorted.map(game => {
-      println(s"process match $game")
-      getMatchObject(game)
-    })
-    out.println(scala.util.parsing.json.JSONArray(data))
-    out.flush()
+    //    val p = combinedMatches.toList
+    //    teams.foreach(teamID => eloRatings.put(teamID, 1500f))
+    //    //    val p = scala.util.parsing.json.JSON.parseFull(StdIn.readLine()).get.asInstanceOf[List[String]]
+    //    val data = p.sorted.map(game => {
+    //      println(s"process match $game")
+    //      getMatchObject(game)
+    //    })
+    //    out.println(scala.util.parsing.json.JSONArray(data))
+    //    out.flush()
     //    p.sorted.foreach(game => {
     //
     //      getMatchData(game)
@@ -158,18 +167,46 @@ object DotaBuffCall {
     //    println()
   }
 
-  private val USER_AGENT = "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:25.0) Gecko/20100101 Firefox/25.0"
-
-  private val TIMEOUT = 10000
+  def averageDotaPlayer(list: List[DotaPlayer]): DotaPlayer = {
+    val builder = new DotaPlayerBuilder()
+    val id = list.head.id
+    val name = list.head.name
+    val avgKills = Math.round(list.map(p => p.kills).sum.toDouble / list.size).toInt
+    val avgDeaths = Math.round(list.map(p => p.deaths).sum.toDouble / list.size).toInt
+    val avgAssists = Math.round(list.map(p => p.assists).sum.toDouble / list.size).toInt
+    val avgLH = Math.round(list.map(p => p.lastHits).sum.toDouble / list.size).toInt
+    val avgDenies = Math.round(list.map(p => p.denies).sum.toDouble / list.size).toInt
+    val avgGPM = Math.round(list.map(p => p.gpm).sum.toDouble / list.size).toInt
+    val avgTowerKills = Math.round(list.map(p => p.towerKill).sum.toDouble / list.size).toInt
+    val avgTeamFightPercentage = list.map(p => p.teamFightPercentage).sum / list.size
+    val avgObs = Math.round(list.map(p => p.observerWardsPlaced).sum / list.size)
+    val avgRunes = Math.round(list.map(p => p.runesPickedUp).sum / list.size)
+    val avgFB = Math.round(list.map(p => p.firstBloods).sum / list.size)
+    builder.withID(id)
+      .withName(name)
+      .withKills(avgKills)
+      .withDeaths(avgDeaths)
+      .withAssists(avgAssists)
+      .withLastHits(avgLH)
+      .withDenies(avgDenies)
+      .withGpm(avgGPM)
+      .withTowerKill(avgTowerKills)
+      .withTeamFightPercentage(avgTeamFightPercentage)
+      .withObservers(avgObs)
+      .withRunes(avgRunes)
+      .withFB(avgFB)
+    builder.build
+  }
 
   def getTeamsIdsFrom(uri: String): Set[String] = {
     try {
       val doc = Jsoup.connect(s"$uri/")
         .userAgent(USER_AGENT)
         .timeout(0)
+        .maxBodySize(MAX_SIZE_DOC)
         .get()
       Thread.sleep(TIMEOUT)
-      val names = doc.getElementsByAttributeValue("matchURI", " teams-all").get(0).children().get(0).children().get(1).children().toArray().toList.map(x =>
+      val names = doc.getElementsByAttributeValue("id", " teams-all").get(0).children().get(0).children().get(1).children().toArray().toList.map(x =>
         x.asInstanceOf[Element].getElementsByAttribute("href").attr("href")).map(s => s.substring(s.indexOf("teams") + "teams".length + 1))
       names.toSet
     } catch {
@@ -185,12 +222,18 @@ object DotaBuffCall {
 
   implicit def string2Float(s: String): Float = java.lang.Float.parseFloat(s)
 
-  def createBasePlayer(element: Element): DotaPlayer = {
+  def createBasePlayer(element: Element, wardsData: Array[String], runeData: Array[String], fbHeroName: String, towerKillsHeroName: Array[String], teamKills: Int): DotaPlayer = {
+    val heroName = element.child(3).children().size() match {
+      case 4 => element.child(3).child(3).child(0).child(1).child(0).child(0).text()
+      case _ => element.child(3).child(2).child(0).child(1).child(0).child(0).text()
+    }
     val builder = new DotaPlayerBuilder()
+    val kills = element.child(5).text()
+    val assists = element.child(7).text()
     builder
-      .withKills(element.child(5).text())
+      .withKills(kills)
       .withDeaths(element.child(6).text())
-      .withAssists(element.child(7).text())
+      .withAssists(assists)
       .withLastHits(element.child(9).text())
       .withDenies(element.child(11).text())
       .withGpm(element.child(12).text())
@@ -201,17 +244,29 @@ object DotaBuffCall {
         .withName(element.child(3).child(1).text())
         .withID(element.child(3).child(1).attr("data-tooltip-url"))
     }
+    val filteredWards = wardsData.filter(_.contains(heroName)).length
+    val runes = runeData.filter(_.contains(heroName)).length
+    val filteredTowerKills = towerKillsHeroName.filter(_.contains(heroName)).length
+    val haveFB = if (fbHeroName.equalsIgnoreCase(heroName)) 1 else 0
+    builder
+      .withObservers(filteredWards)
+      .withTowerKill(filteredTowerKills)
+      .withRunes(runes)
+      .withFB(haveFB)
+      .withTeamFightPercentage((string2Int(kills) + string2Int(assists)).toDouble / teamKills.toDouble)
     builder.build
   }
 
-  // need to parse log data here as well
-  def getPlayerObjectFromMatch(matchURI: String): mutable.HashMap[String, String] = {
+  def getPlayerObjectFromMatch(matchURI: String): mutable.HashMap[String, DotaPlayer] = {
     try {
       val baseData = Jsoup.connect(s"$matchURI")
         .userAgent(USER_AGENT)
         .timeout(0)
+        .maxBodySize(MAX_SIZE_DOC)
         .get()
       Thread.sleep(TIMEOUT)
+      val radiantKills = baseData.getElementsByAttributeValue("class", "the-radiant score").text()
+      val direKills = baseData.getElementsByAttributeValue("class", "the-dire score").text()
       val players = baseData.getElementsByAttributeValue("data-group-name", "team-table")
         .toArray()
         .map(x => x.asInstanceOf[Element]
@@ -221,32 +276,36 @@ object DotaBuffCall {
           .toList
           .map(x => x.asInstanceOf[Element]))
         .flatten
-      val logData = Jsoup.connect(s"$matchURI/log")
+      val logDoc = Jsoup.connect(s"$matchURI/log")
         .userAgent(USER_AGENT)
         .timeout(0)
+        .maxBodySize(MAX_SIZE_DOC)
         .get()
       Thread.sleep(TIMEOUT)
-      logData.getElementsByClass("match-log").get(0).children().toArray().map(x => x.asInstanceOf[Element])
-      val wardsData = logData.getElementsByClass("match-log").get(0).children().toArray()
-        .map(x => x.asInstanceOf[Element]).filter(x => x.text().contains("Observer Ward") &&  x.text().contains("placed"))
-        .map(x => x.child(0).child(2).child(0).text())
-      val runeData = logData.getElementsByClass("match-log").get(0).children().toArray()
-        .map(x => x.asInstanceOf[Element]).filter(x => x.text().contains("Rune") && x.text().contains("activated"))
-        .map(x => x.child(0).child(2).child(0).text())
-      val fbHeroName = logData.getElementsByClass("match-log").get(0).children().toArray()
-        .map(x => x.asInstanceOf[Element]).filter(x => x.text().contains("killed by")).head.child(0).child(2).child(1).text
-      val towerKillsHeroName = logData.getElementsByClass("match-log").get(0).children().toArray()
+      val elements = logDoc.getElementsByClass("match-log").get(0).children().toArray()
         .map(x => x.asInstanceOf[Element])
+      val wardsData = elements
+        .filter(x => x.text().contains("Observer Ward")).filter(x => x.text.contains("placed"))
+        .map(x => x.child(0).child(2).child(0).text())
+      val runeData = elements
+        .filter(x => x.text().contains("Rune")).filter(x => x.text.contains("activated"))
+        .map(x => x.child(0).child(2).child(0).text())
+      val fbHeroName = elements
+        .filter(x => x.text().contains("killed by")).head.child(0).child(2).child(1).text
+      val towerKillsHeroName = elements
         .filter(x => x.text.contains("destroys") && x.text.contains("Tower"))
         .map(x => x.child(0).child(2).child(0).text()).filterNot(x => x.contains("Creep"))
-      val listOfPlayers = players.map(x => createBasePlayer(x))
-      val map = new mutable.HashMap[String, String]()
+      val radiantPlayers = players.take(5).map(x => createBasePlayer(x, wardsData, runeData, fbHeroName, towerKillsHeroName, radiantKills))
+      val direPlayers = players.drop(5).map(x => createBasePlayer(x, wardsData, runeData, fbHeroName, towerKillsHeroName, direKills))
+      val map = new mutable.HashMap[String, DotaPlayer]()
+      radiantPlayers.foreach(p => map.put(p.id, p))
+      direPlayers.foreach(p => map.put(p.id, p))
       map
     } catch {
       case e: Exception => {
         e.printStackTrace(System.out)
         println(s"$matchURI")
-        new mutable.HashMap[String, String]()
+        new mutable.HashMap[String, DotaPlayer]()
       }
     }
   }
@@ -261,6 +320,7 @@ object DotaBuffCall {
       val doc = Jsoup.connect(s"$baseEndpont/$id/")
         .userAgent(USER_AGENT)
         .timeout(0)
+        .maxBodySize(MAX_SIZE_DOC)
         .get()
       Thread.sleep(TIMEOUT)
       val userName: TextNode = doc.getElementsByClass("header-content-title").get(0).childNode(0).childNode(0).asInstanceOf[TextNode]
@@ -280,12 +340,13 @@ object DotaBuffCall {
     var totalMatches = 0
     var page = 0
     var added = 1
-    while (page < 20 && added > 0) {
+    while (page < NUMBER_OF_PAGES && added > 0) {
       //    while (added > 0) {
       try {
         val doc = Jsoup.connect(s"$baseEndpoint/$id/matches?page=$page")
           .userAgent(USER_AGENT)
           .timeout(0)
+          .maxBodySize(MAX_SIZE_DOC)
           .get()
         Thread.sleep(TIMEOUT)
         val wonGames = doc.getElementsByClass("won")
@@ -414,6 +475,7 @@ object DotaBuffCall {
       val doc = Jsoup.connect(s"http://www.dotabuff.com$id/")
         .userAgent(USER_AGENT)
         .timeout(0)
+        .maxBodySize(MAX_SIZE_DOC)
         .get()
       Thread.sleep(TIMEOUT)
       var win = ""
@@ -464,6 +526,7 @@ object DotaBuffCall {
       val doc = Jsoup.connect(s"http://www.dotabuff.com$id/")
         .userAgent(USER_AGENT)
         .timeout(0)
+        .maxBodySize(MAX_SIZE_DOC)
         .get()
       Thread.sleep(TIMEOUT)
       var win = ""
@@ -597,17 +660,4 @@ object DotaBuffCall {
   //    printSet(otherModePicks)
   //    out.close()
   //  }
-
-  def setupProxy: String = {
-    val authUser = "-"
-    val authPassword = "-"
-    val authenticator: Authenticator = new Authenticator {
-      override def getPasswordAuthentication: PasswordAuthentication = {
-        return new PasswordAuthentication(authUser, authPassword.toCharArray())
-      }
-    }
-    Authenticator.setDefault(authenticator)
-    System.setProperty("http.proxyHost", "-")
-    System.setProperty("http.proxyPort", "-")
-  }
 }
