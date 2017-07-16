@@ -1,20 +1,21 @@
-package org.mystic.ipsc2017
+package org.mystic.ipsc.ipsc2017
 
 import java.io._
-import java.util.{StringTokenizer, TreeMap}
+import java.util.StringTokenizer
+import java.util.TreeMap
 
 import scala.collection.mutable
-import scala.collection.mutable.ArrayBuffer
+import scala.io.StdIn
 
-object F1 {
+object J1 {
 
   var out: PrintWriter = null
   var br: BufferedReader = null
   var st: StringTokenizer = null
 
   def main(args: Array[String]): Unit = {
-    br = new BufferedReader(new InputStreamReader(new FileInputStream("f1.in")))
-    out = new PrintWriter(new BufferedOutputStream(new FileOutputStream("f1.out")))
+    br = new BufferedReader(new InputStreamReader(new FileInputStream("j1.in")))
+    out = new PrintWriter(new BufferedOutputStream(new FileOutputStream("j1.out")))
     solve
     out.close
   }
@@ -143,56 +144,14 @@ object F1 {
     }
   }
 
-  def isBlack(color: Array[Boolean]) = color.filter(_ == false).length == 0
-
   def solve = {
     val t = nextInt
     for (_ <- 0 until t) {
-      val c = nextInt
-      val s = nextInt
-      val color = new Array[Boolean](c)
-      for (i <- 0 until c) {
-        color(i) = true
+      val r = nextInt
+      out.println(r - 1)
+      for (i <- 0 until r - 1) {
+        out.println(s"0 ${i + 1}")
       }
-      var rounds = 0
-      var current = 0
-      do {
-        val newPos = (current + Math.sqrt(s).toInt - 1) % c
-        if (current <= newPos) {
-          val buff = new ArrayBuffer[Boolean]()
-          for (i <- current to newPos) {
-            color(i) = !color(i)
-            buff.append(color(i))
-          }
-          var j = buff.length - 1
-          for (i <- current to newPos) {
-            color(i) = buff(j)
-            j -= 1
-          }
-        } else {
-          val buff = new ArrayBuffer[Boolean]()
-          for (i <- current until c) {
-            color(i) = !color(i)
-            buff.append(color(i))
-          }
-          for (i <- 0 to newPos) {
-            color(i) = !color(i)
-            buff.append(color(i))
-          }
-          var j = buff.length - 1
-          for (i <- current until c) {
-            color(i) = buff(j)
-            j -= 1
-          }
-          for (i <- 0 to newPos) {
-            color(i) = buff(j)
-            j -= 1
-          }
-        }
-        current = newPos + 1
-        rounds += 1
-      } while (!isBlack(color))
-      out.println(rounds)
     }
   }
 

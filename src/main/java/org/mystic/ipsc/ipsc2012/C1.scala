@@ -1,12 +1,11 @@
-package org.mystic.ipsc2012
+package org.mystic.ipsc.ipsc2012
 
 import java.io._
 import java.util.{StringTokenizer, TreeMap}
 
-import scala.StringBuilder
 import scala.collection.mutable
 
-object F1 {
+object C1 {
 
   var out: PrintWriter = null
   var br: BufferedReader = null
@@ -94,22 +93,20 @@ object F1 {
   def solve: Int = {
     val t = nextInt
     for (i <- 0 until t) {
-      var c1 = 0
-      var flag = false
       val n = nextInt
-      val prob = new Array[Double](n)
-      for (j <- 0 until n) {
-        prob(j) = nextDouble
-        if (Math.abs(prob(j) - 0.5) < 1e-8) {
-          c1 += 1
-          flag = true
+      val dp = new Array[Double](n)
+      dp(0) = 7.000000000d
+      for (j <- 1 until n) {
+        dp(j) = (dp(j - 1) * Math.floor(dp(j - 1))) / 13.0d
+        var sum = 0.0d
+        var z = 0
+        for (k <- Math.floor(dp(j - 1) + 1).toInt to 13) {
+          sum += k
+          z += 1
         }
+        dp(j) += (sum / z) * ((13.0d - Math.floor(dp(j - 1))) / 13.0d)
       }
-      if (flag) {
-        out.println((pow(2, c1) - 1L) * pow(2, n - c1))
-      } else {
-        out.println(0)
-      }
+      out.println(dp(n - 1))
     }
     return 0
   }

@@ -1,20 +1,19 @@
-package org.mystic.ipsc2017
+package org.mystic.ipsc.ipsc2015
 
 import java.io._
-import java.util.{StringTokenizer, TreeMap}
+import java.util._
 
 import scala.collection.mutable
-import scala.collection.mutable.ArrayBuffer
 
-object E1 {
+object B1 {
 
   var out: PrintWriter = null
   var br: BufferedReader = null
   var st: StringTokenizer = null
 
   def main(args: Array[String]): Unit = {
-    br = new BufferedReader(new InputStreamReader(new FileInputStream("e1.in")))
-    out = new PrintWriter(new BufferedOutputStream(new FileOutputStream("e1.out")))
+    br = new BufferedReader(new InputStreamReader(System.in))
+    out = new PrintWriter(new FileOutputStream("b1.out"))
     solve
     out.close
   }
@@ -84,12 +83,11 @@ object E1 {
   }
 
   /**
-    * Segment tree for any commutative function
-    *
-    * @param values      Array of Int
-    * @param commutative function like min, max, sum
-    * @param zero        zero value - e.g. 0 for sum, Inf for min, max
-    */
+   * Segment tree for any commutative function
+   * @param values Array of Int
+   * @param commutative function like min, max, sum
+   * @param zero zero value - e.g. 0 for sum, Inf for min, max
+   */
   class SegmentTree(values: Array[Int])(commutative: (Int, Int) => Int)(zero: Int) {
     private val SIZE = 1e5.toInt
     private val n = values.length
@@ -143,39 +141,69 @@ object E1 {
     }
   }
 
-  val MOD = (1e9 + 9).toLong
-
-  def solve = {
-    val t = nextInt
-    for (_ <- 0 until t) {
-      val n = nextInt
-      var cost = 0L
-      val SIZE = 10000
-      val terrain = new Array[Int](SIZE + 10)
-      for (i <- 0 until n) {
-        val p = nextInt + SIZE / 2
-        val e = nextInt
-        var operationCost = 0
-        terrain(p) += e
-        for (j <- p + 1 to SIZE) {
-          if (Math.abs(terrain(j) - terrain(j - 1)) > 1) {
-            terrain(j) += e
-            operationCost += 1
-          }
-        }
-        for (j <- p to 1 by -1) {
-          if (Math.abs(terrain(j) - terrain(j - 1)) > 1) {
-            terrain(j - 1) += e
-            operationCost += 1
-          }
-        }
-        operationCost += 1
-        val d = (i.toLong + 1L) * operationCost.toLong
-        cost = (cost % MOD + d % MOD) % MOD
-      }
-      out.println(cost)
+  def solve: Int = {
+    val map1 = mutable.HashMap[String, Int]()
+    val map2 = mutable.HashMap[String, Int]()
+    val map3 = mutable.HashMap[String, Int]()
+    var m = nextInt
+    for (j <- 0 until m) {
+      map1 += (next -> nextInt)
+    }
+    m = nextInt
+    for (j <- 0 until m) {
+      map2 += (next -> nextInt)
+    }
+    m = nextInt
+    for (j <- 0 until m) {
+      map3 += (next -> nextInt)
     }
 
-  }
+    val i1 = map1.keysIterator
 
+    val superPhrases = new ArrayList[(String, Int)]
+    while (i1.hasNext) {
+      val a = i1.next()
+      val i2 = map2.keysIterator
+      while (i2.hasNext) {
+        val b = i2.next()
+        val i3 = map3.keysIterator
+        while (i3.hasNext) {
+          val c = i3.next()
+          superPhrases.add((a + " " + b + " " + c, map1.getOrElse(a, 0) + map2.getOrElse(b, 0) + map3.getOrElse(c, 0)))
+        }
+      }
+    }
+    m = nextInt
+    val phrases = new Array[(String, Int, Int)](m)
+    for (i <- 0 until m) {
+      val a = next
+      val b = next
+      val c = next
+      val str = a + " " + b + " " + c
+      val force = map1.getOrElse(a, 0) + map2.getOrElse(b, 0) + map3.getOrElse(c, 0)
+      phrases(i) = (str, force, i)
+    }
+    val ourPhrases = superPhrases.toArray(Array[(String, Int)]()).sortWith(_._2 >= _._2)
+    val sorted = phrases.sortWith(_._2 >= _._2)
+    val answers = new Array[String](m)
+    val set = new mutable.HashSet[Int]()
+    for (i <- 0 until sorted.length) {
+      val force = sorted(i)._2
+      var idx = 0
+      var flag = true
+      while (flag && idx < ourPhrases.length) {
+        if (ourPhrases(idx)._2 - 1 == force && !set.contains(idx)) {
+          flag = false
+          answers(sorted(i)._3) = ourPhrases(idx)._1 /*+ " " + sorted(i)._2 + " " + ourPhrases(idx)._2*/
+          set.add(idx)
+        } else {
+          idx += 1
+        }
+      }
+    }
+    for (i <- 0 until answers.length) {
+      out.println(answers(i))
+    }
+    return 0
+  }
 }

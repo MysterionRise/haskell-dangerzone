@@ -1,21 +1,20 @@
-package org.mystic.ipsc2017
+package org.mystic.ipsc.ipsc2017
 
 import java.io._
-import java.util.StringTokenizer
-import java.util.TreeMap
+import java.util.{StringTokenizer, TreeMap}
 
 import scala.collection.mutable
-import scala.io.StdIn
+import scala.collection.mutable.ArrayBuffer
 
-object J1 {
+object E1 {
 
   var out: PrintWriter = null
   var br: BufferedReader = null
   var st: StringTokenizer = null
 
   def main(args: Array[String]): Unit = {
-    br = new BufferedReader(new InputStreamReader(new FileInputStream("j1.in")))
-    out = new PrintWriter(new BufferedOutputStream(new FileOutputStream("j1.out")))
+    br = new BufferedReader(new InputStreamReader(new FileInputStream("e1.in")))
+    out = new PrintWriter(new BufferedOutputStream(new FileOutputStream("e1.out")))
     solve
     out.close
   }
@@ -144,15 +143,39 @@ object J1 {
     }
   }
 
+  val MOD = (1e9 + 9).toLong
+
   def solve = {
     val t = nextInt
     for (_ <- 0 until t) {
-      val r = nextInt
-      out.println(r - 1)
-      for (i <- 0 until r - 1) {
-        out.println(s"0 ${i + 1}")
+      val n = nextInt
+      var cost = 0L
+      val SIZE = 10000
+      val terrain = new Array[Int](SIZE + 10)
+      for (i <- 0 until n) {
+        val p = nextInt + SIZE / 2
+        val e = nextInt
+        var operationCost = 0
+        terrain(p) += e
+        for (j <- p + 1 to SIZE) {
+          if (Math.abs(terrain(j) - terrain(j - 1)) > 1) {
+            terrain(j) += e
+            operationCost += 1
+          }
+        }
+        for (j <- p to 1 by -1) {
+          if (Math.abs(terrain(j) - terrain(j - 1)) > 1) {
+            terrain(j - 1) += e
+            operationCost += 1
+          }
+        }
+        operationCost += 1
+        val d = (i.toLong + 1L) * operationCost.toLong
+        cost = (cost % MOD + d % MOD) % MOD
       }
+      out.println(cost)
     }
+
   }
 
 }
