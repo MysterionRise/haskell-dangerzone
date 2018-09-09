@@ -7,23 +7,23 @@ import java.io._
 
 object A {
 
-  var out: PrintWriter = null
-  var br: BufferedReader = null
-  var st: StringTokenizer = null
+  var out: PrintWriter = _
+  var br: BufferedReader = _
+  var st: StringTokenizer = _
 
   def next: String = {
     while (st == null || !st.hasMoreTokens) {
       st = new StringTokenizer(br.readLine)
     }
-    return st.nextToken
+    st.nextToken
   }
 
   def nextInt: Int = {
-    return Integer.parseInt(next)
+    Integer.parseInt(next)
   }
 
   def nextLong: Long = {
-    return Long.parseLong(next)
+    Long.parseLong(next)
   }
 
   def solve = {
@@ -68,7 +68,7 @@ object A {
     val it = map.keysIterator
     while (it.hasNext) {
       val key = it.next
-      val arr = map.get(key).get
+      val arr = map(key)
       if (arr.size > 1) {
         val min = arr.get(0)
         val max = arr.get(arr.size - 1) + 1

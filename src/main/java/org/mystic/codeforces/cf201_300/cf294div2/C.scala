@@ -7,31 +7,31 @@ import scala.collection.mutable
 
 object C {
 
-  var out: PrintWriter = null
-  var br: BufferedReader = null
-  var st: StringTokenizer = null
+  var out: PrintWriter = _
+  var br: BufferedReader = _
+  var st: StringTokenizer = _
 
   def next: String = {
     while (st == null || !st.hasMoreTokens) {
       st = new StringTokenizer(br.readLine)
     }
-    return st.nextToken
+    st.nextToken
   }
 
   def nextInt: Int = {
-    return Integer.parseInt(next)
+    Integer.parseInt(next)
   }
 
   def nextLong: Long = {
-    return java.lang.Long.parseLong(next)
+    java.lang.Long.parseLong(next)
   }
 
   def f1(n: Int, m: Int): Long = {
-    return Math.min(n / 2, m)
+    Math.min(n / 2, m)
   }
 
   def f2(n: Int, m: Int): Long = {
-    return Math.min(n, m / 2)
+    Math.min(n, m / 2)
   }
 
   def solve: Int = {
@@ -49,7 +49,7 @@ object C {
       }
     }
     out.println(max)
-    return 1
+    1
   }
 
   def main(args: Array[String]): Unit = {

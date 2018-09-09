@@ -52,8 +52,8 @@ public class C implements Runnable {
         long money = nextLong();
         long ans = 0;
         int[] ingredients = new int[3];
-        for (int i = 0; i < receipt.length; ++i) {
-            switch (receipt[i]) {
+        for (char aReceipt : receipt) {
+            switch (aReceipt) {
                 case 'B': {
                     ingredients[0]++;
                     break;

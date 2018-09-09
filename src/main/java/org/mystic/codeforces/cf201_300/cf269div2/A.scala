@@ -6,23 +6,23 @@ import java.util
 
 object A {
 
-  var out: PrintWriter = null
-  var br: BufferedReader = null
-  var st: StringTokenizer = null
+  var out: PrintWriter = _
+  var br: BufferedReader = _
+  var st: StringTokenizer = _
 
   def next: String = {
     while (st == null || !st.hasMoreTokens) {
       st = new StringTokenizer(br.readLine)
     }
-    return st.nextToken
+    st.nextToken
   }
 
   def nextInt: Int = {
-    return Integer.parseInt(next)
+    Integer.parseInt(next)
   }
 
   def nextLong: Long = {
-    return java.lang.Long.parseLong(next)
+    java.lang.Long.parseLong(next)
   }
 
   def solve: Int = {
@@ -34,11 +34,11 @@ object A {
     }
     var hands = false
     var e = false
-    for (i <- 0 until m.length) {
+    for (i <- m.indices) {
       if (m(i) >= 4) {
         hands = true
         m(i) -= 4
-        for (j <- 0 until m.length) {
+        for (j <- m.indices) {
           if (m(j) == 2) {
             e = true
           }
@@ -56,7 +56,7 @@ object A {
       }
     }
 
-    return 1
+    1
   }
 
   def main(args: Array[String]): Unit = {

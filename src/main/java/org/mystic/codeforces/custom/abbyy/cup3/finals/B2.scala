@@ -9,9 +9,9 @@ import scala.Predef._
 
 object B2 {
 
-  var out: PrintWriter = null
-  var br: BufferedReader = null
-  var st: StringTokenizer = null
+  var out: PrintWriter = _
+  var br: BufferedReader = _
+  var st: StringTokenizer = _
 
   def next: String = {
     while (st == null || !st.hasMoreTokens) {
@@ -35,7 +35,7 @@ object B2 {
     out.close
   }
 
-  var tree: Array[Long] = null
+  var tree: Array[Long] = _
 
   def solve = {
     val n = nextInt

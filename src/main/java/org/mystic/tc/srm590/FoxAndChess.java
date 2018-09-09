@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class FoxAndChess {
 
     private int[] getPos(String s) {
-        ArrayList<Integer> a = new ArrayList<Integer>();
+        ArrayList<Integer> a = new ArrayList<>();
         for (int i = 0; i < s.length(); ++i) {
             if (s.charAt(i) != '.') {
                 a.add(i);

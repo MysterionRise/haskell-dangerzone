@@ -6,17 +6,17 @@ import java.util.StringTokenizer
 object O {
   val out: PrintWriter = new PrintWriter(new BufferedOutputStream(new FileOutputStream("road.out")))
   var br: BufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream("road.in")))
-  var st: StringTokenizer = null
+  var st: StringTokenizer = _
 
   def next: String = {
     while (st == null || !st.hasMoreTokens) {
       st = new StringTokenizer(br.readLine)
     }
-    return st.nextToken
+    st.nextToken
   }
 
   def nextInt: Int = {
-    return Integer.parseInt(next)
+    Integer.parseInt(next)
   }
 
   def solve = {

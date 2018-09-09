@@ -80,7 +80,7 @@ public class C1 implements Runnable {
         final int n = nextInt();
         final List<List<Integer>> graph = new ArrayList<>(n);
         for (int i = 0; i < n; ++i) {
-            graph.add(new ArrayList<Integer>());
+            graph.add(new ArrayList<>());
         }
         final int m = nextInt();
         Map<Edge, Integer> edges = new HashMap<>();
@@ -134,8 +134,8 @@ public class C1 implements Runnable {
             edgeNumbers[i] = edges.get(new Edge(Math.min(a, b), Math.max(a, b)));
         }
         Arrays.sort(edgeNumbers);
-        for (int i = 0; i < edgeNumbers.length; ++i) {
-            out.println(edgeNumbers[i]);
+        for (int edgeNumber : edgeNumbers) {
+            out.println(edgeNumber);
         }
     }
 

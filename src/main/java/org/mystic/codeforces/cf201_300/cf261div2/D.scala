@@ -5,23 +5,23 @@ import java.io._
 
 object D {
 
-  var out: PrintWriter = null
-  var br: BufferedReader = null
-  var st: StringTokenizer = null
+  var out: PrintWriter = _
+  var br: BufferedReader = _
+  var st: StringTokenizer = _
 
   def next: String = {
     while (st == null || !st.hasMoreTokens) {
       st = new StringTokenizer(br.readLine)
     }
-    return st.nextToken
+    st.nextToken
   }
 
   def nextInt: Int = {
-    return Integer.parseInt(next)
+    Integer.parseInt(next)
   }
 
   def nextLong: Long = {
-    return java.lang.Long.parseLong(next)
+    java.lang.Long.parseLong(next)
   }
 
   def solve: Int = {
@@ -87,7 +87,7 @@ object D {
         if (left == right) {
           return sum + tree(left)
         }
-        return sum
+        sum
       }
 
       def dec(pos: Int): Unit = {
@@ -99,17 +99,17 @@ object D {
       }
     }
     val ranges = new Array[Int](SegmentTree.N)
-    for (i <- 0 until fjn.length) {
+    for (i <- fjn.indices) {
       ranges(fjn(i)) += 1
     }
     SegmentTree.build(ranges)
     var ans: Long = 0
-    for (i <- 0 until f1i.length) {
+    for (i <- f1i.indices) {
       ans += SegmentTree.sum(0, f1i(i) - 1)
       SegmentTree.dec(fjn(i))
     }
     out.println(ans)
-    return 1
+    1
   }
 
   def main(args: Array[String]): Unit = {

@@ -45,7 +45,7 @@ public class C {
         int k = readInt();
         final List<List<Edge>> g = new ArrayList<>();
         for (int i = 0; i < n; ++i) {
-            g.add(new ArrayList<Edge>());
+            g.add(new ArrayList<>());
         }
         for (int i = 0; i < k; ++i) {
             int a = readInt() - 1;

@@ -52,9 +52,7 @@ public class D implements Runnable {
             }
         }
         for (int i = n - 1; i >= 0; --i) {
-            for (int j = 0; j < n; ++j) {
-                field[n - i - 1][j] = tmp[i][j];
-            }
+            System.arraycopy(tmp[i], 0, field[n - i - 1], 0, n);
         }
         final long[][] dp = new long[n][n];
         for (int i = 0; i < n; ++i) {

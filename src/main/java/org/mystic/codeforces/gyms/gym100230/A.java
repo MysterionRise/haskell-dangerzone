@@ -54,7 +54,7 @@ public class A implements Runnable {
         final boolean[] used = new boolean[n];
         Arrays.fill(dist, Integer.MAX_VALUE);
         for (int i = 0; i < n; ++i) {
-            g.add(new ArrayList<Edge>());
+            g.add(new ArrayList<>());
             for (int j = 0; j < n; ++j) {
                 int a = nextInt();
                 if (i != j && a != -1) {

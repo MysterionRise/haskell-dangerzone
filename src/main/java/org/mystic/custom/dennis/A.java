@@ -35,7 +35,7 @@ public class A {
 
         int res = 0;
         for (int i = l; i <= r; ++i) {
-            if (isPrime[i].booleanValue() &&
+            if (isPrime[i] &&
                     checkIsSum(i, isPrime)) {
                 res++;
             }

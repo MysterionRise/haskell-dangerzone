@@ -55,8 +55,8 @@ public class A implements Runnable {
                 }
             }
         }
-        for (int i = 0; i < a.length; ++i) {
-            if (a[i] > k * 2) {
+        for (int anA : a) {
+            if (anA > k * 2) {
                 out.println("NO");
                 return;
             }

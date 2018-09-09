@@ -84,8 +84,8 @@ public class C implements Runnable {
             ans.add("3");
         }
         out.println(ans.size());
-        for (int i = 0; i < ans.size(); ++i) {
-            out.println(ans.get(i));
+        for (String an : ans) {
+            out.println(an);
         }
 
     }

@@ -51,7 +51,7 @@ public class B implements Runnable {
         }
         final List<List<Integer>> graph = new ArrayList<>();
         for (int i = 0; i < n * m; ++i) {
-            graph.add(new ArrayList<Integer>());
+            graph.add(new ArrayList<>());
         }
         for (int i = 0; i < n; ++i) {
             for (int j = 0; j < m; ++j) {

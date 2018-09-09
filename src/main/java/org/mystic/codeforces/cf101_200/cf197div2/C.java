@@ -48,7 +48,7 @@ public class C implements Runnable {
         String g = next();
         int m = nextInt();
         int count = 0;
-        Set<Integer> gs = new TreeSet<Integer>();
+        Set<Integer> gs = new TreeSet<>();
         for (int i = 0; i < 10; ++i) {
             if (g.charAt(i) == '1') {
                 gs.add(i + 1);
@@ -56,7 +56,7 @@ public class C implements Runnable {
         }
         Integer[] val = new Integer[gs.size()];
         gs.toArray(val);
-        List<Integer> ans = new ArrayList<Integer>();
+        List<Integer> ans = new ArrayList<>();
         int left = 0;
         int right = 0;
         int prev = -1;
@@ -128,8 +128,8 @@ public class C implements Runnable {
         }
         if (flag) {
             out.println("YES");
-            for (int i = 0; i < ans.size(); ++i) {
-                out.print(ans.get(i) + " ");
+            for (Integer an : ans) {
+                out.print(an + " ");
             }
         } else {
             out.println("NO");

@@ -60,8 +60,8 @@ public class C implements Runnable {
                     }
                     int left = r.size();
                     int ans = r.size();
-                    for (int j = 0; j < numbers.size(); ++j) {
-                        if (r.contains(numbers.get(j))) {
+                    for (Pair<Integer, Integer> number : numbers) {
+                        if (r.contains(number)) {
                             if (left == 3) {
                                 out.println("pushQueue");
                             } else if (left == 2) {

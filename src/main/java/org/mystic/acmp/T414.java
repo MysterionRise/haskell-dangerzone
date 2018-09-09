@@ -47,7 +47,7 @@ public class T414 implements Runnable {
         final int b = nextInt();
         final List<List<Integer>> graph = new ArrayList<>();
         for (int i = 0; i <= n; ++i) {
-            graph.add(new ArrayList<Integer>());
+            graph.add(new ArrayList<>());
         }
         for (int i = 2; i <= n; ++i) {
             int j = nextInt();

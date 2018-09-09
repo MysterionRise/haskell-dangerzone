@@ -7,23 +7,23 @@ import scala.collection.mutable
 
 object A {
 
-  var out: PrintWriter = null
-  var br: BufferedReader = null
-  var st: StringTokenizer = null
+  var out: PrintWriter = _
+  var br: BufferedReader = _
+  var st: StringTokenizer = _
 
   def next: String = {
     while (st == null || !st.hasMoreTokens) {
       st = new StringTokenizer(br.readLine)
     }
-    return st.nextToken
+    st.nextToken
   }
 
   def nextInt: Int = {
-    return Integer.parseInt(next)
+    Integer.parseInt(next)
   }
 
   def nextLong: Long = {
-    return java.lang.Long.parseLong(next)
+    java.lang.Long.parseLong(next)
   }
 
   def solve: Int = {
@@ -40,10 +40,10 @@ object A {
     }
     var max = 0
     map.keySet.foreach(key => {
-      max = Math.max(max, map.get(key).get)
+      max = Math.max(max, map(key))
     })
     out.println(max + 1)
-    return 1
+    1
   }
 
   def main(args: Array[String]): Unit = {

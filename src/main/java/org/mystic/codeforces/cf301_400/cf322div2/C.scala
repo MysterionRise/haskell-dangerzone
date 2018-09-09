@@ -7,9 +7,9 @@ import scala.collection.mutable
 
 object C {
 
-  var out: PrintWriter = null
-  var br: BufferedReader = null
-  var st: StringTokenizer = null
+  var out: PrintWriter = _
+  var br: BufferedReader = _
+  var st: StringTokenizer = _
 
   def main(args: Array[String]): Unit = {
     br = new BufferedReader(new InputStreamReader(System.in))
@@ -22,14 +22,14 @@ object C {
     while (st == null || !st.hasMoreTokens) {
       st = new StringTokenizer(br.readLine)
     }
-    return st.nextToken
+    st.nextToken
   }
 
-  def nextInt: Int = return Integer.parseInt(next)
+  def nextInt: Int = Integer.parseInt(next)
 
-  def nextLong: Long = return java.lang.Long.parseLong(next)
+  def nextLong: Long = java.lang.Long.parseLong(next)
 
-  def nextDouble: Double = return java.lang.Double.parseDouble(next)  
+  def nextDouble: Double = java.lang.Double.parseDouble(next)
 
   def solve: Int = {
     val n = nextInt
@@ -53,10 +53,10 @@ object C {
       }
     }
     var rtg = 0
-    for (i <- 0 until ab.length) {
+    for (i <- ab.indices) {
       rtg += ab(i) / 10
     }
     out.println(rtg)
-    return 0
+    0
   }
 }

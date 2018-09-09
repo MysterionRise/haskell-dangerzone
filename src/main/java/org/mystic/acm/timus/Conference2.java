@@ -46,7 +46,7 @@ public class Conference2 {
         final int sz = n + m + 2;
         final List<List<Edge>> g = new ArrayList<>();
         for (int i = 0; i < sz; ++i) {
-            g.add(new ArrayList<Edge>());
+            g.add(new ArrayList<>());
         }
         for (int i = 0; i < k; ++i) {
             int a = readInt();

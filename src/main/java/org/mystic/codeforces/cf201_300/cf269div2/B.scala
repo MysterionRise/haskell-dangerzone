@@ -6,23 +6,23 @@ import java.util
 
 object B {
 
-  var out: PrintWriter = null
-  var br: BufferedReader = null
-  var st: StringTokenizer = null
+  var out: PrintWriter = _
+  var br: BufferedReader = _
+  var st: StringTokenizer = _
 
   def next: String = {
     while (st == null || !st.hasMoreTokens) {
       st = new StringTokenizer(br.readLine)
     }
-    return st.nextToken
+    st.nextToken
   }
 
   def nextInt: Int = {
-    return Integer.parseInt(next)
+    Integer.parseInt(next)
   }
 
   def nextLong: Long = {
-    return java.lang.Long.parseLong(next)
+    java.lang.Long.parseLong(next)
   }
 
   def comp(a: (Int, Int), b: (Int, Int)): Boolean = {
@@ -46,7 +46,7 @@ object B {
     val list = new util.ArrayList[Int]()
     var x2 = false
     var x2el = -1
-    for (i <- 0 until m.length) {
+    for (i <- m.indices) {
       if (!could) {
         if (m(i) >= 3) {
           could = true
@@ -153,7 +153,7 @@ object B {
       out.println("NO")
     }
 
-    return 1
+    1
   }
 
   def main(args: Array[String]): Unit = {

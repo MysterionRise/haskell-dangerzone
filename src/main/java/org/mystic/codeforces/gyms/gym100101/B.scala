@@ -5,23 +5,23 @@ import java.io._
 
 object B {
 
-  var out: PrintWriter = null
-  var br: BufferedReader = null
-  var st: StringTokenizer = null
+  var out: PrintWriter = _
+  var br: BufferedReader = _
+  var st: StringTokenizer = _
 
   def next: String = {
     while (st == null || !st.hasMoreTokens) {
       st = new StringTokenizer(br.readLine)
     }
-    return st.nextToken
+    st.nextToken
   }
 
   def nextInt: Int = {
-    return Integer.parseInt(next)
+    Integer.parseInt(next)
   }
 
   def nextLong: Long = {
-    return java.lang.Long.parseLong(next)
+    java.lang.Long.parseLong(next)
   }
 
   def solve: Int = {
@@ -48,14 +48,14 @@ object B {
       } else {
         val value = Integer.parseInt(cmd.substring("Insert(".length, cmd.length - 1))
         val cnt = map.get(value)
-        if (null == cnt) {
+        if (!map.containsKey(value)) {
           map.put(value, 1)
         } else {
           map.put(value, cnt + 1)
         }
       }
     }
-    return 1
+    1
   }
 
   def main(args: Array[String]): Unit = {

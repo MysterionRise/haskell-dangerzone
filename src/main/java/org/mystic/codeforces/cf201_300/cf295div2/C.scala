@@ -4,23 +4,23 @@ import java.util.StringTokenizer
 
 object C {
 
-  var out: PrintWriter = null
-  var br: BufferedReader = null
-  var st: StringTokenizer = null
+  var out: PrintWriter = _
+  var br: BufferedReader = _
+  var st: StringTokenizer = _
 
   def next: String = {
     while (st == null || !st.hasMoreTokens) {
       st = new StringTokenizer(br.readLine)
     }
-    return st.nextToken
+    st.nextToken
   }
 
   def nextInt: Int = {
-    return Integer.parseInt(next)
+    Integer.parseInt(next)
   }
 
   def nextLong: Long = {
-    return java.lang.Long.parseLong(next)
+    java.lang.Long.parseLong(next)
   }
 
   val MOD = 1e9 + 7
@@ -46,7 +46,7 @@ object C {
       }
     }
     out.println(BigInt.int2bigInt(k).pow(n).%(BigInt.int2bigInt(MOD.toInt)))
-    return 1
+    1
   }
 
   def main(args: Array[String]): Unit = {

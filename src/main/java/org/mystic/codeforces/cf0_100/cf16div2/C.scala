@@ -6,23 +6,23 @@ import java.io._
 
 object C {
 
-  var out: PrintWriter = null
-  var br: BufferedReader = null
-  var st: StringTokenizer = null
+  var out: PrintWriter = _
+  var br: BufferedReader = _
+  var st: StringTokenizer = _
 
   def next: String = {
     while (st == null || !st.hasMoreTokens) {
       st = new StringTokenizer(br.readLine)
     }
-    return st.nextToken
+    st.nextToken
   }
 
   def nextInt: Int = {
-    return Integer.parseInt(next)
+    Integer.parseInt(next)
   }
 
   def nextLong: Long = {
-    return Long.parseLong(next)
+    Long.parseLong(next)
   }
 
   def bruteForse(a: Long, b: Long, x: Long, y: Long): (Long, Long) = {
@@ -43,7 +43,7 @@ object C {
       }
       i -= 1
     }
-    return ans
+    ans
   }
 
 
@@ -51,14 +51,14 @@ object C {
     if (b == 0) {
       return a
     }
-    return gcd(b, a % b)
+    gcd(b, a % b)
   }
 
   def cleverSolver(a: Long, b: Long, x1: Long, y1: Long): (Long, Long) = {
     val x = x1 / gcd(x1, y1)
     val y = y1 / gcd(x1, y1)
     if (a % x == 0 && a / x == b / y && b % y == 0) {
-      return (a, b)
+      (a, b)
     } else {
       val ax: Double = a / x
       val by: Double = b / y
@@ -66,12 +66,12 @@ object C {
       val max = Math.max(ax, by)
       val sq = Math.max(min * x * min * y, max * max * x * y)
       if (sq == 0) {
-        return (0, 0)
+        (0, 0)
       } else {
         if (max * x <= a && max * y <= b) {
-          return ((max * x).toInt, (max * y).toInt)
+          ((max * x).toInt, (max * y).toInt)
         } else {
-          return ((min * x).toInt, (min * y).toInt)
+          ((min * x).toInt, (min * y).toInt)
         }
       }
     }

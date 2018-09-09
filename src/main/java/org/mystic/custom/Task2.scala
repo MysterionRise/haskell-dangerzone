@@ -7,9 +7,9 @@ import scala.collection.mutable
 
 object Task2 {
 
-  var out: PrintWriter = null
-  var br: BufferedReader = null
-  var st: StringTokenizer = null
+  var out: PrintWriter = _
+  var br: BufferedReader = _
+  var st: StringTokenizer = _
 
   def main(args: Array[String]): Unit = {
     br = new BufferedReader(new InputStreamReader(System.in))
@@ -22,14 +22,14 @@ object Task2 {
     while (st == null || !st.hasMoreTokens) {
       st = new StringTokenizer(br.readLine)
     }
-    return st.nextToken
+    st.nextToken
   }
 
-  def nextInt: Int = return Integer.parseInt(next)
+  def nextInt: Int = Integer.parseInt(next)
 
-  def nextLong: Long = return java.lang.Long.parseLong(next)
+  def nextLong: Long = java.lang.Long.parseLong(next)
 
-  def nextDouble: Double = return java.lang.Double.parseDouble(next)
+  def nextDouble: Double = java.lang.Double.parseDouble(next)
 
   def solve = {
     println(solution(Array[Int](1)))
@@ -39,7 +39,7 @@ object Task2 {
     val distinct = a.toSet.size
     val fromBegin = new Array[Int](a.length)
     val set = new mutable.HashSet[Int]()
-    for (i <- 0 until a.length) {
+    for (i <- a.indices) {
       set.add(a(i))
       fromBegin(i) = set.size
     }

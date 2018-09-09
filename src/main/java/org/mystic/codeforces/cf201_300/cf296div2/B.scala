@@ -6,23 +6,23 @@ import java.util._
 
 object B {
 
-  var out: PrintWriter = null
-  var br: BufferedReader = null
-  var st: StringTokenizer = null
+  var out: PrintWriter = _
+  var br: BufferedReader = _
+  var st: StringTokenizer = _
 
   def next: String = {
     while (st == null || !st.hasMoreTokens) {
       st = new StringTokenizer(br.readLine)
     }
-    return st.nextToken
+    st.nextToken
   }
 
   def nextInt: Int = {
-    return Integer.parseInt(next)
+    Integer.parseInt(next)
   }
 
   def nextLong: Long = {
-    return java.lang.Long.parseLong(next)
+    java.lang.Long.parseLong(next)
   }
 
   def solve: Int = {
@@ -40,7 +40,7 @@ object B {
         a(s(i) - 'a')(t(i) - 'a') = i + 1
       }
     }
-    for (i <- 0 until a.length) {
+    for (i <- a.indices) {
       for (j <- i + 1 until a(i).length) {
         if (a(i)(j) >= 1 && a(j)(i) >= 1) {
           out.println(curr - 2)
@@ -50,7 +50,7 @@ object B {
       }
     }
 
-    for (i <- 0 until a.length) {
+    for (i <- a.indices) {
       var a1 = 0
       var a2 = 0
       for (j <- 0 until a(i).length) {
@@ -65,7 +65,7 @@ object B {
     }
     out.println(curr)
     out.println("-1 -1")
-    return 1
+    1
   }
 
   def main(args: Array[String]): Unit = {

@@ -6,23 +6,23 @@ import java.util
 
 object C {
 
-  var out: PrintWriter = null
-  var br: BufferedReader = null
-  var st: StringTokenizer = null
+  var out: PrintWriter = _
+  var br: BufferedReader = _
+  var st: StringTokenizer = _
 
   def next: String = {
     while (st == null || !st.hasMoreTokens) {
       st = new StringTokenizer(br.readLine)
     }
-    return st.nextToken
+    st.nextToken
   }
 
   def nextInt: Int = {
-    return Integer.parseInt(next)
+    Integer.parseInt(next)
   }
 
   def nextLong: Long = {
-    return java.lang.Long.parseLong(next)
+    java.lang.Long.parseLong(next)
   }
 
   def shift(s: Array[Int], ind: Int): Array[Int] = {
@@ -34,7 +34,7 @@ object C {
       i = (i + 1) % s.length
       cnt += 1
     }
-    return res
+    res
   }
 
   def rotate(sh: Array[Int], arr: Array[Int], num: Int): Array[Int] = {
@@ -46,7 +46,7 @@ object C {
     for (i <- 0 until 4) {
       arr(sh(i)) = shifted(i)
     }
-    return arr
+    arr
   }
 
   def solve: Int = {
@@ -66,7 +66,7 @@ object C {
       (0 until 6).foreach(i => out.print(sides(f(i)) + " "))
       out.println()
     })
-    return 1
+    1
   }
 
   def main(args: Array[String]): Unit = {

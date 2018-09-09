@@ -6,23 +6,23 @@ import java.util._
 
 object B {
 
-  var out: PrintWriter = null
-  var br: BufferedReader = null
-  var st: StringTokenizer = null
+  var out: PrintWriter = _
+  var br: BufferedReader = _
+  var st: StringTokenizer = _
 
   def next: String = {
     while (st == null || !st.hasMoreTokens) {
       st = new StringTokenizer(br.readLine)
     }
-    return st.nextToken
+    st.nextToken
   }
 
   def nextInt: Int = {
-    return Integer.parseInt(next)
+    Integer.parseInt(next)
   }
 
   def nextLong: Long = {
-    return java.lang.Long.parseLong(next)
+    java.lang.Long.parseLong(next)
   }
 
 
@@ -73,12 +73,12 @@ object B {
         if (n > m) {
           return ans + n - m
         }
-        return Math.min(f(n * 2, m, ans + 1), f(n - 1, m, ans + 1))
+        Math.min(f(n * 2, m, ans + 1), f(n - 1, m, ans + 1))
       }
     }
     val u = new Utils
     out.println(u.f(n, m, 0))
-    return 1
+    1
   }
 
   def main(args: Array[String]): Unit = {

@@ -6,23 +6,23 @@ import java.util._
 
 object C {
 
-  var out: PrintWriter = null
-  var br: BufferedReader = null
-  var st: StringTokenizer = null
+  var out: PrintWriter = _
+  var br: BufferedReader = _
+  var st: StringTokenizer = _
 
   def next: String = {
     while (st == null || !st.hasMoreTokens) {
       st = new StringTokenizer(br.readLine)
     }
-    return st.nextToken
+    st.nextToken
   }
 
   def nextInt: Int = {
-    return Integer.parseInt(next)
+    Integer.parseInt(next)
   }
 
   def nextLong: Long = {
-    return java.lang.Long.parseLong(next)
+    java.lang.Long.parseLong(next)
   }
 
   val MODULO = (1e9 + 7).toInt
@@ -30,11 +30,11 @@ object C {
   def sum(a: Int, b: Int): Int = {
     val sum = a + b
     val res = if (sum < MODULO) sum else sum - MODULO
-    return res
+    res
   }
 
   def multiply(a: Int, b: Int): Int = {
-    return (1L * a * b % MODULO).toInt
+    (1L * a * b % MODULO).toInt
   }
 
   def calcHash(ch: Array[Char]): Int = {
@@ -44,7 +44,7 @@ object C {
       hash = multiply(hash, 31)
       hash = sum(hash, (ch(i) - 'a') + 1)
     }
-    return hash
+    hash
   }
 
   class HashString(val s: Array[Char], val hash: Int) {
@@ -57,7 +57,7 @@ object C {
 
     override def equals(obj: scala.Any): Boolean = {
       val s1 = obj.asInstanceOf[HashString]
-      return Arrays.equals(s, s1.s)
+      Arrays.equals(s, s1.s)
     }
   }
 
@@ -98,7 +98,7 @@ object C {
         println("NO")
       }
     })
-    return 1
+    1
   }
 
   def main(args: Array[String]): Unit = {

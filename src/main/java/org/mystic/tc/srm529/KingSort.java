@@ -7,9 +7,9 @@ import java.util.Map;
 
 public class KingSort {
     public String[] getSortedList(String[] kings) {
-        ArrayList<KingName> names = new ArrayList<KingName>();
-        for (int i = 0; i < kings.length; ++i) {
-            names.add(new KingName(kings[i].split(" ")[0], kings[i].split(" ")[1]));
+        ArrayList<KingName> names = new ArrayList<>();
+        for (String king : kings) {
+            names.add(new KingName(king.split(" ")[0], king.split(" ")[1]));
         }
         Collections.sort(names);
         String[] ans = new String[kings.length];
@@ -48,7 +48,7 @@ public class KingSort {
     }
 
     public static Integer parseRomanNum(String kingNumber) {
-        Map<Character, Integer> map = new HashMap<Character, Integer>();
+        Map<Character, Integer> map = new HashMap<>();
         map.put('I', 1);
         map.put('V', 5);
         map.put('X', 10);

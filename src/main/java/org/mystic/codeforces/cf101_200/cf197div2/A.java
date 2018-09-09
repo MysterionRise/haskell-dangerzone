@@ -49,8 +49,8 @@ public class A implements Runnable {
         }
         Arrays.sort(spl);
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < spl.length; ++i) {
-            sb.append(spl[i]).append("+");
+        for (int aSpl : spl) {
+            sb.append(aSpl).append("+");
         }
         sb.deleteCharAt(sb.length() - 1);
         out.println(sb.toString());

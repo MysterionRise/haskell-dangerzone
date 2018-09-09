@@ -97,8 +97,8 @@ public class A implements Runnable {
             out.println("-1");
             return;
         }
-        for (int i = 0; i < ans.size(); ++i) {
-            out.println(ans.get(i));
+        for (String an : ans) {
+            out.println(an);
         }
     }
 }

@@ -60,10 +60,10 @@ public class T345 implements Runnable {
             programs[i] = new Program(name, chain);
         }
         final boolean[][] graph = new boolean[n][n];
-        for (int i = 0; i < programs.length; ++i) {
-            int id = ids.get(programs[i].name);
-            for (int j = 0; j < programs[i].chain.length; ++j) {
-                int innerId = ids.get(programs[i].chain[j]);
+        for (Program program1 : programs) {
+            int id = ids.get(program1.name);
+            for (int j = 0; j < program1.chain.length; ++j) {
+                int innerId = ids.get(program1.chain[j]);
                 graph[id][innerId] = true;
             }
         }
@@ -90,8 +90,8 @@ public class T345 implements Runnable {
             }
         }
         Utils u = new Utils();
-        for (int i = 0; i < programs.length; ++i) {
-            int id = ids.get(programs[i].name);
+        for (Program program : programs) {
+            int id = ids.get(program.name);
             Arrays.fill(u.used, -1);
             if (graph[id][id]) {
                 out.println("YES");

@@ -6,31 +6,31 @@ import java.io._
 
 object A {
 
-  var out: PrintWriter = null
-  var br: BufferedReader = null
-  var st: StringTokenizer = null
+  var out: PrintWriter = _
+  var br: BufferedReader = _
+  var st: StringTokenizer = _
 
   def next: String = {
     while (st == null || !st.hasMoreTokens) {
       st = new StringTokenizer(br.readLine)
     }
-    return st.nextToken
+    st.nextToken
   }
 
   def nextInt: Int = {
-    return Integer.parseInt(next)
+    Integer.parseInt(next)
   }
 
   def nextLong: Long = {
-    return Long.parseLong(next)
+    Long.parseLong(next)
   }
 
   def sqDist(x1: Int, y1: Int, x2: Int, y2: Int): Int = {
-    return (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2)
+    (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2)
   }
 
   def dist(x1: Int, y1: Int, x2: Int, y2: Int): Double = {
-    return Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2))
+    Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2))
   }
 
   def isSquareTriangle(x1: Int, y1: Int, x2: Int, y2: Int, x3: Int, y3: Int): Boolean = {
@@ -45,7 +45,7 @@ object A {
         return true
       }
     }
-    return false
+    false
   }
 
   def solve: Int = {
@@ -108,7 +108,7 @@ object A {
       return 1
     }
     out.println("NEITHER")
-    return 1
+    1
   }
 
   def main(args: Array[String]): Unit = {

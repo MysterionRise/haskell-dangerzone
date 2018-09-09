@@ -6,23 +6,23 @@ import java.util
 
 object B {
 
-  var out: PrintWriter = null
-  var br: BufferedReader = null
-  var st: StringTokenizer = null
+  var out: PrintWriter = _
+  var br: BufferedReader = _
+  var st: StringTokenizer = _
 
   def next: String = {
     while (st == null || !st.hasMoreTokens) {
       st = new StringTokenizer(br.readLine)
     }
-    return st.nextToken
+    st.nextToken
   }
 
   def nextInt: Int = {
-    return Integer.parseInt(next)
+    Integer.parseInt(next)
   }
 
   def nextLong: Long = {
-    return java.lang.Long.parseLong(next)
+    java.lang.Long.parseLong(next)
   }
 
   def solve: Int = {
@@ -35,7 +35,7 @@ object B {
     (0 until n).foreach({
       i =>
         g(i) = new Array[Int](graph(i).size())
-        (0 until g(i).length).foreach(j => g(i)(j) = graph(i).get(j))
+        g(i).indices.foreach(j => g(i)(j) = graph(i).get(j))
     })
 
     object Helper {
@@ -52,7 +52,7 @@ object B {
           return true
         }
         color(v) = 'g'
-        (0 until g(v).length).foreach({
+        g(v).indices.foreach({
           i =>
             if (findCycle(g(v)(i))) {
               path.add(v)
@@ -61,7 +61,7 @@ object B {
             }
         })
         color(v) = 'b'
-        return false
+        false
       }
     }
     (0 until n).foreach({
@@ -75,7 +75,7 @@ object B {
         }
     })
     out.println("NO")
-    return 1
+    1
   }
 
   def main(args: Array[String]): Unit = {

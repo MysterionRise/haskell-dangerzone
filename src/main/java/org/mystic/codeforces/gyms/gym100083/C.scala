@@ -9,23 +9,23 @@ import java.util
  */
 object C {
 
-  var out: PrintWriter = null
-  var br: BufferedReader = null
-  var st: StringTokenizer = null
+  var out: PrintWriter = _
+  var br: BufferedReader = _
+  var st: StringTokenizer = _
 
   def next: String = {
     while (st == null || !st.hasMoreTokens) {
       st = new StringTokenizer(br.readLine)
     }
-    return st.nextToken
+    st.nextToken
   }
 
   def nextInt: Int = {
-    return Integer.parseInt(next)
+    Integer.parseInt(next)
   }
 
   def nextLong: Long = {
-    return java.lang.Long.parseLong(next)
+    java.lang.Long.parseLong(next)
   }
 
   def comp(a: Int, b: Int): Boolean = {
@@ -50,7 +50,7 @@ object C {
     val g = new Array[Array[Int]](n)
     for (i <- 0 until n) {
       g(i) = new Array[Int](graph(i).size())
-      for (j <- 0 until g(i).length) {
+      for (j <- g(i).indices) {
         g(i)(j) = graph(i).get(j)
       }
     }
@@ -68,7 +68,7 @@ object C {
         inTime(v) = timer
         low(v) = timer
         timer += 1
-        for (i <- 0 until g(v).length) {
+        for (i <- g(v).indices) {
           val w = g(v)(i)
           if (!used(w)) {
             findBridge(v, w)
@@ -79,7 +79,7 @@ object C {
           }
           else {
             if (w != u)
-              low(v) = Math.min(low(v), inTime(w));
+              low(v) = Math.min(low(v), inTime(w))
           }
         }
       }
@@ -97,13 +97,13 @@ object C {
     for (i <- 0 until size) {
       val a = Helper.bridges.get(i)._1
       val b = Helper.bridges.get(i)._2
-      edgeNumbers(i) = (edges.get((Math.min(a, b), Math.max(a, b))))
+      edgeNumbers(i) = edges.get((Math.min(a, b), Math.max(a, b)))
     }
     val sorted = edgeNumbers.sortWith(comp)
-    for (i <- 0 until sorted.length) {
+    for (i <- sorted.indices) {
       out.println(sorted(i))
     }
-    return 1
+    1
   }
 
   def main(args: Array[String]): Unit = {

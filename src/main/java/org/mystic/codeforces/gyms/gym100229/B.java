@@ -50,7 +50,7 @@ public class B implements Runnable {
         final int m = nextInt();
         final List<List<Integer>> g = new ArrayList<>();
         for (int i = 0; i < n; ++i) {
-            g.add(new ArrayList<Integer>());
+            g.add(new ArrayList<>());
         }
         for (int i = 0; i < m; ++i) {
             int a = nextInt();

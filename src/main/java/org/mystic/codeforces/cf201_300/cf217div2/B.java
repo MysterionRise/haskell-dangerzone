@@ -45,7 +45,7 @@ public class B implements Runnable {
         List<Set<Integer>> players = new ArrayList<>();
         for (int i = 0; i < n; ++i) {
             m[i] = nextInt();
-            players.add(new HashSet<Integer>());
+            players.add(new HashSet<>());
             for (int j = 0; j < m[i]; ++j) {
                 players.get(i).add(nextInt());
             }

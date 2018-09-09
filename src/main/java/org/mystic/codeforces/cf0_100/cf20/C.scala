@@ -6,23 +6,23 @@ import java.io._
 
 object C {
 
-  var out: PrintWriter = null
-  var br: BufferedReader = null
-  var st: StringTokenizer = null
+  var out: PrintWriter = _
+  var br: BufferedReader = _
+  var st: StringTokenizer = _
 
   def next: String = {
     while (st == null || !st.hasMoreTokens) {
       st = new StringTokenizer(br.readLine)
     }
-    return st.nextToken
+    st.nextToken
   }
 
   def nextInt: Int = {
-    return Integer.parseInt(next)
+    Integer.parseInt(next)
   }
 
   def nextLong: Long = {
-    return java.lang.Long.parseLong(next)
+    java.lang.Long.parseLong(next)
   }
 
   def solve: Int = {
@@ -64,7 +64,7 @@ object C {
         while (!set.isEmpty) {
           val v = set.poll().to
           if (!relaxed(v)) {
-            for (i <- 0 until graph(v).length) {
+            for (i <- graph(v).indices) {
               val to = graph(v)(i)._1
               val len = graph(v)(i)._2
               if (dist(v) + len < dist(to)) {
@@ -76,7 +76,7 @@ object C {
             }
           }
         }
-        return (dist(end), path)
+        (dist(end), path)
       }
     }
     val (dist, p) = Dijkstra.findShortestPath(0, n - 1)
@@ -94,7 +94,7 @@ object C {
         out.print(path.get(i) + " ")
       }
     }
-    return 1
+    1
   }
 
   class Edge(var len: Long, var to: Int) extends Comparable[Edge] {

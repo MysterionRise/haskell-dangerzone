@@ -4,26 +4,26 @@ import java.io._
 import java.util.StringTokenizer
 
 object M {
-  var out: PrintWriter = null
-  var br: BufferedReader = null
-  var st: StringTokenizer = null
+  var out: PrintWriter = _
+  var br: BufferedReader = _
+  var st: StringTokenizer = _
 
   def next: String = {
     while (st == null || !st.hasMoreTokens) {
       st = new StringTokenizer(br.readLine)
     }
-    return st.nextToken
+    st.nextToken
   }
 
   def nextInt: Int = {
-    return Integer.parseInt(next)
+    Integer.parseInt(next)
   }
 
   def solve = {
-    val n = nextInt;
+    val n = nextInt
     val arr = new Array[Int](n)
     for (i <- 0 until n) {
-      arr(i) = nextInt;
+      arr(i) = nextInt
     }
     var i = 0
     var j = n - 1
@@ -34,8 +34,8 @@ object M {
       } else {
         out.print(arr(i) + " ")
       }
-      i = i + 1;
-      j = j - 1;
+      i = i + 1
+      j = j - 1
     }
   }
 

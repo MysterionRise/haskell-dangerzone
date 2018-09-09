@@ -53,7 +53,7 @@ public class B implements Runnable {
             int left = 0;
             for (int i = 1; i < n && left < n; ++i) {
                 if (i > left) {
-                    StringBuffer b = new StringBuffer(word.substring(left, i));
+                    StringBuilder b = new StringBuilder(word.substring(left, i));
                     char[] begin = b.reverse().toString().toCharArray();
                     char[] end = word.substring(i).toCharArray();
                     for (int j = 0; j < Math.min(begin.length, end.length); ++j) {

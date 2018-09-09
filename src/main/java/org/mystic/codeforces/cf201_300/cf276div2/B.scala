@@ -6,23 +6,23 @@ import java.util
 
 object B {
 
-  var out: PrintWriter = null
-  var br: BufferedReader = null
-  var st: StringTokenizer = null
+  var out: PrintWriter = _
+  var br: BufferedReader = _
+  var st: StringTokenizer = _
 
   def next: String = {
     while (st == null || !st.hasMoreTokens) {
       st = new StringTokenizer(br.readLine)
     }
-    return st.nextToken
+    st.nextToken
   }
 
   def nextInt: Int = {
-    return Integer.parseInt(next)
+    Integer.parseInt(next)
   }
 
   def nextLong: Long = {
-    return java.lang.Long.parseLong(next)
+    java.lang.Long.parseLong(next)
   }
 
   def solve: Int = {
@@ -40,12 +40,12 @@ object B {
       maxY = Math.max(maxY, y)
     }
     var sq1: Long = Math.abs(minX - maxX).toLong
-    sq1 *= sq1;
+    sq1 *= sq1
     var sq2: Long = Math.abs(minY - maxY).toLong
     sq2 *= sq2
     out.println(Math.max(sq1, sq2))
 
-    return 1
+    1
   }
 
   def main(args: Array[String]): Unit = {

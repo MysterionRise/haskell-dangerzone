@@ -49,7 +49,7 @@ public class B implements Runnable {
         int f = nextInt() - 1;
         final List<List<Edge>> g = new ArrayList<>();
         for (int i = 0; i < n; ++i) {
-            g.add(new ArrayList<Edge>());
+            g.add(new ArrayList<>());
         }
         for (int i = 0; i < m; ++i) {
             int a = nextInt() - 1;

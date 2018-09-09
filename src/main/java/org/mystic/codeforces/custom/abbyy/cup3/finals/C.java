@@ -42,7 +42,7 @@ public class C implements Runnable {
 
     public void solve() throws IOException {
         int n = nextInt();
-        HashSet<Integer> set = new HashSet<Integer>();
+        HashSet<Integer> set = new HashSet<>();
         set.add(n);
         int res = 0;
         if (n == 0) {
@@ -52,10 +52,10 @@ public class C implements Runnable {
         boolean isZero = true;
         while (isZero) {
             ++res;
-            HashSet<Integer> newSet = new HashSet<Integer>();
+            HashSet<Integer> newSet = new HashSet<>();
             for (Integer x : set) {
                 String s = Integer.toString(x);
-                HashSet<Character> diff = new HashSet<Character>();
+                HashSet<Character> diff = new HashSet<>();
                 for (int j = 0; j < s.length(); ++j) {
                     char c = s.charAt(j);
                     if (!diff.contains(c) && c != '0') {

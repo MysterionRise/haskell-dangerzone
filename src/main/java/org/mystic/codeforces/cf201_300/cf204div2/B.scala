@@ -7,9 +7,9 @@ import scala.collection.mutable.HashSet
 import java.util
 
 object B {
-  var out: PrintWriter = null
-  var br: BufferedReader = null
-  var st: StringTokenizer = null
+  var out: PrintWriter = _
+  var br: BufferedReader = _
+  var st: StringTokenizer = _
   val mm = new HashMap[Int, HashSet[Int]]
   var ans = new util.TreeMap[Int, String]
 
@@ -17,15 +17,15 @@ object B {
     while (st == null || !st.hasMoreTokens) {
       st = new StringTokenizer(br.readLine)
     }
-    return st.nextToken
+    st.nextToken
   }
 
   def nextInt: Int = {
-    return Integer.parseInt(next)
+    Integer.parseInt(next)
   }
 
   def findAns(v: Int): Unit = {
-    val set = mm.get(v).get
+    val set = mm(v)
     val it = set.toList.sorted.toIterator
     var prev = -1
     var diff = -1
@@ -47,7 +47,7 @@ object B {
         diff = 0
       }
     }
-    ans.put(v,(v + " " + diff))
+    ans.put(v, v + " " + diff)
   }
 
   def solve = {

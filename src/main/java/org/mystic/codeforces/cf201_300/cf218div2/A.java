@@ -52,9 +52,7 @@ public class A implements Runnable {
             a[i] = nextInt();
         }
         int[] b = new int[k];
-        for (int i = 0; i < k; ++i) {
-            b[i] = a[i];
-        }
+        System.arraycopy(a, 0, b, 0, k);
         int cnt = 0;
         for (int i = 0; i < n; ++i) {
             if (a[i] == b[i % k]) {

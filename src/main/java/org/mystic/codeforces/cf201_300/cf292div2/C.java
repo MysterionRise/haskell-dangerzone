@@ -63,10 +63,10 @@ public class C implements Runnable {
         int[] dividers = new int[]{2, 3, 5, 7};
         for (int i = 0; i < n; ++i) {
             int x = fact[numbers[i]];
-            for (int j = 0; j < dividers.length; ++j) {
-                while (x != 1 && x % dividers[j] == 0) {
-                    x /= dividers[j];
-                    digits[dividers[j]]++;
+            for (int divider : dividers) {
+                while (x != 1 && x % divider == 0) {
+                    x /= divider;
+                    digits[divider]++;
                 }
             }
         }

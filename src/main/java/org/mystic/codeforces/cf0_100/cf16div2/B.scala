@@ -6,28 +6,28 @@ import java.io._
 
 object B {
 
-  var out: PrintWriter = null
-  var br: BufferedReader = null
-  var st: StringTokenizer = null
+  var out: PrintWriter = _
+  var br: BufferedReader = _
+  var st: StringTokenizer = _
 
   def next: String = {
     while (st == null || !st.hasMoreTokens) {
       st = new StringTokenizer(br.readLine)
     }
-    return st.nextToken
+    st.nextToken
   }
 
   def nextInt: Int = {
-    return Integer.parseInt(next)
+    Integer.parseInt(next)
   }
 
   def nextLong: Long = {
-    return Long.parseLong(next)
+    Long.parseLong(next)
   }
 
   def comp(x: (Long, Long), y: (Long, Long)): Boolean = {
-    if (x._2 == y._2) return x._1 > y._1
-    else return x._2 > y._2
+    if (x._2 == y._2) x._1 > y._1
+    else x._2 > y._2
   }
 
   def solve = {

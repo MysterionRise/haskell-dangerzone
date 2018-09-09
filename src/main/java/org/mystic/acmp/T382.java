@@ -45,8 +45,7 @@ public class T382 implements Runnable {
     public void solve() throws IOException {
         final int n = nextInt();
         final int[][] room = new int[n + 2][n + 2];
-        for (int i = 0; i < room.length; ++i)
-            Arrays.fill(room[i], 1);
+        for (int[] aRoom : room) Arrays.fill(aRoom, 1);
         for (int i = 0; i < 2; ++i) {
             room[0][i] = -1;
             room[room.length - 1][room.length - i - 1] = -1;

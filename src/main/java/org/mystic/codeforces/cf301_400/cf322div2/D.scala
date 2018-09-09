@@ -8,9 +8,9 @@ import scala.collection.mutable
 
 object D {
 
-  var out: PrintWriter = null
-  var br: BufferedReader = null
-  var st: StringTokenizer = null
+  var out: PrintWriter = _
+  var br: BufferedReader = _
+  var st: StringTokenizer = _
 
   def main(args: Array[String]): Unit = {
     br = new BufferedReader(new InputStreamReader(System.in))
@@ -23,27 +23,27 @@ object D {
     while (st == null || !st.hasMoreTokens) {
       st = new StringTokenizer(br.readLine)
     }
-    return st.nextToken
+    st.nextToken
   }
 
-  def nextInt: Int = return Integer.parseInt(next)
+  def nextInt: Int = Integer.parseInt(next)
 
-  def nextLong: Long = return java.lang.Long.parseLong(next)
+  def nextLong: Long = java.lang.Long.parseLong(next)
 
-  def nextDouble: Double = return java.lang.Double.parseDouble(next)  
+  def nextDouble: Double = java.lang.Double.parseDouble(next)
 
   case class Rectangle(width: Int, height: Int) {
 
     def normalize(): Rectangle = {
-      new Rectangle(Math.min(width, height), Math.max(width, height))
+      Rectangle(Math.min(width, height), Math.max(width, height))
     }
 
     def maximize(): Rectangle = {
-      new Rectangle(Math.max(width, height), Math.min(width, height))
+      Rectangle(Math.max(width, height), Math.min(width, height))
     }
 
     def rotate(): Rectangle = {
-      new Rectangle(height, width)
+      Rectangle(height, width)
     }
   }
 
@@ -115,16 +115,16 @@ object D {
   def solve: Int = {
     val x1 = nextInt
     val y1 = nextInt
-    val a = new Rectangle(x1, y1).normalize
-    val a1 = new Rectangle(x1, y1).maximize
+    val a = Rectangle(x1, y1).normalize
+    val a1 = Rectangle(x1, y1).maximize
     val x2 = nextInt
     val y2 = nextInt
-    val b = new Rectangle(x2, y2).normalize
-    val b1 = new Rectangle(x2, y2).maximize
+    val b = Rectangle(x2, y2).normalize
+    val b1 = Rectangle(x2, y2).maximize
     val x3 = nextInt
     val y3 = nextInt
-    val c = new Rectangle(x3, y3).normalize
-    val c1 = new Rectangle(x3, y3).maximize
+    val c = Rectangle(x3, y3).normalize
+    val c1 = Rectangle(x3, y3).maximize
     if (a.height == b.height && b.height == c.height && a.width + b.width + c.width == a.height) {
       // output the result
       out.println(a.height)
@@ -161,6 +161,6 @@ object D {
       }
     }
     out.println(-1)
-    return 0
+    0
   }
 }

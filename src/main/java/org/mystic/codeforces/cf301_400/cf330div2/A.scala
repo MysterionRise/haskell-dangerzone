@@ -7,9 +7,9 @@ import scala.collection.mutable
 
 object A {
 
-  var out: PrintWriter = null
-  var br: BufferedReader = null
-  var st: StringTokenizer = null
+  var out: PrintWriter = _
+  var br: BufferedReader = _
+  var st: StringTokenizer = _
 
   def main(args: Array[String]): Unit = {
     br = new BufferedReader(new InputStreamReader(System.in))
@@ -22,14 +22,14 @@ object A {
     while (st == null || !st.hasMoreTokens) {
       st = new StringTokenizer(br.readLine)
     }
-    return st.nextToken
+    st.nextToken
   }
 
   class MultiHashSet[T <% Comparable[T]] {
     val map = new mutable.HashMap[T, Int]()
 
     def count(x: T): Int = {
-      return map.getOrElse(x, 0)
+      map.getOrElse(x, 0)
     }
 
     def add(x: T): Unit = map.put(x, count(x) + 1)
@@ -43,7 +43,7 @@ object A {
       } else {
         map.put(x, prev - 1)
       }
-      return true
+      true
     }
   }
 
@@ -51,17 +51,14 @@ object A {
     val map = new TreeMap[T, Int]()
 
     def count(x: T): Int = {
-      val res = map.get(x)
-      if (res == null)
-        return 0
-      return res
+      map.getOrDefault(x, 0)
     }
 
     def add(x: T): Unit = map.put(x, count(x) + 1)
 
-    def first(): T = return map.firstKey()
+    def first(): T = map.firstKey()
 
-    def last(): T = return map.lastKey()
+    def last(): T = map.lastKey()
 
     def remove(x: T): Boolean = {
       val prev = count(x)
@@ -72,7 +69,7 @@ object A {
       } else {
         map.put(x, prev - 1)
       }
-      return true
+      true
     }
   }
 
@@ -135,11 +132,11 @@ object A {
     }
   }
 
-  def nextInt: Int = return Integer.parseInt(next)
+  def nextInt: Int = Integer.parseInt(next)
 
-  def nextLong: Long = return java.lang.Long.parseLong(next)
+  def nextLong: Long = java.lang.Long.parseLong(next)
 
-  def nextDouble: Double = return java.lang.Double.parseDouble(next)
+  def nextDouble: Double = java.lang.Double.parseDouble(next)
 
   def solve: Int = {
     val n = nextInt
@@ -155,6 +152,6 @@ object A {
       }
     }
     out.println(ans)
-    return 0
+    0
   }
 }

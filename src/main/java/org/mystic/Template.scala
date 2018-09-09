@@ -59,10 +59,7 @@ object Template {
     val map = new TreeMap[T, Int]()
 
     def count(x: T): Int = {
-      val res = map.get(x)
-      if (res == null)
-        return 0
-      return res
+      map.getOrDefault(x, 0)
     }
 
     def add(x: T): Unit = map.put(x, count(x) + 1)

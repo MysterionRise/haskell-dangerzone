@@ -7,9 +7,9 @@ import scala.collection.mutable
 
 object B1 {
 
-  var out: PrintWriter = null
-  var br: BufferedReader = null
-  var st: StringTokenizer = null
+  var out: PrintWriter = _
+  var br: BufferedReader = _
+  var st: StringTokenizer = _
 
   def main(args: Array[String]): Unit = {
     br = new BufferedReader(new InputStreamReader(System.in))
@@ -22,20 +22,20 @@ object B1 {
     while (st == null || !st.hasMoreTokens) {
       st = new StringTokenizer(br.readLine)
     }
-    return st.nextToken
+    st.nextToken
   }
 
-  def nextInt: Int = return Integer.parseInt(next)
+  def nextInt: Int = Integer.parseInt(next)
 
-  def nextLong: Long = return java.lang.Long.parseLong(next)
+  def nextLong: Long = java.lang.Long.parseLong(next)
 
-  def nextDouble: Double = return java.lang.Double.parseDouble(next)
+  def nextDouble: Double = java.lang.Double.parseDouble(next)
 
   class MultiHashSet[T <% Comparable[T]] {
     val map = new mutable.HashMap[T, Int]()
 
     def count(x: T): Int = {
-      return map.getOrElse(x, 0)
+      map.getOrElse(x, 0)
     }
 
     def add(x: T): Unit = map.put(x, count(x) + 1)
@@ -49,7 +49,7 @@ object B1 {
       } else {
         map.put(x, prev - 1)
       }
-      return true
+      true
     }
   }
 
@@ -57,17 +57,14 @@ object B1 {
     val map = new TreeMap[T, Int]()
 
     def count(x: T): Int = {
-      val res = map.get(x)
-      if (res == null)
-        return 0
-      return res
+      map.getOrDefault(x, 0)
     }
 
     def add(x: T): Unit = map.put(x, count(x) + 1)
 
-    def first(): T = return map.firstKey()
+    def first(): T = map.firstKey()
 
-    def last(): T = return map.lastKey()
+    def last(): T = map.lastKey()
 
     def remove(x: T): Boolean = {
       val prev = count(x)
@@ -78,7 +75,7 @@ object B1 {
       } else {
         map.put(x, prev - 1)
       }
-      return true
+      true
     }
   }
 
@@ -187,7 +184,7 @@ object B1 {
     val sorted = phrases.sortWith(_._2 >= _._2)
     val answers = new Array[String](m)
     val set = new mutable.HashSet[Int]()
-    for (i <- 0 until sorted.length) {
+    for (i <- sorted.indices) {
       val force = sorted(i)._2
       var idx = 0
       var flag = true
@@ -201,9 +198,9 @@ object B1 {
         }
       }
     }
-    for (i <- 0 until answers.length) {
+    for (i <- answers.indices) {
       out.println(answers(i))
     }
-    return 0
+    0
   }
 }

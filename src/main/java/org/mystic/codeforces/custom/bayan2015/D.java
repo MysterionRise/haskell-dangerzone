@@ -113,9 +113,9 @@ public class D implements Runnable {
             final Long z = m.get(key);
             int mul = s.mul[i];
             if (z == null) {
-                m.put(key, 1L * mul);
+                m.put(key, (long) mul);
             } else {
-                m.put(key, z + (1L * mul));
+                m.put(key, z + ((long) mul));
             }
         }
         final int q = nextInt();
