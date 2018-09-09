@@ -142,27 +142,6 @@ object Template {
   }
 
   def solve = {
-    println(solution(Array[Int](Int.MaxValue, Int.MaxValue, Int.MaxValue, Int.MaxValue, Int.MaxValue), Array[Int](2, 2, 2, 2, 2), 5, 5, 1))
     0
-  }
-
-  def solution(a: Array[Int], b: Array[Int], m: Int, x: Int, y: Int): Int = {
-
-    var ans = 0
-    var zipped = a.zip(b)
-    while (!zipped.isEmpty) {
-      var curWeight = 0L
-      var curLimit = 0L
-      val passengers = zipped.takeWhile(el => {
-        curWeight += el._1
-        curLimit += 1L
-        curWeight <= y && curLimit <= x
-      })
-      zipped = zipped.drop(passengers.length)
-      val sortedByFloor = passengers.sortBy(f => f._2).map(pass => pass._2).toSet
-      ans += sortedByFloor.size + 1
-    }
-
-    ans
   }
 }
