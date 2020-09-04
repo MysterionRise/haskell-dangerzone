@@ -5,7 +5,7 @@ import java.util.{StringTokenizer, TreeMap}
 
 import scala.collection.mutable
 
-object Q {
+object R1 {
 
   var out: PrintWriter = _
   var br: BufferedReader = _
